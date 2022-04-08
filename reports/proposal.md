@@ -32,10 +32,26 @@ The first stretch goal would be to have the shells bounce off the walls from the
 
 ### Resources
 
+#### General Design
+
 - [Wii Tanks](https://youtu.be/orLxrg51xL8)
+- [Kenney Free Assets](https://www.kenney.nl/assets)
+
+#### Multiplayer
+
 - [TCP Server-Client Implementation in C](https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/)
+- [sdl_networking](https://www.reddit.com/r/gamedev/comments/b6j5dp/sdl_networking/)
+- [What frameworks should I consider for online multiplayer?](https://www.reddit.com/r/gamedev/comments/4e5t3k/what_frameworks_should_i_consider_for_online/)
+- [ENet](http://enet.bespin.org/index.html)
+
+#### SDL
+
 - [SDL Tutorials](http://wiki.libsdl.org/Tutorials)
 - [SDL2 Game Tutorials](https://www.parallelrealities.co.uk/tutorials/)
+- [Probably Worth Buying](https://parallelrealities.itch.io/sdl2-tutorials)
+- [Lazyfoo SDL Tutorials](https://lazyfoo.net/SDL_tutorials/)
+- [Modern SDL programming tips & tricks](https://www.reddit.com/r/gamedev/comments/re4zvh/modern_sdl_programming_tips_tricks/)
+- [SDL 2.0 API by Category](https://wiki.libsdl.org/APIByCategory)
 
 ### First Tasks
 
