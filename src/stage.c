@@ -35,7 +35,7 @@ void initStage(void)
 	stage.entityTail = &stage.entityHead;
 	stage.bulletTail = &stage.bulletHead;
 	
-	targetterTexture = loadTexture("gfx/targetter.png");
+	targetterTexture = loadTexture("gfx/crosshair010.png");
 	gridTexture = loadTexture("gfx/tileGrass1.png");
 	
 	initPlayer();

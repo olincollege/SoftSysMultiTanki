@@ -36,6 +36,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MAX_NAME_LENGTH			32
 
 #define MAX_SND_CHANNELS    	16
+
+#define PLAYER_MAX_BULLET		5
 #define PLAYER_RELOAD			10
 
 #define PLAYER_SPEED        	3

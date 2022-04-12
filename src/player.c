@@ -42,7 +42,7 @@ void initPlayer(void)
 	playerHead->texture = loadTexture("gfx/tankBlue_barrel2_outline.png");
 	playerHead->x = playerBody->x;
 	playerHead->y = playerBody->y;
-	playerHead->ammo = 4;
+	playerHead->ammo = PLAYER_MAX_BULLET;
 
 	SDL_QueryTexture(playerBody->texture, NULL, NULL, &playerBody->w, &playerBody->h);
 }
@@ -58,7 +58,7 @@ void doPlayer(void)
 
 	if (app.keyboard[SDL_SCANCODE_W])
 	{
-		if (currentAngle >= 90 && currentAngle < 270)
+		if (currentAngle > 90 && currentAngle < 270)
 		{
 			if (currentAngle == 180)
 			{
@@ -81,7 +81,7 @@ void doPlayer(void)
 			{
 
 			}
-			else if (currentAngle > 270)
+			else if (currentAngle >= 270)
 			{
 				currentAngle += PLAYER_ROTATION_SPEED;
 				currentAngle =  currentAngle < 360 ? currentAngle : 0;
@@ -96,7 +96,7 @@ void doPlayer(void)
 	
 	if (app.keyboard[SDL_SCANCODE_S])
 	{
-		if (currentAngle > 90 && currentAngle <= 270)
+		if (currentAngle >= 90 && currentAngle <= 270)
 		{
 			if (currentAngle == 180)
 			{
@@ -134,45 +134,7 @@ void doPlayer(void)
 	
 	if (app.keyboard[SDL_SCANCODE_A])
 	{
-		if (currentAngle >= 0 && currentAngle < 180)
-		{
-			if (currentAngle == 90)
-			{
-
-			}
-			else if (currentAngle < 90)
-			{
-				currentAngle += PLAYER_ROTATION_SPEED;
-				currentAngle =  currentAngle <= 90 ? currentAngle : 90;
-			}
-			else
-			{
-				currentAngle -= PLAYER_ROTATION_SPEED;
-				currentAngle =  currentAngle >= 90 ? currentAngle : 90;
-			}
-		}
-		else
-		{
-			if (currentAngle == 270)
-			{
-
-			}
-			else if (currentAngle > 270)
-			{
-				currentAngle -= PLAYER_ROTATION_SPEED;
-				currentAngle =  currentAngle >= 270 ? currentAngle : 270;
-			}
-			else
-			{
-				currentAngle += PLAYER_ROTATION_SPEED;
-				currentAngle = currentAngle <= 270 ? currentAngle : 270;
-			}
-		}
-	}
-	
-	if (app.keyboard[SDL_SCANCODE_D])
-	{
-		if (currentAngle > 0 && currentAngle <= 180)
+		if (currentAngle > 0 && currentAngle < 180)
 		{
 			if (currentAngle == 90)
 			{
@@ -195,7 +157,45 @@ void doPlayer(void)
 			{
 				currentAngle = 360;
 			}
-			
+
+			if (currentAngle == 270)
+			{
+
+			}
+			else if (currentAngle > 270)
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 270 ? currentAngle : 270;
+			}
+			else
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle = currentAngle <= 270 ? currentAngle : 270;
+			}
+		}
+	}
+	
+	if (app.keyboard[SDL_SCANCODE_D])
+	{
+		if (currentAngle >= 0 && currentAngle <= 180)
+		{
+			if (currentAngle == 90)
+			{
+
+			}
+			else if (currentAngle < 90)
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle <= 90 ? currentAngle : 90;
+			}
+			else
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 90 ? currentAngle : 90;
+			}
+		}
+		else
+		{
 			if (currentAngle == 270)
 			{
 
