@@ -25,5 +25,6 @@ extern float getAngle(int x1, int y1, int x2, int y2);
 extern SDL_Texture *loadTexture(char *filename);
 
 extern App app;
-extern Entity *player;
+extern Entity *playerHead;
+extern Entity *playerBody;
 extern Stage stage;

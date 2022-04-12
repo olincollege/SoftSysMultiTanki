@@ -29,5 +29,6 @@ extern void prepareScene(void);
 extern void presentScene(void);
 
 App app;
-Entity *player;
+Entity *playerHead;
+Entity *playerBody;
 Stage stage;

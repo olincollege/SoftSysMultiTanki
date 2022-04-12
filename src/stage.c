@@ -36,7 +36,7 @@ void initStage(void)
 	stage.bulletTail = &stage.bulletHead;
 	
 	targetterTexture = loadTexture("gfx/targetter.png");
-	gridTexture = loadTexture("gfx/grid.png");
+	gridTexture = loadTexture("gfx/tileGrass1.png");
 	
 	initPlayer();
 }

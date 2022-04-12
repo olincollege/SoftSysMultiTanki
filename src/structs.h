@@ -46,6 +46,7 @@ struct Entity {
 	int h;
 	int health;
 	int reload;
+	int ammo;
 	float dx;
 	float dy;
 	int angle;

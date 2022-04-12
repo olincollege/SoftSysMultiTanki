@@ -22,50 +22,207 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void initPlayer(void)
 {
-	player = malloc(sizeof(Entity));
-	memset(player, 0, sizeof(Entity));
-	stage.entityTail->next = player;
-	stage.entityTail = player;
+	playerHead = malloc(sizeof(Entity));
+	memset(playerHead, 0, sizeof(Entity));
+
+	playerBody = malloc(sizeof(Entity));
+	memset(playerBody, 0, sizeof(Entity));
+
+	stage.entityTail->next = playerBody;
+	stage.entityTail = playerBody;
+
+	stage.entityTail->next = playerHead;
+	stage.entityTail = playerHead;
+
+	playerBody->texture = loadTexture("gfx/tankBody_blue_outline.png");
+	playerBody->x = SCREEN_WIDTH / 2;
+	playerBody->y = SCREEN_HEIGHT / 2;
+	playerBody->angle = 70;
 	
-	player->texture = loadTexture("gfx/donk.png");
-	player->health = 5;
-	player->x = SCREEN_WIDTH / 2;
-	player->y = SCREEN_HEIGHT / 2;
-	
-	SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
+	playerHead->texture = loadTexture("gfx/tankBlue_barrel2_outline.png");
+	playerHead->x = playerBody->x;
+	playerHead->y = playerBody->y;
+	playerHead->ammo = 4;
+
+	SDL_QueryTexture(playerBody->texture, NULL, NULL, &playerBody->w, &playerBody->h);
 }
 
 void doPlayer(void)
 {
-	player->dx *= 0.85;
-	player->dy *= 0.85;
+	int currentAngle; 
 	
+	currentAngle = playerBody -> angle;
+
+	playerBody->dx *= 0.85;
+	playerBody->dy *= 0.85;
+
 	if (app.keyboard[SDL_SCANCODE_W])
 	{
-		player->dy = -PLAYER_SPEED;
+		if (currentAngle >= 90 && currentAngle < 270)
+		{
+			if (currentAngle == 180)
+			{
+
+			}
+			else if (currentAngle < 180)
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle <= 180 ? currentAngle : 180;
+			}
+			else if (currentAngle != 180)
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 180 ? currentAngle : 180;
+			}
+		}
+		else
+		{
+			if (currentAngle == 0)
+			{
+
+			}
+			else if (currentAngle > 270)
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle < 360 ? currentAngle : 0;
+			}
+			else
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 0 ? currentAngle : 0;
+			}
+		}
 	}
 	
 	if (app.keyboard[SDL_SCANCODE_S])
 	{
-		player->dy = PLAYER_SPEED;
+		if (currentAngle > 90 && currentAngle <= 270)
+		{
+			if (currentAngle == 180)
+			{
+
+			}
+			else if (currentAngle < 180)
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle <= 180 ? currentAngle : 180;
+			}
+			else
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 180 ? currentAngle : 180;
+			}
+		}
+		else
+		{
+			if (currentAngle == 0)
+			{
+
+			}
+			else if (currentAngle > 270)
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle < 360 ? currentAngle : 0;
+			}
+			else
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 0 ? currentAngle : 0;
+			}
+		}
 	}
 	
 	if (app.keyboard[SDL_SCANCODE_A])
 	{
-		player->dx = -PLAYER_SPEED;
+		if (currentAngle >= 0 && currentAngle < 180)
+		{
+			if (currentAngle == 90)
+			{
+
+			}
+			else if (currentAngle < 90)
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle <= 90 ? currentAngle : 90;
+			}
+			else
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 90 ? currentAngle : 90;
+			}
+		}
+		else
+		{
+			if (currentAngle == 270)
+			{
+
+			}
+			else if (currentAngle > 270)
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 270 ? currentAngle : 270;
+			}
+			else
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle = currentAngle <= 270 ? currentAngle : 270;
+			}
+		}
 	}
 	
 	if (app.keyboard[SDL_SCANCODE_D])
 	{
-		player->dx = PLAYER_SPEED;
+		if (currentAngle > 0 && currentAngle <= 180)
+		{
+			if (currentAngle == 90)
+			{
+
+			}
+			else if (currentAngle < 90)
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle <= 90 ? currentAngle : 90;
+			}
+			else
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 90 ? currentAngle : 90;
+			}
+		}
+		else
+		{
+			if (currentAngle == 0)
+			{
+				currentAngle = 360;
+			}
+			
+			if (currentAngle == 270)
+			{
+
+			}
+			else if (currentAngle > 270)
+			{
+				currentAngle -= PLAYER_ROTATION_SPEED;
+				currentAngle =  currentAngle >= 270 ? currentAngle : 270;
+			}
+			else
+			{
+				currentAngle += PLAYER_ROTATION_SPEED;
+				currentAngle = currentAngle <= 270 ? currentAngle : 270;
+			}
+		}
 	}
+
+	playerBody->angle = currentAngle;
+
+	printf("%d\n", playerBody->angle);
 	
-	player->angle = getAngle(player->x, player->y, app.mouse.x, app.mouse.y);
+	playerHead->angle = getAngle(playerHead->x, playerHead->y, app.mouse.x, app.mouse.y);
 	
-	if (player->reload == 0 && app.mouse.button[SDL_BUTTON_LEFT])
+	if (playerHead->reload == 0 && playerHead->ammo > 0 && app.mouse.button[SDL_BUTTON_LEFT])
 	{
 		fireBullet();
 	}
 
-	player->reload = MAX(player->reload - 1, 0);
+	playerHead->reload = MAX(playerHead->reload - 1, 0);
 }

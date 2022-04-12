@@ -24,7 +24,7 @@ static SDL_Texture *donkBullet;
 
 void initBullets(void)
 {
-	donkBullet = loadTexture("gfx/donkBullet.png");
+	donkBullet = loadTexture("gfx/bulletBlue3_outline.png");
 }
 
 void fireBullet(void)
@@ -36,18 +36,19 @@ void fireBullet(void)
 	stage.bulletTail->next = b;
 	stage.bulletTail = b;
 	
-	b->x = player->x;
-	b->y = player->y;
+	b->x = playerHead->x;
+	b->y = playerHead->y;
 	b->texture = donkBullet;
 	b->health = FPS * 2;
-	b->angle = player->angle;
+	b->angle = playerHead->angle;
 	
 	calcSlope(app.mouse.x, app.mouse.y, b->x, b->y, &b->dx, &b->dy);
 	
-	b->dx *= 16;
-	b->dy *= 16;
+	b->dx *= 8;
+	b->dy *= 8;
 
-	player->reload = PLAYER_RELOAD;
+	playerHead->reload = PLAYER_RELOAD;
+	playerHead->ammo -= 1;
 }
 
 void doBullets(void)
@@ -68,6 +69,7 @@ void doBullets(void)
 				stage.bulletTail = prev;
 			}
 			
+			playerHead->ammo += 1;
 			prev->next = b->next;
 			free(b);
 			b = prev;

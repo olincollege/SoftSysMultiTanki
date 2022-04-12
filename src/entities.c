@@ -29,7 +29,7 @@ void doEntities(void)
 		e->x += e->dx;
 		e->y += e->dy;
 		
-		if (e == player)
+		if (e == playerBody)
 		{
 			e->x = MIN(MAX(e->x, e->w / 2), SCREEN_WIDTH - e->w / 2);
 			e->y = MIN(MAX(e->y, e->h / 2), SCREEN_HEIGHT - e->h / 2);

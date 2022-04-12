@@ -22,5 +22,5 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern void blitRotated(SDL_Texture *texture, int x, int y, float angle);
 
-extern Entity *player;
+extern Entity *playerBody;
 extern Stage stage;
