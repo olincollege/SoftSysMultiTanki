@@ -69,17 +69,21 @@ void doPlayer(void)
 				currentAngle += PLAYER_ROTATION_SPEED;
 				currentAngle =  currentAngle <= 180 ? currentAngle : 180;
 			}
-			else if (currentAngle != 180)
+			else
 			{
 				currentAngle -= PLAYER_ROTATION_SPEED;
 				currentAngle =  currentAngle >= 180 ? currentAngle : 180;
 			}
+
+			playerBody->dx = -(PLAYER_SPEED * sin((PI/180) * currentAngle));
+			playerBody->dy = (PLAYER_SPEED * cos((PI/180) * currentAngle));
 		}
 		else
 		{
 			if (currentAngle == 0)
 			{
-
+				playerBody->dy = -PLAYER_SPEED;
+				playerBody->dx = 0;
 			}
 			else if (currentAngle >= 270)
 			{
@@ -91,6 +95,8 @@ void doPlayer(void)
 				currentAngle -= PLAYER_ROTATION_SPEED;
 				currentAngle =  currentAngle >= 0 ? currentAngle : 0;
 			}
+			playerBody->dx = (PLAYER_SPEED * sin((PI/180) * currentAngle));
+			playerBody->dy = -(PLAYER_SPEED * cos((PI/180) * currentAngle));
 		}
 	}
 	
@@ -112,6 +118,8 @@ void doPlayer(void)
 				currentAngle -= PLAYER_ROTATION_SPEED;
 				currentAngle =  currentAngle >= 180 ? currentAngle : 180;
 			}
+			playerBody->dx = (PLAYER_SPEED * sin((PI/180) * currentAngle));
+			playerBody->dy = -(PLAYER_SPEED * cos((PI/180) * currentAngle));
 		}
 		else
 		{
@@ -129,6 +137,8 @@ void doPlayer(void)
 				currentAngle -= PLAYER_ROTATION_SPEED;
 				currentAngle =  currentAngle >= 0 ? currentAngle : 0;
 			}
+			playerBody->dx = -(PLAYER_SPEED * sin((PI/180) * currentAngle));
+			playerBody->dy = (PLAYER_SPEED * cos((PI/180) * currentAngle));
 		}
 	}
 	
@@ -150,6 +160,9 @@ void doPlayer(void)
 				currentAngle -= PLAYER_ROTATION_SPEED;
 				currentAngle =  currentAngle >= 90 ? currentAngle : 90;
 			}
+
+			playerBody->dx = -(PLAYER_SPEED * sin((PI/180) * currentAngle));
+			playerBody->dy = (PLAYER_SPEED * cos((PI/180) * currentAngle));
 		}
 		else
 		{
@@ -172,6 +185,9 @@ void doPlayer(void)
 				currentAngle += PLAYER_ROTATION_SPEED;
 				currentAngle = currentAngle <= 270 ? currentAngle : 270;
 			}
+
+			playerBody->dx = (PLAYER_SPEED * sin((PI/180) * currentAngle));
+			playerBody->dy = -(PLAYER_SPEED * cos((PI/180) * currentAngle));
 		}
 	}
 	
@@ -193,6 +209,9 @@ void doPlayer(void)
 				currentAngle -= PLAYER_ROTATION_SPEED;
 				currentAngle =  currentAngle >= 90 ? currentAngle : 90;
 			}
+
+			playerBody->dx = (PLAYER_SPEED * sin((PI/180) * currentAngle));
+			playerBody->dy = -(PLAYER_SPEED * cos((PI/180) * currentAngle));
 		}
 		else
 		{
@@ -210,14 +229,19 @@ void doPlayer(void)
 				currentAngle += PLAYER_ROTATION_SPEED;
 				currentAngle = currentAngle <= 270 ? currentAngle : 270;
 			}
+
+			playerBody->dx = -(PLAYER_SPEED * sin((PI/180) * currentAngle));
+			playerBody->dy = (PLAYER_SPEED * cos((PI/180) * currentAngle));
 		}
 	}
-
+	
 	playerBody->angle = currentAngle;
 
-	printf("%d\n", playerBody->angle);
+	//printf("%d\n", playerBody->angle);
 	
 	playerHead->angle = getAngle(playerHead->x, playerHead->y, app.mouse.x, app.mouse.y);
+	playerHead->x = playerBody->x;
+	playerHead->y = playerBody->y;
 	
 	if (playerHead->reload == 0 && playerHead->ammo > 0 && app.mouse.button[SDL_BUTTON_LEFT])
 	{

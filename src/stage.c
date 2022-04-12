@@ -53,10 +53,10 @@ static void logic(void)
 static void draw(void)
 {
 	drawGrid();
+
+	drawBullets();
 	
 	drawEntities();
-	
-	drawBullets();
 	
 	blit(targetterTexture, app.mouse.x, app.mouse.y, 1);
 }
