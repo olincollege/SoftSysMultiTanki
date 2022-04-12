@@ -20,14 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "common.h"
 
-extern void cleanup(void);
-extern void doInput(void);
-extern void initGame(void);
-extern void initSDL(void);
-extern void initStage(void);
-extern void prepareScene(void);
-extern void presentScene(void);
+extern void blit(SDL_Texture *texture, int x, int y, int center);
+extern void doBullets(void);
+extern void doEntities(void);
+extern void doPlayer(void);
+extern void drawBullets(void);
+extern void drawEntities(void);
+extern void initPlayer(void);
+extern SDL_Texture *loadTexture(char *filename);
 
-App app;
-Entity *player;
-Stage stage;
+extern App app;
+extern Entity *player;
+extern Stage stage;

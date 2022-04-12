@@ -18,16 +18,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "common.h"
+#include "util.h"
 
-extern void cleanup(void);
-extern void doInput(void);
-extern void initGame(void);
-extern void initSDL(void);
-extern void initStage(void);
-extern void prepareScene(void);
-extern void presentScene(void);
+float getAngle(int x1, int y1, int x2, int y2)
+{
+	float angle = -90 + atan2(y1 - y2, x1 - x2) * (180 / PI);
+	return angle >= 0 ? angle : 360 + angle;
+}
 
-App app;
-Entity *player;
-Stage stage;
+void calcSlope(int x1, int y1, int x2, int y2, float *dx, float *dy)
+{
+	int steps = MAX(abs(x1 - x2), abs(y1 - y2));
+
+	if (steps == 0)
+	{
+		*dx = *dy = 0;
+		return;
+	}
+
+	*dx = (x1 - x2);
+	*dx /= steps;
+
+	*dy = (y1 - y2);
+	*dy /= steps;
+}

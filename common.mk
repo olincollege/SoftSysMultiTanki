@@ -6,9 +6,14 @@ vpath %.h $(SEARCHPATH)
 
 DEPS += defs.h structs.h
 
+_OBJS += bullets.o
 _OBJS += draw.o
+_OBJS += entities.o
 _OBJS += init.o input.o
 _OBJS += main.o
+_OBJS += player.o
+_OBJS += stage.o
+_OBJS += util.o
 
 OBJS = $(patsubst %,$(OUT)/%,$(_OBJS))
 

@@ -18,16 +18,31 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "common.h"
+#include "entities.h"
 
-extern void cleanup(void);
-extern void doInput(void);
-extern void initGame(void);
-extern void initSDL(void);
-extern void initStage(void);
-extern void prepareScene(void);
-extern void presentScene(void);
+void doEntities(void)
+{
+	Entity *e;
+	
+	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+	{
+		e->x += e->dx;
+		e->y += e->dy;
+		
+		if (e == player)
+		{
+			e->x = MIN(MAX(e->x, e->w / 2), SCREEN_WIDTH - e->w / 2);
+			e->y = MIN(MAX(e->y, e->h / 2), SCREEN_HEIGHT - e->h / 2);
+		}
+	}
+}
 
-App app;
-Entity *player;
-Stage stage;
+void drawEntities(void)
+{
+	Entity *e;
+	
+	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+	{
+		blitRotated(e->texture, e->x, e->y, e->angle);
+	}
+}

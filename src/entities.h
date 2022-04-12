@@ -18,51 +18,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-typedef struct Texture Texture;
-typedef struct Entity Entity;
+#include "common.h"
 
-typedef struct {
-	void (*logic)(void);
-	void (*draw)(void);
-} Delegate;
+extern void blitRotated(SDL_Texture *texture, int x, int y, float angle);
 
-struct Texture {
-	char name[MAX_NAME_LENGTH];
-	SDL_Texture *texture;
-	Texture *next;
-};
-
-typedef struct {
-	int x;
-	int y;
-	int button[MAX_MOUSE_BUTTONS];
-	int wheel;
-} Mouse;
-
-struct Entity {
-	float x;
-	float y;
-	int w;
-	int h;
-	int health;
-	int reload;
-	float dx;
-	float dy;
-	int angle;
-	SDL_Texture *texture;
-	Entity *next;
-};
-
-typedef struct {
-	SDL_Renderer *renderer;
-	SDL_Window *window;
-	Delegate delegate;
-	int keyboard[MAX_KEYBOARD_KEYS];
-	Mouse mouse;
-	Texture textureHead, *textureTail;
-} App;
-
-typedef struct {
-	Entity entityHead, *entityTail;
-	Entity bulletHead, *bulletTail;
-} Stage;
+extern Entity *player;
+extern Stage stage;

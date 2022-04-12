@@ -1,5 +1,20 @@
 /*
+Copyright (C) 2015-2018 Parallel Realities
 
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
@@ -18,24 +33,29 @@ void initSDL(void)
 		printf("Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
-
-	app.window = SDL_CreateWindow("MultiTanki", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
 	
-	if (!app.window)
-	{
-		printf("Failed to open %d x %d window: %s\n", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_GetError());
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
+    {
+        printf("Couldn't initialize SDL Mixer\n");
 		exit(1);
-	}
+    }
+
+    Mix_AllocateChannels(MAX_SND_CHANNELS);
+
+	app.window = SDL_CreateWindow("Battle Arena DONK! 3", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
 	app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
 	
-	if (!app.renderer)
-	{
-		printf("Failed to create renderer: %s\n", SDL_GetError());
-		exit(1);
-	}
+	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+	
+	SDL_ShowCursor(0);
+}
+
+void initGame(void)
+{
+	initBullets();
 }
 
 void cleanup(void)
