@@ -28,7 +28,11 @@ extern void drawBullets(void);
 extern void drawEntities(void);
 extern void initPlayer(void);
 extern void drawPlayers(void);
+extern SDL_Texture *loadSprite(int num);
 extern SDL_Texture *loadTexture(char *filename);
 
 extern App app;
 extern Stage stage;
+
+extern int gdata[15][20];
+extern int wdata[15][20];

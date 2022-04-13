@@ -13,6 +13,7 @@ _OBJS += main.o
 _OBJS += player.o
 _OBJS += stage.o
 _OBJS += util.o
+_OBJS += map.o
 
 OBJS = $(patsubst %,$(OUT)/%,$(_OBJS))
 

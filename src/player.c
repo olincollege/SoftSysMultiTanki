@@ -263,6 +263,7 @@ void doPlayer(void)
 			e->y = MIN(MAX(e->y, e->h / 2), SCREEN_HEIGHT - e->h / 2);
 		}
 	}
+	//printf("(%f, %f)\n", playerBody->x, playerBody->y);
 }
 
 void drawPlayers(void)

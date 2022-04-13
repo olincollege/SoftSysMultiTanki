@@ -89,13 +89,10 @@ typedef struct {
 } App;
 
 typedef struct {
-	int grid[GRID_WIDTH][GRID_HEIGHT];
-	int object[GRID_WIDTH][GRID_HEIGHT];
-} Map;
-
-typedef struct {
 	Player pHead, *pTail;
 	Bullet bHead, *bTail;
-	Map map;
+	MapTile oHead, *oTail;
+	MapTile* ground[GRID_HEIGHT][GRID_WIDTH];
+	MapTile* walls[GRID_HEIGHT][GRID_WIDTH];
 } Stage;
 

@@ -25,7 +25,6 @@ static void draw(void);
 static void drawGrid(void);
 
 static SDL_Texture *targetterTexture;
-static SDL_Texture *gridTexture;
 
 void initStage(void)
 {
@@ -34,9 +33,31 @@ void initStage(void)
 	
 	stage.pTail = &stage.pHead;
 	stage.bTail = &stage.bHead;
-	
+	stage.oTail = &stage.oHead;
+
 	targetterTexture = loadTexture("gfx/crosshair010.png");
-	gridTexture = loadTexture("gfx/tileGrass1.png");
+
+	for (int y = 0 ; y < GRID_HEIGHT ; y += 1)
+	{
+		for (int x = 0 ; x < GRID_WIDTH ; x += 1)
+		{
+			printf("(%i, %i)\n", x, y);
+			MapTile* g = malloc(sizeof(MapTile));
+			memset(g, 0, sizeof(MapTile));
+
+			g->x = x * GRID_SIZE;
+			g->y = y * GRID_SIZE;
+
+			g->texture = loadSprite(gdata[y][x]);
+			stage.ground[y][x] = g;
+
+			MapTile* w = malloc(sizeof(MapTile));
+			memset(w, 0, sizeof(MapTile));
+
+			w->texture = loadSprite(wdata[y][x]);
+			stage.walls[y][x] = w;
+		}
+	}
 	
 	initPlayer();
 }
@@ -63,11 +84,16 @@ static void drawGrid(void)
 {
 	int x, y;
 	
-	for (y = 0 ; y < SCREEN_HEIGHT ; y += GRID_SIZE)
+	for (y = 0 ; y < GRID_HEIGHT ; y += 1)
 	{
-		for (x = 0 ; x < SCREEN_WIDTH ; x += GRID_SIZE)
+		for (x = 0 ; x < GRID_WIDTH ; x += 1)
 		{
-			blit(gridTexture, x, y, 0);
+			//printf("(%i, %i)\n", x, y);
+			MapTile* m = stage.ground[y][x];
+			blit(m->texture, m->x, m->y, 0);
 		}
 	}
+
+	MapTile* m = stage.ground[0][18];
+	blit(m->texture, 1200, 120, 0);
 }

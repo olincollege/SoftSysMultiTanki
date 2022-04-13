@@ -23,14 +23,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define STRNCPY(dest, src, n) strncpy(dest, src, n); dest[n - 1] = '\0'
 #define PI                   3.14159265358979323846
 
-#define SCREEN_WIDTH        	1280
-#define SCREEN_HEIGHT       	720
-
 #define FPS                 	60
 
 #define GRID_SIZE           	64
 #define GRID_WIDTH				20
 #define GRID_HEIGHT				15
+
+#define SCREEN_WIDTH        	GRID_WIDTH * GRID_SIZE
+#define SCREEN_HEIGHT       	GRID_HEIGHT * GRID_SIZE
 
 #define MAX_KEYBOARD_KEYS   	350
 #define MAX_MOUSE_BUTTONS   	6
