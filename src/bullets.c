@@ -20,11 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "bullets.h"
 
-static SDL_Texture *donkBullet;
+static SDL_Texture *bulletTexture;
 
 void initBullets(void)
 {
-	donkBullet = loadTexture("gfx/bulletBlue3_outline.png");
+	bulletTexture = loadTexture("gfx/bulletBlue3_outline.png");
 }
 
 void fireBullet(void)
@@ -38,7 +38,7 @@ void fireBullet(void)
 	
 	b->x = playerHead->x;
 	b->y = playerHead->y;
-	b->texture = donkBullet;
+	b->texture = bulletTexture;
 	b->health = FPS * 2;
 	b->angle = playerHead->angle;
 	
