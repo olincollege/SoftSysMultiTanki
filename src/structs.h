@@ -64,6 +64,13 @@ typedef struct {
 } App;
 
 typedef struct {
+	int grid[GRID_WIDTH][GRID_HEIGHT];
+	int object[GRID_WIDTH][GRID_HEIGHT];
+} Map;
+
+typedef struct {
 	Entity entityHead, *entityTail;
 	Entity bulletHead, *bulletTail;
+	Map map;
 } Stage;
+
