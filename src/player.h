@@ -23,8 +23,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 extern void fireBullet(void);
 extern float getAngle(int x1, int y1, int x2, int y2);
 extern SDL_Texture *loadTexture(char *filename);
+extern void blitRotated(SDL_Texture *texture, int x, int y, float angle);
 
 extern App app;
-extern Entity *playerHead;
-extern Entity *playerBody;
+extern Player *playerHead;
+extern Player *playerBody;
 extern Stage stage;

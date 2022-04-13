@@ -19,7 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 typedef struct Texture Texture;
-typedef struct Entity Entity;
+typedef struct Player Player;
+typedef struct Bullet Bullet;
+typedef struct MapTile MapTile;
 
 typedef struct {
 	void (*logic)(void);
@@ -39,7 +41,7 @@ typedef struct {
 	int wheel;
 } Mouse;
 
-struct Entity {
+struct Player {
 	float x;
 	float y;
 	int w;
@@ -51,7 +53,30 @@ struct Entity {
 	float dy;
 	int angle;
 	SDL_Texture *texture;
-	Entity *next;
+	Player *next;
+};
+
+struct Bullet {
+	float x;
+	float y;
+	int w;
+	int h;
+	int health;
+	float dx;
+	float dy;
+	int angle;
+	SDL_Texture *texture;
+	Bullet *next;
+};
+
+struct MapTile {
+	float x;
+	float y;
+	int w;
+	int h;
+	int collision;
+	SDL_Texture *texture;
+	MapTile *next;
 };
 
 typedef struct {
@@ -69,8 +94,8 @@ typedef struct {
 } Map;
 
 typedef struct {
-	Entity entityHead, *entityTail;
-	Entity bulletHead, *bulletTail;
+	Player pHead, *pTail;
+	Bullet bHead, *bTail;
 	Map map;
 } Stage;
 

@@ -29,12 +29,12 @@ void initBullets(void)
 
 void fireBullet(void)
 {
-	Entity *b;
+	Bullet *b;
 	
-	b = malloc(sizeof(Entity));
-	memset(b, 0, sizeof(Entity));
-	stage.bulletTail->next = b;
-	stage.bulletTail = b;
+	b = malloc(sizeof(Bullet));
+	memset(b, 0, sizeof(Bullet));
+	stage.bTail->next = b;
+	stage.bTail = b;
 	
 	b->x = playerHead->x;
 	b->y = playerHead->y;
@@ -53,20 +53,20 @@ void fireBullet(void)
 
 void doBullets(void)
 {
-	Entity *b, *prev;
+	Bullet *b, *prev;
 	
-	prev = &stage.bulletHead;
+	prev = &stage.bHead;
 	
-	for (b = stage.bulletHead.next ; b != NULL ; b = b->next)
+	for (b = stage.bHead.next ; b != NULL ; b = b->next)
 	{
 		b->x += b->dx;
 		b->y += b->dy;
 		
 		if (--b->health <= 0)
 		{
-			if (b == stage.bulletTail)
+			if (b == stage.bTail)
 			{
-				stage.bulletTail = prev;
+				stage.bTail = prev;
 			}
 			
 			playerHead->ammo += 1;
@@ -81,9 +81,9 @@ void doBullets(void)
 
 void drawBullets(void)
 {
-	Entity *b;
+	Bullet *b;
 	
-	for (b = stage.bulletHead.next ; b != NULL ; b = b->next)
+	for (b = stage.bHead.next ; b != NULL ; b = b->next)
 	{
 		blitRotated(b->texture, b->x, b->y, b->angle);
 	}

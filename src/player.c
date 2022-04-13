@@ -22,17 +22,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void initPlayer(void)
 {
-	playerHead = malloc(sizeof(Entity));
-	memset(playerHead, 0, sizeof(Entity));
+	playerHead = malloc(sizeof(Player));
+	memset(playerHead, 0, sizeof(Player));
 
-	playerBody = malloc(sizeof(Entity));
-	memset(playerBody, 0, sizeof(Entity));
+	playerBody = malloc(sizeof(Player));
+	memset(playerBody, 0, sizeof(Player));
 
-	stage.entityTail->next = playerBody;
-	stage.entityTail = playerBody;
+	stage.pTail->next = playerBody;
+	stage.pTail = playerBody;
 
-	stage.entityTail->next = playerHead;
-	stage.entityTail = playerHead;
+	stage.pTail->next = playerHead;
+	stage.pTail = playerHead;
 
 	playerBody->texture = loadTexture("gfx/tankBody_blue_outline.png");
 	playerBody->x = SCREEN_WIDTH / 2;
@@ -249,4 +249,28 @@ void doPlayer(void)
 	}
 
 	playerHead->reload = MAX(playerHead->reload - 1, 0);
+
+	Player *e;
+	
+	for (e = stage.pHead.next ; e != NULL ; e = e->next)
+	{
+		e->x += e->dx;
+		e->y += e->dy;
+		
+		if (e == playerBody)
+		{
+			e->x = MIN(MAX(e->x, e->w / 2), SCREEN_WIDTH - e->w / 2);
+			e->y = MIN(MAX(e->y, e->h / 2), SCREEN_HEIGHT - e->h / 2);
+		}
+	}
+}
+
+void drawPlayers(void)
+{
+	Player *e;
+	
+	for (e = stage.pHead.next ; e != NULL ; e = e->next)
+	{
+		blitRotated(e->texture, e->x, e->y, e->angle);
+	}
 }

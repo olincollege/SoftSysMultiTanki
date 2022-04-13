@@ -32,8 +32,8 @@ void initStage(void)
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 	
-	stage.entityTail = &stage.entityHead;
-	stage.bulletTail = &stage.bulletHead;
+	stage.pTail = &stage.pHead;
+	stage.bTail = &stage.bHead;
 	
 	targetterTexture = loadTexture("gfx/crosshair010.png");
 	gridTexture = loadTexture("gfx/tileGrass1.png");
@@ -45,8 +45,6 @@ static void logic(void)
 {
 	doPlayer();
 	
-	doEntities();
-	
 	doBullets();
 }
 
@@ -56,7 +54,7 @@ static void draw(void)
 
 	drawBullets();
 	
-	drawEntities();
+	drawPlayers();
 	
 	blit(targetterTexture, app.mouse.x, app.mouse.y, 1);
 }

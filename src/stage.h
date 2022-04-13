@@ -27,8 +27,8 @@ extern void doPlayer(void);
 extern void drawBullets(void);
 extern void drawEntities(void);
 extern void initPlayer(void);
+extern void drawPlayers(void);
 extern SDL_Texture *loadTexture(char *filename);
 
 extern App app;
-extern Entity *player;
 extern Stage stage;
