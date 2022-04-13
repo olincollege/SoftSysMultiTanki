@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define FPS                 	60
 
 #define GRID_SIZE           	64
-#define GRID_WIDTH				20
+#define GRID_WIDTH				21
 #define GRID_HEIGHT				15
 
 #define SCREEN_WIDTH        	GRID_WIDTH * GRID_SIZE
@@ -44,9 +44,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define PLAYER_SPEED        	2
 #define PLAYER_ROTATION_SPEED 	3
-
-#define GLYPH_WIDTH         18
-#define GLYPH_HEIGHT        29
 
 enum
 {

@@ -34,5 +34,5 @@ extern SDL_Texture *loadTexture(char *filename);
 extern App app;
 extern Stage stage;
 
-extern int gdata[15][20];
-extern int wdata[15][20];
+extern int gdata[GRID_HEIGHT][GRID_WIDTH];
+extern int wdata[GRID_HEIGHT][GRID_WIDTH];

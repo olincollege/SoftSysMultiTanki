@@ -41,7 +41,6 @@ void initStage(void)
 	{
 		for (int x = 0 ; x < GRID_WIDTH ; x += 1)
 		{
-			printf("(%i, %i)\n", x, y);
 			MapTile* g = malloc(sizeof(MapTile));
 			memset(g, 0, sizeof(MapTile));
 
@@ -53,6 +52,9 @@ void initStage(void)
 
 			MapTile* w = malloc(sizeof(MapTile));
 			memset(w, 0, sizeof(MapTile));
+
+			w->x = x * GRID_SIZE;
+			w->y = y * GRID_SIZE;
 
 			w->texture = loadSprite(wdata[y][x]);
 			stage.walls[y][x] = w;
@@ -88,12 +90,20 @@ static void drawGrid(void)
 	{
 		for (x = 0 ; x < GRID_WIDTH ; x += 1)
 		{
-			//printf("(%i, %i)\n", x, y);
 			MapTile* m = stage.ground[y][x];
 			blit(m->texture, m->x, m->y, 0);
 		}
 	}
 
-	MapTile* m = stage.ground[0][18];
-	blit(m->texture, 1200, 120, 0);
+	for (y = 0 ; y < GRID_HEIGHT ; y += 1)
+	{
+		for (x = 0 ; x < GRID_WIDTH ; x += 1)
+		{
+			if (wdata[y][x] != 0) 
+			{
+				MapTile* m = stage.walls[y][x];
+				blit(m->texture, m->x, m->y, 0);
+			}
+		}
+	}
 }
