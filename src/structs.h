@@ -65,6 +65,7 @@ struct Bullet {
 	float dx;
 	float dy;
 	int angle;
+	float bp[2];
 	SDL_Texture *texture;
 	Bullet *next;
 };

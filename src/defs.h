@@ -45,6 +45,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PLAYER_SPEED        	2
 #define PLAYER_ROTATION_SPEED 	3
 
+#define BULLET_SPEED			4
+#define BULLET_HEIGHT			15
+
 enum
 {
 	TEXT_LEFT,

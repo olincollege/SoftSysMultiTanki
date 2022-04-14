@@ -21,10 +21,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "bullets.h"
 
 static SDL_Texture *bulletTexture;
+static SDL_Texture *testBullet;
 
 void initBullets(void)
 {
 	bulletTexture = loadTexture("gfx/bulletBlue3_outline.png");
+	testBullet = loadTexture("gfx/crosshair001.png");
+
 }
 
 void fireBullet(void)
@@ -44,8 +47,8 @@ void fireBullet(void)
 	
 	calcSlope(app.mouse.x, app.mouse.y, b->x, b->y, &b->dx, &b->dy);
 	
-	b->dx *= 8;
-	b->dy *= 8;
+	b->dx *= BULLET_SPEED;
+	b->dy *= BULLET_SPEED;
 
 	playerHead->reload = PLAYER_RELOAD;
 	playerHead->ammo -= 1;
@@ -61,6 +64,9 @@ void doBullets(void)
 	{
 		b->x += b->dx;
 		b->y += b->dy;
+
+		b->bp[0] = b->x + (BULLET_HEIGHT * 0.5 * sin((PI/180) * b->angle));
+		b->bp[1] = b->y - (BULLET_HEIGHT * 0.5 * cos((PI/180) * b->angle));
 		
 		if (--b->health <= 0)
 		{
@@ -86,5 +92,7 @@ void drawBullets(void)
 	for (b = stage.bHead.next ; b != NULL ; b = b->next)
 	{
 		blitRotated(b->texture, b->x, b->y, b->angle);
+		blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
+		blitRotated(testBullet, b->x, b->y, b->angle);
 	}
 }

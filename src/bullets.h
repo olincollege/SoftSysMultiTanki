@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern void blitRotated(SDL_Texture *texture, int x, int y, float angle);
 extern void calcSlope(int x1, int y1, int x2, int y2, float *dx, float *dy);
+extern void blitPoint(float x, float y);
 extern SDL_Texture *loadTexture(char *filename);
 
 extern App app;

@@ -116,3 +116,8 @@ void blitRotated(SDL_Texture *texture, int x, int y, float angle)
 
 	SDL_RenderCopyEx(app.renderer, texture, NULL, &dstRect, angle, NULL, SDL_FLIP_NONE);
 }
+
+void blitPoint(float x, float y)
+{
+	SDL_RenderDrawPoint(app.renderer, x, y);
+}
