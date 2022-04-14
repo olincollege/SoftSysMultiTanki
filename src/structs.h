@@ -94,6 +94,5 @@ typedef struct {
 	Bullet bHead, *bTail;
 	MapTile oHead, *oTail;
 	MapTile* ground[GRID_HEIGHT][GRID_WIDTH];
-	MapTile* walls[GRID_HEIGHT][GRID_WIDTH];
 } Stage;
 

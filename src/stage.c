@@ -50,14 +50,19 @@ void initStage(void)
 			g->texture = loadSprite(gdata[y][x]);
 			stage.ground[y][x] = g;
 
-			MapTile* w = malloc(sizeof(MapTile));
-			memset(w, 0, sizeof(MapTile));
+			if (wdata[y][x] != 0) 
+			{
+				MapTile* w = malloc(sizeof(MapTile));
+				memset(w, 0, sizeof(MapTile));
 
-			w->x = x * GRID_SIZE;
-			w->y = y * GRID_SIZE;
+				w->x = x * GRID_SIZE;
+				w->y = y * GRID_SIZE;
 
-			w->texture = loadSprite(wdata[y][x]);
-			stage.walls[y][x] = w;
+				w->texture = loadSprite(wdata[y][x]);
+
+				stage.oTail->next = w;
+				stage.oTail = w;
+			}
 		}
 	}
 	
@@ -95,15 +100,22 @@ static void drawGrid(void)
 		}
 	}
 
-	for (y = 0 ; y < GRID_HEIGHT ; y += 1)
+	// for (y = 0 ; y < GRID_HEIGHT ; y += 1)
+	// {
+	// 	for (x = 0 ; x < GRID_WIDTH ; x += 1)
+	// 	{
+	// 		if (wdata[y][x] != 0) 
+	// 		{
+	// 			MapTile* m = stage.walls[y][x];
+	// 			blit(m->texture, m->x, m->y, 0);
+	// 		}
+	// 	}
+	// }
+	
+	MapTile *m;
+	
+	for (m = stage.oHead.next ; m != NULL ; m = m->next)
 	{
-		for (x = 0 ; x < GRID_WIDTH ; x += 1)
-		{
-			if (wdata[y][x] != 0) 
-			{
-				MapTile* m = stage.walls[y][x];
-				blit(m->texture, m->x, m->y, 0);
-			}
-		}
+		blit(m->texture, m->x, m->y, 0);
 	}
 }
