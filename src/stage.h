@@ -28,6 +28,7 @@ extern void drawBullets(void);
 extern void drawEntities(void);
 extern void initPlayer(void);
 extern void drawPlayers(void);
+extern void collisionWallsBullets(void);
 extern SDL_Texture *loadSprite(int num);
 extern SDL_Texture *loadTexture(char *filename);
 
