@@ -1,5 +1,8 @@
 # Output File
 multitanki
+example_server
+enet_test_client
+enet_test_server
 
 # Prerequisites
 *.d
