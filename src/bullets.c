@@ -92,7 +92,7 @@ void drawBullets(void)
 	for (b = stage.bHead.next ; b != NULL ; b = b->next)
 	{
 		blitRotated(b->texture, b->x, b->y, b->angle);
-		// blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
+		//blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
 		// blitRotated(testBullet, b->x, b->y, b->angle);
 	}
 }

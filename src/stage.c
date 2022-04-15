@@ -92,6 +92,8 @@ static void draw(void)
 static void collision(void)
 {
 	collisionWallsBullets();
+
+	collisionPlayerWallsWithMove();
 }
 
 static void drawGrid(void)

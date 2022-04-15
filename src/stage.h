@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "common.h"
 
 extern void blit(SDL_Texture *texture, int x, int y, int center);
+extern void blitRotated(SDL_Texture *texture, int x, int y, float angle);
 extern void doBullets(void);
 extern void doEntities(void);
 extern void doPlayer(void);
@@ -29,6 +30,7 @@ extern void drawEntities(void);
 extern void initPlayer(void);
 extern void drawPlayers(void);
 extern void collisionWallsBullets(void);
+extern void collisionPlayerWallsWithMove(void);
 extern SDL_Texture *loadSprite(int num);
 extern SDL_Texture *loadTexture(char *filename);
 
