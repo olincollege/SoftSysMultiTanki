@@ -47,6 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define BULLET_SPEED			4
 #define BULLET_HEIGHT			15
+#define BULLET_MAX_HEALTH		3
 
 enum
 {

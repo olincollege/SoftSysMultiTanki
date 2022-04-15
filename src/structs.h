@@ -26,6 +26,7 @@ typedef struct MapTile MapTile;
 typedef struct {
 	void (*logic)(void);
 	void (*draw)(void);
+	void (*collision)(void);
 } Delegate;
 
 struct Texture {

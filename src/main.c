@@ -51,6 +51,8 @@ int main(int argc, char *argv[])
 		app.delegate.logic();
 		
 		app.delegate.draw();
+
+		app.delegate.collision();
 		
 		presentScene();
 		

@@ -121,3 +121,4 @@ void blitPoint(float x, float y)
 {
 	SDL_RenderDrawPoint(app.renderer, x, y);
 }
+

@@ -42,7 +42,7 @@ void fireBullet(void)
 	b->x = playerHead->x;
 	b->y = playerHead->y;
 	b->texture = bulletTexture;
-	b->health = FPS * 2;
+	b->health = BULLET_MAX_HEALTH;
 	b->angle = playerHead->angle;
 	
 	calcSlope(app.mouse.x, app.mouse.y, b->x, b->y, &b->dx, &b->dy);
@@ -68,7 +68,7 @@ void doBullets(void)
 		b->bp[0] = b->x + (BULLET_HEIGHT * 0.5 * sin((PI/180) * b->angle));
 		b->bp[1] = b->y - (BULLET_HEIGHT * 0.5 * cos((PI/180) * b->angle));
 		
-		if (--b->health <= 0)
+		if (b->health <= 0)
 		{
 			if (b == stage.bTail)
 			{
@@ -92,7 +92,7 @@ void drawBullets(void)
 	for (b = stage.bHead.next ; b != NULL ; b = b->next)
 	{
 		blitRotated(b->texture, b->x, b->y, b->angle);
-		blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
-		blitRotated(testBullet, b->x, b->y, b->angle);
+		// blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
+		// blitRotated(testBullet, b->x, b->y, b->angle);
 	}
 }
