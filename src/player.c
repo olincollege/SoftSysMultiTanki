@@ -249,20 +249,6 @@ void doPlayer(void)
 	}
 
 	playerHead->reload = MAX(playerHead->reload - 1, 0);
-
-	Player *e;
-	
-	for (e = stage.pHead.next ; e != NULL ; e = e->next)
-	{
-		e->x += e->dx;
-		e->y += e->dy;
-		
-		if (e == playerBody)
-		{
-			e->x = MIN(MAX(e->x, e->w / 2), SCREEN_WIDTH - e->w / 2);
-			e->y = MIN(MAX(e->y, e->h / 2), SCREEN_HEIGHT - e->h / 2);
-		}
-	}
 	//printf("(%f, %f)\n", playerBody->x, playerBody->y);
 }
 
