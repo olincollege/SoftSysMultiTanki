@@ -56,6 +56,7 @@ void initSDL(void)
 void initGame(void)
 {
 	initBullets();
+	initEffect();
 }
 
 void cleanup(void)

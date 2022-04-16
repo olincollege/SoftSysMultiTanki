@@ -76,6 +76,8 @@ static void logic(void)
 	doPlayer();
 	
 	doBullets();
+
+	doEffect();
 }
 
 static void draw(void)
@@ -83,6 +85,8 @@ static void draw(void)
 	drawGrid();
 
 	drawBullets();
+
+	drawEffect();
 	
 	drawPlayers();
 	
@@ -109,18 +113,6 @@ static void drawGrid(void)
 		}
 	}
 
-	// for (y = 0 ; y < GRID_HEIGHT ; y += 1)
-	// {
-	// 	for (x = 0 ; x < GRID_WIDTH ; x += 1)
-	// 	{
-	// 		if (wdata[y][x] != 0) 
-	// 		{
-	// 			MapTile* m = stage.walls[y][x];
-	// 			blit(m->texture, m->x, m->y, 0);
-	// 		}
-	// 	}
-	// }
-	
 	MapTile *m;
 	
 	for (m = stage.oHead.next ; m != NULL ; m = m->next)

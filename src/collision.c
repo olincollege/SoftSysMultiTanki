@@ -74,6 +74,14 @@ void collisionPlayerWallsWithMove(void)
     Player *p;
     for (p = stage.pHead.next ; p != NULL ; p = p->next)
 	{
+        if (p->isBody != 1)
+        {
+            continue;
+        }
+        
+        float startX = p->x;
+        float startY = p->y;
+
 		p->x += p->dx;
 
         MapTile* m;
@@ -95,6 +103,10 @@ void collisionPlayerWallsWithMove(void)
                 break;
             }
         }
+
+        float travelDistance = sqrtf(powf(p->x - startX, 2) + powf(p->y - startY, 2));
+
+        p->trailDistance -= travelDistance;
 		
 		p->x = MIN(MAX(p->x, p->w / 2), SCREEN_WIDTH - p->w / 2);
 		p->y = MIN(MAX(p->y, p->h / 2), SCREEN_HEIGHT - p->h / 2);

@@ -35,9 +35,12 @@ void initPlayer(void)
 	stage.pTail = playerHead;
 
 	playerBody->texture = loadTexture("gfx/tankBody_blue_outline.png");
+	playerBody->isBody = 1;
 	playerBody->x = SCREEN_WIDTH / 2;
 	playerBody->y = SCREEN_HEIGHT / 2;
 	playerBody->angle = 70;
+	playerBody->trailDistance = PLAYER_TRAIL_DISTANCE;
+	playerBody->etrailTail = &playerBody->etrailHead;
 	
 	playerHead->texture = loadTexture("gfx/tankBlue_barrel2_outline.png");
 	playerHead->x = playerBody->x;

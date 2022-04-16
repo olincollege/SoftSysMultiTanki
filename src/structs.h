@@ -22,6 +22,7 @@ typedef struct Texture Texture;
 typedef struct Player Player;
 typedef struct Bullet Bullet;
 typedef struct MapTile MapTile;
+typedef struct Effect Effect;
 
 typedef struct {
 	void (*logic)(void);
@@ -42,7 +43,19 @@ typedef struct {
 	int wheel;
 } Mouse;
 
+struct Effect {
+	float x;
+	float y;
+	int active;
+	int maxLife;
+	int life;
+	int angle;
+	SDL_Texture *texture;
+	Effect *next;
+};
+
 struct Player {
+	int isBody;
 	float x;
 	float y;
 	int w;
@@ -54,6 +67,8 @@ struct Player {
 	float dy;
 	int angle;
 	SDL_Texture *texture;
+	Effect etrailHead, *etrailTail;
+	float trailDistance;
 	Player *next;
 };
 
