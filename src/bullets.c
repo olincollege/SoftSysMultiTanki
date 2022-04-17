@@ -27,7 +27,6 @@ void initBullets(void)
 {
 	bulletTexture = loadTexture("gfx/bulletBlue3_outline.png");
 	testBullet = loadTexture("gfx/crosshair001.png");
-
 }
 
 void fireBullet(void)
@@ -55,6 +54,7 @@ void fireBullet(void)
 
 	playerHead->reload = PLAYER_RELOAD;
 	playerHead->ammo -= 1;
+	playerHead->bulletShot.health = PLAYER_RELOAD;
 }
 
 void doBullets(void)

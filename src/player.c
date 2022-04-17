@@ -46,6 +46,7 @@ void initPlayer(void)
 	playerHead->x = playerBody->x;
 	playerHead->y = playerBody->y;
 	playerHead->ammo = PLAYER_MAX_BULLET;
+	playerHead->bulletShot.texture = loadTexture("gfx/shotLarge.png");
 
 	SDL_QueryTexture(playerBody->texture, NULL, NULL, &playerBody->w, &playerBody->h);
 }

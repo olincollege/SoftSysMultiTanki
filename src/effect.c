@@ -15,7 +15,7 @@ void initEffect(void)
     bulletTrailTexture4 = loadTexture("gfx/smoke_06_resized.png");
 }
 
-void leaveTankTrail(void)
+void leaveTankTrailEffect(void)
 {
     Player *p;
     for (p = stage.pHead.next; p != NULL ; p = p->next)
@@ -44,7 +44,7 @@ void leaveTankTrail(void)
     }
 }
 
-void leaveBulletTrail(void)
+void leaveBulletTrailEffect(void)
 {
     Bullet *b;
     for (b = stage.bHead.next; b != NULL ; b = b->next)
@@ -82,10 +82,26 @@ void leaveBulletTrail(void)
     }
 }
 
+void updateBulletShotEffect(void)
+{
+    Player *p;
+    for (p = stage.pHead.next; p != NULL ; p = p->next)
+    {
+        if (p->isBody == 0 && p->bulletShot.health > 0)
+        {
+            //printf("check %i\n", p->bulletShot.health);
+            p->bulletShot.x = p->x + (PLAYER_BARREL_HEIGHT * sin((PI/180) * p->angle));
+            p->bulletShot.y = p->y - (PLAYER_BARREL_HEIGHT * cos((PI/180) * p->angle));
+            p->bulletShot.angle = p->angle;
+        }
+    }
+}
+
 void doEffect(void)
 {
-    leaveTankTrail();
-    leaveBulletTrail();
+    leaveTankTrailEffect();
+    leaveBulletTrailEffect();
+    updateBulletShotEffect();
 }
 
 void drawEffectUnder(void)
@@ -115,6 +131,16 @@ void drawEffectUnder(void)
                 // }
                 
                 // prev = e;
+            }
+        }
+
+        if (p->isBody == 0)
+        {
+            if (p->bulletShot.health > 0)
+            {
+                blitRotated(p->bulletShot.texture, p->bulletShot.x, p->bulletShot.y, p->bulletShot.angle);
+                printf("check %i\n", p->bulletShot.angle);
+                p->bulletShot.health -= 1;
             }
         }
     }
