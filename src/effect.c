@@ -139,7 +139,7 @@ void drawEffectUnder(void)
             if (p->bulletShot.health > 0)
             {
                 blitRotated(p->bulletShot.texture, p->bulletShot.x, p->bulletShot.y, p->bulletShot.angle);
-                printf("check %i\n", p->bulletShot.angle);
+                //printf("check %i\n", p->bulletShot.angle);
                 p->bulletShot.health -= 1;
             }
         }

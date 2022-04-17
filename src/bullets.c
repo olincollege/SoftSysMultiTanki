@@ -38,8 +38,8 @@ void fireBullet(void)
 	stage.bTail->next = b;
 	stage.bTail = b;
 	
-	b->x = playerHead->x;
-	b->y = playerHead->y;
+	b->x = playerHead->x + (PLAYER_BARREL_HEIGHT * 0.8 * sin((PI/180) * playerHead->angle));
+	b->y = playerHead->y - (PLAYER_BARREL_HEIGHT * 0.8 * cos((PI/180) * playerHead->angle));
 	b->texture = bulletTexture;
 	b->health = BULLET_MAX_HEALTH;
 	b->angle = playerHead->angle;
