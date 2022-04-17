@@ -44,15 +44,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define PLAYER_SPEED        	2
 #define PLAYER_ROTATION_SPEED 	3
-#define PLAYER_TRAIL_DISTANCE	10
+#define PLAYER_TRAIL_DISTANCE	12
 
-#define BULLET_SPEED			4
+#define BULLET_SPEED			3
 #define BULLET_HEIGHT			15
 #define BULLET_MAX_HEALTH		3
 
-enum
-{
-	TEXT_LEFT,
-	TEXT_CENTER,
-	TEXT_RIGHT
-};
+#define BULLET_TRAIL_DISTANCE	18

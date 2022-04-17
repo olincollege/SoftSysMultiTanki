@@ -86,9 +86,11 @@ static void draw(void)
 
 	drawBullets();
 
-	drawEffect();
+	drawEffectUnder();
 	
 	drawPlayers();
+
+	drawEffectOver();
 	
 	blit(targetterTexture, app.mouse.x, app.mouse.y, 1);
 }

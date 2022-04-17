@@ -44,6 +44,9 @@ void fireBullet(void)
 	b->texture = bulletTexture;
 	b->health = BULLET_MAX_HEALTH;
 	b->angle = playerHead->angle;
+	b->etrailTail = &b->etrailHead;
+	b->trailDistance = BULLET_TRAIL_DISTANCE * 3;
+	b->active = 1;
 	
 	calcSlope(app.mouse.x, app.mouse.y, b->x, b->y, &b->dx, &b->dy);
 	
@@ -62,23 +65,44 @@ void doBullets(void)
 	
 	for (b = stage.bHead.next ; b != NULL ; b = b->next)
 	{
+		if (b->active == 0)
+		{
+			if (&b->etrailHead == b->etrailTail)
+			{
+				if (b == stage.bTail)
+				{
+					stage.bTail = prev;
+				}
+				
+				prev->next = b->next;
+				free(b);
+				b = prev;
+				//printf("check\n");
+				continue;
+			}
+			else
+			{
+				continue;
+			}
+		}
+
+		float startX = b->x;
+        float startY = b->y;
+
 		b->x += b->dx;
 		b->y += b->dy;
 
 		b->bp[0] = b->x + (BULLET_HEIGHT * 0.5 * sin((PI/180) * b->angle));
 		b->bp[1] = b->y - (BULLET_HEIGHT * 0.5 * cos((PI/180) * b->angle));
+
+		float travelDistance = sqrtf(powf(b->x - startX, 2) + powf(b->y - startY, 2));
+
+        b->trailDistance -= travelDistance;
 		
 		if (b->health <= 0)
 		{
-			if (b == stage.bTail)
-			{
-				stage.bTail = prev;
-			}
-			
+			b->active = 0;
 			playerHead->ammo += 1;
-			prev->next = b->next;
-			free(b);
-			b = prev;
 		}
 		
 		prev = b;
@@ -91,7 +115,10 @@ void drawBullets(void)
 	
 	for (b = stage.bHead.next ; b != NULL ; b = b->next)
 	{
-		blitRotated(b->texture, b->x, b->y, b->angle);
+		if (b->active == 1)
+		{
+			blitRotated(b->texture, b->x, b->y, b->angle);
+		}
 		//blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
 		// blitRotated(testBullet, b->x, b->y, b->angle);
 	}

@@ -47,8 +47,8 @@ struct Effect {
 	float x;
 	float y;
 	int active;
-	int maxLife;
-	int life;
+	int maxHealth;
+	int health;
 	int angle;
 	SDL_Texture *texture;
 	Effect *next;
@@ -66,13 +66,15 @@ struct Player {
 	float dx;
 	float dy;
 	int angle;
-	SDL_Texture *texture;
 	Effect etrailHead, *etrailTail;
+	Effect bulletShot;
 	float trailDistance;
+	SDL_Texture *texture;
 	Player *next;
 };
 
 struct Bullet {
+	int active;
 	float x;
 	float y;
 	int w;
@@ -82,6 +84,8 @@ struct Bullet {
 	float dy;
 	int angle;
 	float bp[2];
+	Effect etrailHead, *etrailTail;
+	float trailDistance;
 	SDL_Texture *texture;
 	Bullet *next;
 };
@@ -89,9 +93,6 @@ struct Bullet {
 struct MapTile {
 	float x;
 	float y;
-	int w;
-	int h;
-	int collision;
 	SDL_Texture *texture;
 	MapTile *next;
 };
