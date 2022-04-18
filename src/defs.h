@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PI                   3.14159265358979323846
 
 #define FPS                 	60
+#define WAIT                    1000/FPS                  
+#define REMAINDER               (1000/(float)FPS) - WAIT
 
 #define GRID_SIZE           	64
 #define GRID_WIDTH				21
@@ -40,15 +42,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MAX_SND_CHANNELS    	16
 
 #define PLAYER_MAX_BULLET		5
-#define PLAYER_RELOAD			10
+#define PLAYER_RELOAD			10 * (FPS/(float)60)
 
-#define PLAYER_SPEED        	2
-#define PLAYER_ROTATION_SPEED 	3
-#define PLAYER_TRAIL_DISTANCE	12
+#define PLAYER_SPEED        	2 * ((float)60/FPS)
+#define PLAYER_ROTATION_SPEED 	3 * ((float)60/FPS)
+#define PLAYER_TRAIL_DISTANCE	12 * (FPS/(float)60)
 #define PLAYER_BARREL_HEIGHT    38
 
-#define BULLET_SPEED			3
+#define BULLET_SPEED			3 * ((float)60/FPS)
 #define BULLET_HEIGHT			15
 #define BULLET_MAX_HEALTH		3
-
-#define BULLET_TRAIL_DISTANCE	18
+#define BULLET_TRAIL_DISTANCE	18 * (FPS/(float)60)
