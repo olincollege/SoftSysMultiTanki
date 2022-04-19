@@ -23,6 +23,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define STRNCPY(dest, src, n) strncpy(dest, src, n); dest[n - 1] = '\0'
 #define PI                   3.14159265358979323846
 
+#define PLAYER_INDEX            0
+#define MAX_PLAYER              2
+
 #define FPS                 	60
 #define WAIT                    1000/FPS                  
 #define REMAINDER               (1000/(float)FPS) - WAIT
