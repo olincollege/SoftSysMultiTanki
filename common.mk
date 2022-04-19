@@ -16,6 +16,7 @@ _OBJS += util.o
 _OBJS += map.o
 _OBJS += collision.o
 _OBJS += effect.o
+_OBJS += server.o
 
 OBJS = $(patsubst %,$(OUT)/%,$(_OBJS))
 

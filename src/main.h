@@ -27,6 +27,8 @@ extern void initSDL(void);
 extern void initStage(void);
 extern void prepareScene(void);
 extern void presentScene(void);
+extern void doSendToServer(void);
+extern void doReceiveFromServer(void);
 
 App app;
 Stage stage;

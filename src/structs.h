@@ -101,6 +101,7 @@ struct MapTile {
 typedef struct {
 	int keyboard[MAX_KEYBOARD_KEYS];
 	Mouse mouse;
+	int testInt;
 } PlayerInput;
 
 typedef struct {

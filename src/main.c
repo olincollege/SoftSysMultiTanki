@@ -58,6 +58,8 @@ int main(int argc, char *argv[])
 		presentScene();
 		
 		capFrameRate(&then, &remainder);
+		
+		doReceiveFromServer();
 	}
 
 	return 0;
