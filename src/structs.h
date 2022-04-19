@@ -27,7 +27,6 @@ typedef struct Effect Effect;
 typedef struct {
 	void (*logic)(void);
 	void (*draw)(void);
-	void (*collision)(void);
 } Delegate;
 
 struct Texture {
@@ -55,6 +54,7 @@ struct Effect {
 };
 
 struct Player {
+	int playerIndex;
 	int isBody;
 	float x;
 	float y;
@@ -74,6 +74,7 @@ struct Player {
 };
 
 struct Bullet {
+	int playerIndex;
 	int active;
 	float x;
 	float y;
@@ -98,11 +99,17 @@ struct MapTile {
 };
 
 typedef struct {
+	int keyboard[MAX_KEYBOARD_KEYS];
+	Mouse mouse;
+} PlayerInput;
+
+typedef struct {
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	Delegate delegate;
-	int keyboard[MAX_KEYBOARD_KEYS];
-	Mouse mouse;
+	int maxPlayer;
+	int playerIndex;
+	PlayerInput playerInputs[MAX_PLAYER];
 	Texture textureHead, *textureTail;
 } App;
 

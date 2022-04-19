@@ -29,6 +29,4 @@ extern void prepareScene(void);
 extern void presentScene(void);
 
 App app;
-Player *playerHead;
-Player *playerBody;
 Stage stage;

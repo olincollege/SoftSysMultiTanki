@@ -27,5 +27,4 @@ extern void blitPoint(float x, float y);
 extern SDL_Texture *loadTexture(char *filename);
 
 extern App app;
-extern Player *playerHead;
 extern Stage stage;

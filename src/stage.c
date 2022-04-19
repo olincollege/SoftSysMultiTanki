@@ -22,7 +22,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static void logic(void);
 static void draw(void);
-static void collision(void);
 static void drawGrid(void);
 
 static SDL_Texture *targetterTexture;
@@ -31,7 +30,6 @@ void initStage(void)
 {
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
-	app.delegate.collision = collision;
 	
 	stage.pTail = &stage.pHead;
 	stage.bTail = &stage.bHead;
@@ -78,6 +76,10 @@ static void logic(void)
 	doBullets();
 
 	doEffect();
+
+	collisionWallsBullets();
+
+	collisionPlayerWallsWithMove();
 }
 
 static void draw(void)
@@ -92,14 +94,7 @@ static void draw(void)
 
 	drawEffectOver();
 	
-	blit(targetterTexture, app.mouse.x, app.mouse.y, 1);
-}
-
-static void collision(void)
-{
-	collisionWallsBullets();
-
-	collisionPlayerWallsWithMove();
+	blit(targetterTexture, app.playerInputs[app.playerIndex].mouse.x, app.playerInputs[app.playerIndex].mouse.y, 1);
 }
 
 static void drawGrid(void)

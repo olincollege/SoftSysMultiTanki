@@ -29,6 +29,9 @@ int main(int argc, char *argv[])
 	
 	memset(&app, 0, sizeof(App));
 	app.textureTail = &app.textureHead;
+
+	app.maxPlayer = MAX_PLAYER;
+	app.playerIndex = 0;
 	
 	initSDL();
 	
@@ -51,8 +54,6 @@ int main(int argc, char *argv[])
 		app.delegate.logic();
 		
 		app.delegate.draw();
-
-		app.delegate.collision();
 		
 		presentScene();
 		

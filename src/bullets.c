@@ -20,16 +20,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "bullets.h"
 
-static SDL_Texture *bulletTexture;
+static SDL_Texture *bulletTexture1;
+static SDL_Texture *bulletTexture2;
 static SDL_Texture *testBullet;
 
 void initBullets(void)
 {
-	bulletTexture = loadTexture("gfx/bulletBlue3_outline.png");
+	bulletTexture1 = loadTexture("gfx/bulletBlue3_outline.png");
+	bulletTexture2 = loadTexture("gfx/bulletRed3_outline.png");
 	testBullet = loadTexture("gfx/crosshair001.png");
 }
 
-void fireBullet(void)
+void fireBullet(Player* playerHead)
 {
 	Bullet *b;
 	
@@ -40,14 +42,27 @@ void fireBullet(void)
 	
 	b->x = playerHead->x + (PLAYER_BARREL_HEIGHT * 0.8 * sin((PI/180) * playerHead->angle));
 	b->y = playerHead->y - (PLAYER_BARREL_HEIGHT * 0.8 * cos((PI/180) * playerHead->angle));
-	b->texture = bulletTexture;
+	switch(playerHead->playerIndex)
+	{
+		case 0:
+			b->texture = bulletTexture1;
+			break;
+		case 1:
+			b->texture = bulletTexture2;
+			break;
+		default:
+			b->texture = bulletTexture1;
+			break;
+
+	}
 	b->health = BULLET_MAX_HEALTH;
 	b->angle = playerHead->angle;
 	b->etrailTail = &b->etrailHead;
 	b->trailDistance = BULLET_TRAIL_DISTANCE * 3;
 	b->active = 1;
+	b->playerIndex = playerHead->playerIndex;
 	
-	calcSlope(app.mouse.x, app.mouse.y, b->x, b->y, &b->dx, &b->dy);
+	calcSlope(app.playerInputs[playerHead->playerIndex].mouse.x, app.playerInputs[playerHead->playerIndex].mouse.y, b->x, b->y, &b->dx, &b->dy);
 	
 	b->dx *= BULLET_SPEED;
 	b->dy *= BULLET_SPEED;
@@ -102,7 +117,16 @@ void doBullets(void)
 		if (b->health <= 0)
 		{
 			b->active = 0;
-			playerHead->ammo += 1;
+
+			Player *p;
+	
+			for (p = stage.pHead.next ; p != NULL ; p = p->next)
+			{
+				if (p->isBody == 0 && b->playerIndex == p->playerIndex)
+				{
+					p->ammo += 1;
+				}
+			}
 		}
 		
 		prev = b;
