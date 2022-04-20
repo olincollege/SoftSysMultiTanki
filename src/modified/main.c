@@ -38,8 +38,10 @@ int main(int argc, char *argv[])
 	atexit(cleanup);
 	
 	initGame();
+
+	initTitle();
 	
-	initStage();
+	//initStage();
 	
 	then = SDL_GetTicks();
 	

@@ -35,8 +35,6 @@ extern void doEffect(void);
 extern void drawEffectOver(void);
 extern void drawEffectUnder(void);
 
-extern void drawText(char *text, int x, int y, int r, int g, int b, int fontType, int align, int maxWidth);
-
 extern SDL_Texture *loadSprite(int num);
 extern SDL_Texture *loadTexture(char *filename);
 

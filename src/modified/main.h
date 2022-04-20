@@ -29,6 +29,7 @@ extern void prepareScene(void);
 extern void presentScene(void);
 extern void doSendToServer(void);
 extern void doReceiveFromServer(void);
+extern void initTitle(void);
 
 App app;
 Stage stage;
