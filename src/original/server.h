@@ -1,4 +1,4 @@
-#include "common.h"
+#include "../common.h"
 
 extern App app;
 extern Stage stage;

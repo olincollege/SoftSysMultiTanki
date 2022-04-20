@@ -18,12 +18,30 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "common.h"
+#include "../common.h"
 
-extern void fireBullet(Player* playerHead);
-extern float getAngle(int x1, int y1, int x2, int y2);
-extern SDL_Texture *loadTexture(char *filename);
+extern void blit(SDL_Texture *texture, int x, int y, int center);
 extern void blitRotated(SDL_Texture *texture, int x, int y, float angle);
+extern void doBullets(void);
+extern void doEntities(void);
+extern void doPlayer(void);
+extern void drawBullets(void);
+extern void drawEntities(void);
+extern void initPlayer(void);
+extern void drawPlayers(void);
+extern void collisionWallsBullets(void);
+extern void collisionPlayerWallsWithMove(void);
+extern void doEffect(void);
+extern void drawEffectOver(void);
+extern void drawEffectUnder(void);
+
+extern void drawText(char *text, int x, int y, int r, int g, int b, int fontType, int align, int maxWidth);
+
+extern SDL_Texture *loadSprite(int num);
+extern SDL_Texture *loadTexture(char *filename);
 
 extern App app;
 extern Stage stage;
+
+extern int gdata[GRID_HEIGHT][GRID_WIDTH];
+extern int wdata[GRID_HEIGHT][GRID_WIDTH];

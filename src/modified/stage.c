@@ -95,6 +95,8 @@ static void draw(void)
 	drawEffectOver();
 	
 	blit(targetterTexture, app.playerInputs[app.playerIndex].mouse.x, app.playerInputs[app.playerIndex].mouse.y, 1);
+
+	drawText("What the Fox", SCREEN_WIDTH / 2, 100, 255, 255, 255, FONT_PARTY, TEXT_ALIGN_CENTER, 0);
 }
 
 static void drawGrid(void)

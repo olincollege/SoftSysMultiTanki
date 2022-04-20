@@ -18,4 +18,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "common.h"
+#include "../common.h"
+
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL_mixer.h"
+#include "SDL2/SDL_ttf.h"
+
+extern void initFonts(void);
+extern void initBullets(void);
+extern void initFonts(void);
+extern void initEffect(void);
+
+extern App app;

@@ -49,6 +49,12 @@ void initSDL(void)
 	app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
 	
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+
+	if (TTF_Init() < 0)
+	{
+		printf("Couldn't initialize SDL TTF: %s\n", SDL_GetError());
+		exit(1);
+	}
 	
 	SDL_ShowCursor(0);
 
@@ -59,6 +65,7 @@ void initGame(void)
 {
 	initBullets();
 	initEffect();
+	initFonts();
 }
 
 void cleanup(void)

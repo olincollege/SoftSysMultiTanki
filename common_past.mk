@@ -1,13 +1,23 @@
 OUT = bin
 
-SEARCHPATH += $(shell find src -type d | sort)
-
+SEARCHPATH += src
 vpath %.c $(SEARCHPATH)
 vpath %.h $(SEARCHPATH)
 
 DEPS += defs.h structs.h
 
-_OBJS = $(shell find src -iname *.c -type f -exec basename {} \; | sed 's/\.c/\.o/g' | sort | grep -v win32)
+_OBJS += bullets.o
+_OBJS += draw.o
+_OBJS += init.o input.o
+_OBJS += main.o
+_OBJS += player.o
+_OBJS += stage.o
+_OBJS += util.o
+_OBJS += map.o
+_OBJS += collision.o
+_OBJS += effect.o
+_OBJS += server.o
+_OBJS += text.o textures.o
 
 OBJS = $(patsubst %,$(OUT)/%,$(_OBJS))
 
@@ -18,7 +28,7 @@ all: $(PROG)
 $(OUT)/%.o: %.c %.h $(DEPS)
 	@mkdir -p $(OUT)
 	$(CC) $(CFLAGS) $(CXXFLAGS) -c -o $@ $<
-
+	
 # cleaning everything that can be automatically recreated with "make".
 clean:
 	$(RM) -rf $(OUT) $(PROG)
