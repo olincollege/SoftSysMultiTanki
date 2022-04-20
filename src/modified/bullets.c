@@ -37,8 +37,9 @@ void fireBullet(Player* playerHead)
 	
 	b = malloc(sizeof(Bullet));
 	memset(b, 0, sizeof(Bullet));
-	stage.bTail->next = b;
-	stage.bTail = b;
+
+	playerHead->bTail->next = b;
+	playerHead->bTail = b;
 	
 	b->x = playerHead->x + (PLAYER_BARREL_HEIGHT * 0.8 * sin((PI/180) * playerHead->angle));
 	b->y = playerHead->y - (PLAYER_BARREL_HEIGHT * 0.8 * cos((PI/180) * playerHead->angle));
@@ -55,13 +56,14 @@ void fireBullet(Player* playerHead)
 			break;
 
 	}
+
 	b->health = BULLET_MAX_HEALTH;
 	b->angle = playerHead->angle;
 	b->etrailTail = &b->etrailHead;
 	b->trailDistance = BULLET_TRAIL_DISTANCE * 3;
 	b->active = 1;
 	b->playerIndex = playerHead->playerIndex;
-	
+
 	calcSlope(app.playerInputs[playerHead->playerIndex].mouse.x, app.playerInputs[playerHead->playerIndex].mouse.y, b->x, b->y, &b->dx, &b->dy);
 	
 	b->dx *= BULLET_SPEED;
@@ -74,76 +76,86 @@ void fireBullet(Player* playerHead)
 
 void doBullets(void)
 {
-	Bullet *b, *prev;
+	Player *p;
 	
-	prev = &stage.bHead;
-	
-	for (b = stage.bHead.next ; b != NULL ; b = b->next)
-	{
-		if (b->active == 0)
+	for (p = stage.pHead.next ; p != NULL ; p = p->next)
+	{	
+		if (p->isBody == 1)
 		{
-			if (&b->etrailHead == b->etrailTail)
-			{
-				if (b == stage.bTail)
-				{
-					stage.bTail = prev;
-				}
-				
-				prev->next = b->next;
-				free(b);
-				b = prev;
-				//printf("check\n");
-				continue;
-			}
-			else
-			{
-				continue;
-			}
+			continue;
 		}
 
-		float startX = b->x;
-        float startY = b->y;
-
-		b->x += b->dx;
-		b->y += b->dy;
-
-		b->bp[0] = b->x + (BULLET_HEIGHT * 0.5 * sin((PI/180) * b->angle));
-		b->bp[1] = b->y - (BULLET_HEIGHT * 0.5 * cos((PI/180) * b->angle));
-
-		float travelDistance = sqrtf(powf(b->x - startX, 2) + powf(b->y - startY, 2));
-
-        b->trailDistance -= travelDistance;
+		Bullet *b, *prev;
 		
-		if (b->health <= 0)
+		prev = &p->bHead;
+		
+		for (b = p->bHead.next ; b != NULL ; b = b->next)
 		{
-			b->active = 0;
-
-			Player *p;
-	
-			for (p = stage.pHead.next ; p != NULL ; p = p->next)
+			if (b->active == 0)
 			{
-				if (p->isBody == 0 && b->playerIndex == p->playerIndex)
+				if (&b->etrailHead == b->etrailTail)
 				{
-					p->ammo += 1;
+					if (b == p->bTail)
+					{
+						p->bTail = prev;
+					}
+					
+					prev->next = b->next;
+					free(b);
+					b = prev;
+					//printf("check\n");
+					continue;
+				}
+				else
+				{
+					continue;
 				}
 			}
+
+			float startX = b->x;
+			float startY = b->y;
+
+			b->x += b->dx;
+			b->y += b->dy;
+
+			b->bp[0] = b->x + (BULLET_HEIGHT * 0.5 * sin((PI/180) * b->angle));
+			b->bp[1] = b->y - (BULLET_HEIGHT * 0.5 * cos((PI/180) * b->angle));
+
+			float travelDistance = sqrtf(powf(b->x - startX, 2) + powf(b->y - startY, 2));
+
+			b->trailDistance -= travelDistance;
+			
+			if (b->health <= 0)
+			{
+				b->active = 0;
+				p->ammo += 1;
+			}
+			
+			prev = b;
 		}
-		
-		prev = b;
 	}
 }
 
 void drawBullets(void)
 {
-	Bullet *b;
+	Player *p;
 	
-	for (b = stage.bHead.next ; b != NULL ; b = b->next)
-	{
-		if (b->active == 1)
+	for (p = stage.pHead.next ; p != NULL ; p = p->next)
+	{	
+		if (p->isBody == 1)
 		{
-			blitRotated(b->texture, b->x, b->y, b->angle);
+			continue;
 		}
-		//blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
-		// blitRotated(testBullet, b->x, b->y, b->angle);
+		Bullet *b;
+		
+		for (b = p->bHead.next ; b != NULL ; b = b->next)
+		{
+			if (b->active == 1)
+			{
+				blitRotated(b->texture, b->x, b->y, b->angle);
+			}
+			//blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
+			// blitRotated(testBullet, b->x, b->y, b->angle);
+		}
 	}
 }

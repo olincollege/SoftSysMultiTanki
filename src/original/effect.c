@@ -46,38 +46,48 @@ void leaveTankTrailEffect(void)
 
 void leaveBulletTrailEffect(void)
 {
-    Bullet *b;
-    for (b = stage.bHead.next; b != NULL ; b = b->next)
-    {
-        if (b->trailDistance <= 0)
+    Player *p;
+	
+	for (p = stage.pHead.next ; p != NULL ; p = p->next)
+	{	
+		if (p->isBody == 1)
+		{
+			continue;
+		}
+
+        Bullet *b;
+        for (b = p->bHead.next; b != NULL ; b = b->next)
         {
-            b->trailDistance = BULLET_TRAIL_DISTANCE;
-
-            Effect *e = malloc(sizeof(Effect));
-			memset(e, 0, sizeof(Effect));
-
-            b->etrailTail->next = e;
-	        b->etrailTail = e;
-
-            switch(rand() % 4)
+            if (b->trailDistance <= 0)
             {
-                case 0:
-                    e->texture = bulletTrailTexture1;
-                    break;
-                case 1:
-                    e->texture = bulletTrailTexture2;
-                    break;
-                case 2:
-                    e->texture = bulletTrailTexture3;
-                    break;
-                case 3:
-                    e->texture = bulletTrailTexture4;
-                    break;
+                b->trailDistance = BULLET_TRAIL_DISTANCE;
+
+                Effect *e = malloc(sizeof(Effect));
+                memset(e, 0, sizeof(Effect));
+
+                b->etrailTail->next = e;
+                b->etrailTail = e;
+
+                switch(rand() % 4)
+                {
+                    case 0:
+                        e->texture = bulletTrailTexture1;
+                        break;
+                    case 1:
+                        e->texture = bulletTrailTexture2;
+                        break;
+                    case 2:
+                        e->texture = bulletTrailTexture3;
+                        break;
+                    case 3:
+                        e->texture = bulletTrailTexture4;
+                        break;
+                }
+                e->x = b->x - (BULLET_HEIGHT * 0.5 * sin((PI/180) * b->angle));
+                e->y = b->y + (BULLET_HEIGHT * 0.5 * cos((PI/180) * b->angle));
+                e->angle = rand() % 360;
+                e->health = FPS * 1;
             }
-            e->x = b->x - (BULLET_HEIGHT * 0.5 * sin((PI/180) * b->angle));
-            e->y = b->y + (BULLET_HEIGHT * 0.5 * cos((PI/180) * b->angle));
-            e->angle = rand() % 360;
-            e->health = FPS * 1;
         }
     }
 }
@@ -148,29 +158,38 @@ void drawEffectUnder(void)
 
 void drawEffectOver(void)
 {
-    Bullet *b;
-    for (b = stage.bHead.next; b != NULL ; b = b->next)
-    {
-        Effect *e;
-        Effect *prev = &(b->etrailHead);
-
-        for (e = b->etrailHead.next; e != NULL ; e = e->next)
+    Player *p;
+	
+	for (p = stage.pHead.next ; p != NULL ; p = p->next)
+	{	
+		if (p->isBody == 1)
+		{
+			continue;
+		}
+        Bullet *b;
+        for (b = p->bHead.next; b != NULL ; b = b->next)
         {
-            blitRotated(e->texture, e->x, e->y, e->angle);
+            Effect *e;
+            Effect *prev = &(b->etrailHead);
 
-            if (--e->health <= 0)
+            for (e = b->etrailHead.next; e != NULL ; e = e->next)
             {
-                if (e == b->etrailTail)
-                {
-                    b->etrailTail = prev;
-                }
+                blitRotated(e->texture, e->x, e->y, e->angle);
 
-                prev->next = e->next;
-                free(e);
-                e = prev;
+                if (--e->health <= 0)
+                {
+                    if (e == b->etrailTail)
+                    {
+                        b->etrailTail = prev;
+                    }
+
+                    prev->next = e->next;
+                    free(e);
+                    e = prev;
+                }
+                
+                prev = e;
             }
-            
-            prev = e;
         }
     }
 }

@@ -21,6 +21,8 @@ void initPlayer(void)
 		playerHead->playerIndex = i;
 		playerBody->playerIndex = i;
 
+		playerHead->bTail = &playerHead->bHead;
+
 		switch(i)
 		{
 			case 0:

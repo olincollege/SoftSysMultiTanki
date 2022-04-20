@@ -53,6 +53,24 @@ struct Effect {
 	Effect *next;
 };
 
+struct Bullet {
+	int playerIndex;
+	int active;
+	float x;
+	float y;
+	int w;
+	int h;
+	int health;
+	float dx;
+	float dy;
+	int angle;
+	float bp[2];
+	Effect etrailHead, *etrailTail;
+	float trailDistance;
+	SDL_Texture *texture;
+	Bullet *next;
+};
+
 struct Player {
 	int playerIndex;
 	int isBody;
@@ -70,25 +88,8 @@ struct Player {
 	Effect bulletShot;
 	float trailDistance;
 	SDL_Texture *texture;
+	Bullet bHead, *bTail;
 	Player *next;
-};
-
-struct Bullet {
-	int playerIndex;
-	int active;
-	float x;
-	float y;
-	int w;
-	int h;
-	int health;
-	float dx;
-	float dy;
-	int angle;
-	float bp[2];
-	Effect etrailHead, *etrailTail;
-	float trailDistance;
-	SDL_Texture *texture;
-	Bullet *next;
 };
 
 struct MapTile {
@@ -117,7 +118,6 @@ typedef struct {
 
 typedef struct {
 	Player pHead, *pTail;
-	Bullet bHead, *bTail;
 	MapTile oHead, *oTail;
 	MapTile* ground[GRID_HEIGHT][GRID_WIDTH];
 } Stage;

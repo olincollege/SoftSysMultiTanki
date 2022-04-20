@@ -32,7 +32,6 @@ void initStage(void)
 	app.delegate.draw = draw;
 	
 	stage.pTail = &stage.pHead;
-	stage.bTail = &stage.bHead;
 	stage.oTail = &stage.oHead;
 
 	targetterTexture = loadTexture("gfx/crosshair010.png");
