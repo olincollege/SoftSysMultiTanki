@@ -56,6 +56,7 @@ struct Effect {
 struct Bullet {
 	int playerIndex;
 	int active;
+	int isDead;
 	float x;
 	float y;
 	int w;
@@ -74,6 +75,7 @@ struct Bullet {
 struct Player {
 	int playerIndex;
 	int isBody;
+	int isDead;
 	float x;
 	float y;
 	int w;

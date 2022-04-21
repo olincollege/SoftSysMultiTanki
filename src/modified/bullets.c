@@ -23,12 +23,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static SDL_Texture *bulletTexture1;
 static SDL_Texture *bulletTexture2;
 static SDL_Texture *testBullet;
+static SDL_Texture *bulletExplosion[5];
 
 void initBullets(void)
 {
 	bulletTexture1 = loadTexture("gfx/bulletBlue3_outline.png");
 	bulletTexture2 = loadTexture("gfx/bulletRed3_outline.png");
 	testBullet = loadTexture("gfx/crosshair001.png");
+	bulletExplosion[0] = loadTexture("gfx/explosionSmoke1.png");
+	bulletExplosion[1] = loadTexture("gfx/explosionSmoke2.png");
+	bulletExplosion[2] = loadTexture("gfx/explosionSmoke3.png");
+	bulletExplosion[3] = loadTexture("gfx/explosionSmoke4.png");
+	bulletExplosion[4] = loadTexture("gfx/explosionSmoke5.png");
 }
 
 void fireBullet(Player* playerHead)
@@ -93,7 +99,7 @@ void doBullets(void)
 		{
 			if (b->active == 0)
 			{
-				if (&b->etrailHead == b->etrailTail)
+				if (&b->etrailHead == b->etrailTail && b->isDead <= 0)
 				{
 					if (b == p->bTail)
 					{
@@ -108,6 +114,7 @@ void doBullets(void)
 				}
 				else
 				{
+					b->isDead -= 1;
 					continue;
 				}
 			}
@@ -128,6 +135,7 @@ void doBullets(void)
 			if (b->health <= 0)
 			{
 				b->active = 0;
+				b->isDead = FPS * 0.5;
 				p->ammo += 1;
 			}
 			
@@ -153,6 +161,26 @@ void drawBullets(void)
 			if (b->active == 1)
 			{
 				blitRotated(b->texture, b->x, b->y, b->angle);
+			}
+			else if (b->isDead > FPS * 0.4)
+			{
+				blitRotated(bulletExplosion[0], b->x, b->y, b->angle);
+			}
+			else if (b->isDead > FPS * 0.3)
+			{
+				blitRotated(bulletExplosion[1], b->x, b->y, b->angle);
+			}
+			else if (b->isDead > FPS * 0.2)
+			{
+				blitRotated(bulletExplosion[2], b->x, b->y, b->angle);
+			}
+			else if (b->isDead > FPS * 0.1)
+			{
+				blitRotated(bulletExplosion[3], b->x, b->y, b->angle);
+			}
+			else if (b->isDead > 0)
+			{
+				blitRotated(bulletExplosion[4], b->x, b->y, b->angle);
 			}
 			//blitRotated(testBullet, b->bp[0], b->bp[1], b->angle);
 			// blitRotated(testBullet, b->x, b->y, b->angle);
