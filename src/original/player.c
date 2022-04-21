@@ -100,6 +100,7 @@ void doPlayer(void)
 			playerBody->angle = 0;
 			playerHead->x = playerBody->x;
 			playerHead->y = playerBody->y;
+			playerBody->health -= 1;
 			continue;
 		}
 		else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.6)
