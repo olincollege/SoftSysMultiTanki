@@ -38,6 +38,20 @@ int wdata[GRID_HEIGHT][GRID_WIDTH] =
     { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
 };
 
+void getEmptyPosition(int *x, int *y)
+{
+    int i = rand() % (GRID_WIDTH -4) + 2;
+    int j = rand() % (GRID_HEIGHT -4) + 2;
+    while (wdata[j][i] != 0)
+    {
+        i = rand() % (GRID_WIDTH -4) + 2;
+        j = rand() % (GRID_HEIGHT -4) + 2;
+    }
+
+    *x = i;
+    *y = j;
+}
+
 SDL_Texture* loadSprite(int num)
 {
     SDL_Texture *t;

@@ -142,6 +142,10 @@ void collisionPlayerBullets(void)
         {
             continue;
         }
+        else if (p->isDead > 0)
+        {
+            continue;
+        }
         
         Player *e;
         for (e = stage.pHead.next ; e != NULL ; e = e->next)
@@ -158,7 +162,7 @@ void collisionPlayerBullets(void)
                 if (getPointInsideRect(p->x - p->w/2, p->y - p->h/2, p->x + p->w/2, p->y + p->h/2, b->x, b->y) == 1)
                 {
                     b->health = 0;
-                    p->isDead = FPS * 2;
+                    p->isDead = PLAYER_EXPLOSION_TIME;
                 }
             }
         }

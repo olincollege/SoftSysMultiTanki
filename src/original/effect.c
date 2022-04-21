@@ -144,15 +144,15 @@ void drawEffectUnder(void)
             }
         }
 
-        if (p->isBody == 0)
-        {
-            if (p->bulletShot.health > 0)
-            {
-                blitRotated(p->bulletShot.texture, p->bulletShot.x, p->bulletShot.y, p->bulletShot.angle);
-                //printf("check %i\n", p->bulletShot.angle);
-                p->bulletShot.health -= 1;
-            }
-        }
+        // if (p->isBody == 0)
+        // {
+        //     if (p->bulletShot.health > 0)
+        //     {
+        //         blitRotated(p->bulletShot.texture, p->bulletShot.x, p->bulletShot.y, p->bulletShot.angle);
+        //         //printf("check %i\n", p->bulletShot.angle);
+        //         p->bulletShot.health -= 1;
+        //     }
+        // }
     }
 }
 
@@ -166,6 +166,14 @@ void drawEffectOver(void)
 		{
 			continue;
 		}
+
+        if (p->bulletShot.health > 0)
+        {
+            blitRotated(p->bulletShot.texture, p->bulletShot.x, p->bulletShot.y, p->bulletShot.angle);
+            //printf("check %i\n", p->bulletShot.angle);
+            p->bulletShot.health -= 1;
+        }
+
         Bullet *b;
         for (b = p->bHead.next; b != NULL ; b = b->next)
         {

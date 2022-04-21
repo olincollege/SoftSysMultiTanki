@@ -57,6 +57,7 @@ void initPlayer(void)
 		playerBody->angle = 0;
 		playerBody->trailDistance = PLAYER_TRAIL_DISTANCE;
 		playerBody->etrailTail = &playerBody->etrailHead;
+		playerBody->health = PLAYER_MAX_HEALTH;
 		
 		playerHead->x = playerBody->x;
 		playerHead->y = playerBody->y;
@@ -81,11 +82,36 @@ void doPlayer(void)
 		{
 			playerBody = p;
 			playerHead = p->next;
-			playerHead->isDead = playerBody->isDead;
 		}
 		else
 		{
 			continue;
+		}
+		
+		if (p->isDead == PLAYER_EXPLOSION_TIME * 0.65)
+		{
+			int x = 0;
+			int y = 0;
+
+			getEmptyPosition(&x, &y);
+			playerBody->isDead -= 1;
+			playerBody->x = x * GRID_SIZE;
+			playerBody->y = y * GRID_SIZE;
+			playerBody->angle = 0;
+			playerHead->x = playerBody->x;
+			playerHead->y = playerBody->y;
+			continue;
+		}
+		else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.6)
+		{
+			playerBody->dx = 0;
+			playerBody->dy = 0;
+			playerBody->isDead -= 1;
+			continue;
+		}
+		else if (p->isDead > 0)
+		{
+			playerBody->isDead -= 1;
 		}
 		
 		currentAngle = playerBody -> angle;
@@ -280,7 +306,7 @@ void doPlayer(void)
 		playerHead->x = playerBody->x;
 		playerHead->y = playerBody->y;
 		
-		if (playerHead->reload == 0 && playerHead->ammo > 0 && app.playerInputs[playerBody->playerIndex].mouse.button[SDL_BUTTON_LEFT])
+		if (playerHead->reload == 0 && playerHead->ammo > 0 && app.playerInputs[playerBody->playerIndex].mouse.button[SDL_BUTTON_LEFT] && playerBody->isDead <= 0)
 		{
 			fireBullet(playerHead);
 		}
@@ -292,10 +318,101 @@ void doPlayer(void)
 
 void drawPlayers(void)
 {
-	Player *e;
+	Player *p;
 	
-	for (e = stage.pHead.next ; e != NULL ; e = e->next)
+	for (p = stage.pHead.next ; p != NULL ; p = p->next)
 	{
-		blitRotated(e->texture, e->x, e->y, e->angle);
+		if (p->isBody == 1)
+		{
+			if (p->isDead > PLAYER_EXPLOSION_TIME * 0.97)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+				blitRotated(playerExplosion[0], p->x, p->y, p->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.94)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+				blitRotated(playerExplosion[1], p->x, p->y, p->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.91)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+				blitRotated(playerExplosion[2], p->x, p->y, p->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.88)
+			{
+				blitRotated(playerExplosion[3], p->x, p->y, p->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.85)
+			{
+				blitRotated(playerExplosion[4], p->x, p->y, p->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.6)
+			{
+				
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.55)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.5)
+			{
+				
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.45)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.4)
+			{
+				
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.35)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.30)
+			{
+				
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.25)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.2)
+			{
+				
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.15)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.1)
+			{
+				
+			}
+			else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.05)
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+			}
+			else if (p->isDead > 0)
+			{
+				
+			}
+			else
+			{
+				blitRotated(p->texture, p->x, p->y, p->angle);
+				blitRotated(p->next->texture, p->next->x, p->next->y, p->next->angle);
+			}
+		}
 	}
 }

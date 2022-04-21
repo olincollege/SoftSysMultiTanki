@@ -135,7 +135,7 @@ void doBullets(void)
 			if (b->health <= 0)
 			{
 				b->active = 0;
-				b->isDead = FPS * 0.5;
+				b->isDead = BULLET_EXPLOSION_TIME;
 				p->ammo += 1;
 			}
 			
@@ -162,19 +162,19 @@ void drawBullets(void)
 			{
 				blitRotated(b->texture, b->x, b->y, b->angle);
 			}
-			else if (b->isDead > FPS * 0.4)
+			else if (b->isDead > BULLET_EXPLOSION_TIME * 0.8)
 			{
 				blitRotated(bulletExplosion[0], b->x, b->y, b->angle);
 			}
-			else if (b->isDead > FPS * 0.3)
+			else if (b->isDead > BULLET_EXPLOSION_TIME * 0.6)
 			{
 				blitRotated(bulletExplosion[1], b->x, b->y, b->angle);
 			}
-			else if (b->isDead > FPS * 0.2)
+			else if (b->isDead > BULLET_EXPLOSION_TIME * 0.4)
 			{
 				blitRotated(bulletExplosion[2], b->x, b->y, b->angle);
 			}
-			else if (b->isDead > FPS * 0.1)
+			else if (b->isDead > BULLET_EXPLOSION_TIME * 0.2)
 			{
 				blitRotated(bulletExplosion[3], b->x, b->y, b->angle);
 			}

@@ -23,8 +23,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static void logic(void);
 static void draw(void);
 static void drawGrid(void);
+static void drawUI(void);
 
 static SDL_Texture *targetterTexture;
+static SDL_Texture *tankTextures[4];
 
 void initStage(void)
 {
@@ -35,6 +37,8 @@ void initStage(void)
 	stage.oTail = &stage.oHead;
 
 	targetterTexture = loadTexture("gfx/crosshair010.png");
+	tankTextures[0] = loadTexture("gfx/tank_blue.png");
+	tankTextures[1] = loadTexture("gfx/tank_red.png");
 
 	for (int y = 0 ; y < GRID_HEIGHT ; y += 1)
 	{
@@ -87,13 +91,15 @@ static void draw(void)
 {
 	drawGrid();
 
-	drawBullets();
-
 	drawEffectUnder();
 	
 	drawPlayers();
 
+	drawBullets();
+
 	drawEffectOver();
+
+	drawUI();
 	
 	blit(targetterTexture, app.playerInputs[app.playerIndex].mouse.x, app.playerInputs[app.playerIndex].mouse.y, 1);
 }
@@ -116,5 +122,37 @@ static void drawGrid(void)
 	for (m = stage.oHead.next ; m != NULL ; m = m->next)
 	{
 		blit(m->texture, m->x, m->y, 0);
+	}
+}
+
+static void drawUI(void)
+{
+	Player *p;
+	
+	for (p = stage.pHead.next ; p != NULL ; p = p->next)
+	{
+		if (p->isBody == 1 && p->playerIndex == 0)
+		{
+			int x = GRID_SIZE * 0.5;
+			int y = GRID_SIZE * 0.5;
+
+			for (int i = 0; i < p->health; i++)
+			{
+				blitRotated(tankTextures[0], x, y, 0);
+				x += GRID_SIZE;
+			}
+		}
+
+		if (p->isBody == 1 && p->playerIndex == 1)
+		{
+			int x = SCREEN_WIDTH - GRID_SIZE * 0.5;
+			int y = GRID_SIZE * 0.5;
+
+			for (int i = 0; i < p->health; i++)
+			{
+				blitRotated(tankTextures[1], x, y, 0);
+				x -= GRID_SIZE;
+			}
+		}
 	}
 }

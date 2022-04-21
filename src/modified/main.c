@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 		
 		capFrameRate(&then, &remainder);
 		
-		//doReceiveFromServer();
+		doReceiveFromServer();
 	}
 
 	return 0;

@@ -31,11 +31,14 @@
 #define PLAYER_ROTATION_SPEED 	3 * ((float)60/FPS)
 #define PLAYER_TRAIL_DISTANCE	12 * (FPS/(float)60)
 #define PLAYER_BARREL_HEIGHT    38
+#define PLAYER_EXPLOSION_TIME	FPS * 5
+#define PLAYER_MAX_HEALTH		3
 
 #define BULLET_SPEED			3 * ((float)60/FPS)
 #define BULLET_HEIGHT			15
-#define BULLET_MAX_HEALTH		3
+#define BULLET_MAX_HEALTH		2
 #define BULLET_TRAIL_DISTANCE	18 * (FPS/(float)60)
+#define BULLET_EXPLOSION_TIME	FPS * 0.5
 
 enum {
 	FONT_PARTY,
