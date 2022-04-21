@@ -79,6 +79,8 @@ static void logic(void)
 	collisionWallsBullets();
 
 	collisionPlayerWallsWithMove();
+
+	collisionPlayerBullets();
 }
 
 static void draw(void)

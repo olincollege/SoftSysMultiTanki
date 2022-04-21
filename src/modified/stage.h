@@ -31,6 +31,7 @@ extern void initPlayer(void);
 extern void drawPlayers(void);
 extern void collisionWallsBullets(void);
 extern void collisionPlayerWallsWithMove(void);
+extern void collisionPlayerBullets(void);
 extern void doEffect(void);
 extern void drawEffectOver(void);
 extern void drawEffectUnder(void);

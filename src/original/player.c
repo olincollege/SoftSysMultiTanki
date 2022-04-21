@@ -1,7 +1,15 @@
 #include "player.h"
 
+static SDL_Texture *playerExplosion[5];
+
 void initPlayer(void)
 {
+	playerExplosion[0] = loadTexture("gfx/explosion.png");
+	playerExplosion[1] = loadTexture("gfx/explosion2.png");
+	playerExplosion[2] = loadTexture("gfx/explosion3.png");
+	playerExplosion[3] = loadTexture("gfx/explosion4.png");
+	playerExplosion[4] = loadTexture("gfx/explosion5.png");
+	
 	for (int i = 0; i < app.maxPlayer; i++)
 	{
 		Player *playerHead;
@@ -57,7 +65,6 @@ void initPlayer(void)
 
 		SDL_QueryTexture(playerBody->texture, NULL, NULL, &playerBody->w, &playerBody->h);
 	}
-	
 }
 
 void doPlayer(void)
@@ -74,6 +81,7 @@ void doPlayer(void)
 		{
 			playerBody = p;
 			playerHead = p->next;
+			playerHead->isDead = playerBody->isDead;
 		}
 		else
 		{

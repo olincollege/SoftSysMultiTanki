@@ -132,3 +132,35 @@ void collisionPlayerWallsWithMove(void)
 		p->y = MIN(MAX(p->y, p->h / 2), SCREEN_HEIGHT - p->h / 2);
 	}
 }
+
+void collisionPlayerBullets(void)
+{
+    Player *p;
+    for (p = stage.pHead.next ; p != NULL ; p = p->next)
+	{
+        if (p->isBody != 1)
+        {
+            continue;
+        }
+        
+        Player *e;
+        for (e = stage.pHead.next ; e != NULL ; e = e->next)
+        {
+            if (e->isBody == 1)
+            {
+                continue;
+            }
+            
+            Bullet *b;
+
+            for (b = e->bHead.next ; b != NULL ; b = b->next)
+            {
+                if (getPointInsideRect(p->x - p->w/2, p->y - p->h/2, p->x + p->w/2, p->y + p->h/2, b->x, b->y) == 1)
+                {
+                    b->health = 0;
+                    p->isDead = FPS * 2;
+                }
+            }
+        }
+	}
+}
