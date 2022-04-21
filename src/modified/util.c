@@ -106,3 +106,12 @@ int getRectOverlap(float x1, float y1, float x2, float y2, float x3, float y3, f
 {
     return (x1 < x4 && x3 < x2 && y1 < y4 && y3 < y2 && x1 != x2 && x3 != x4 && y1 != y2 && y3 != y4);
 }
+
+int getPointInsideRect(int x1, int y1, int x2, int y2, int x, int y)
+{
+    if (x > x1 && x < x2 && y > y1 && y < y2)
+    {
+        return 1;
+    }
+    return 0;
+}
