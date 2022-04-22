@@ -101,6 +101,11 @@ void doPlayer(void)
 			playerHead->x = playerBody->x;
 			playerHead->y = playerBody->y;
 			playerBody->health -= 1;
+
+			if (playerBody->health == 0)
+			{
+				initGameOver();
+			}
 			continue;
 		}
 		else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.6)
