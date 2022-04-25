@@ -21,6 +21,12 @@ static void logic(void)
 	{
 		initTitle();
 	}
+
+    if (app.playerInputs[0].keyboard[SDL_SCANCODE_W])
+	{
+		cleanup();
+        exit(0);
+	}
 }
 
 static void draw(void)

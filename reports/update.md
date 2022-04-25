@@ -61,7 +61,8 @@ The first stretch goal would be to have the shells bounce off the walls from the
 ### Single-Player Game
 *SeungU*
 
-[![Update Demo](http://img.youtube.com/vi/JRxff37KnSA/sddefault.jpg)](https://youtu.be/JRxff37KnSA) 
+[![Update Demo](http://img.youtube.com/vi/JRxff37KnSA/sddefault.jpg)](https://youtu.be/JRxff37KnSA)
+*click the image for demo video*
 
 We made a good progress on implementing the basic game part. All the basic game features with the stretch goal is implemented, except for sound which will soon be added. This includes graphics, collisions, tank movement, receiving player inputs, bullets and reflection, lives, and special effects.
 

@@ -18,18 +18,12 @@ Whenever host computer detects death of other players, the data sent will be acc
 
 So prob need death data/death frame to also be sent through communication.
 
-## Tank death effect
-
-I think I can just change the sprite of the tank itself whenever it is dead.
-
-Make a variable like, tankDeathFrame = 160, and say if it's over 140 show sprite 1, if over 100 show sprite 2....
-
-During the death the tank should not be moved or collide with anything. 
-
 ## Title
 
 Make the title little more active - right now it just looks like a photo.
 
-## Font
+## Restarting the game
 
-Try to mix controlling fonts and different font choices so that logo can also just be font? If I have extra time.
+Need to free all the memory before finishing the game. 
+
+Also have to add quit game option or something
