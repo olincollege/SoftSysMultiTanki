@@ -1,0 +1,12 @@
+EnterCommand.ttf
+	- By jeti
+	- https://www.dafont.com/enter-command.font
+
+Graphic Resources
+	- By Kenney
+	- https://www.kenney.nl/assets
+
+Codes in /src/imported and /src/modified
+	- By Parallel Realities
+	- https://www.parallelrealities.co.uk/tutorials/
+	- https://parallelrealities.itch.io/sdl2-tutorials
