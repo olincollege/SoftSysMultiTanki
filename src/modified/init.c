@@ -66,6 +66,7 @@ void initGame(void)
 	initBullets();
 	initEffect();
 	initFonts();
+	initSounds();
 }
 
 void cleanup(void)

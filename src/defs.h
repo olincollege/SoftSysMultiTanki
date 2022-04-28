@@ -50,3 +50,17 @@ enum {
 	TEXT_ALIGN_CENTER,
 	TEXT_ALIGN_RIGHT
 };
+
+enum
+{
+	CH_ANY = -1,
+	CH_PLAYER1,
+	CH_PLAYER2,
+	CH_PLAYER3,
+	CH_PLAYER4
+};
+
+enum
+{
+	SND_MAX
+};
