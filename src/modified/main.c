@@ -47,6 +47,9 @@ int main(int argc, char *argv[])
 	
 	remainder = 0;
 
+	SDL_Event e;
+	while (SDL_PollEvent(&e));
+
 	while (1)
 	{
 		prepareScene();

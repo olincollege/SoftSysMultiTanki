@@ -17,13 +17,15 @@ void initGameOver(void)
 
 static void logic(void)
 {
-    if (app.playerInputs[0].keyboard[SDL_SCANCODE_Q])
+    if (app.playerInputs[0].keyboard[SDL_SCANCODE_SPACE])
 	{
+        app.playerInputs[0].keyboard[SDL_SCANCODE_SPACE] = 0;
 		initTitle();
 	}
 
-    if (app.playerInputs[0].keyboard[SDL_SCANCODE_W])
+    if (app.playerInputs[0].keyboard[SDL_SCANCODE_ESCAPE])
 	{
+        app.playerInputs[0].keyboard[SDL_SCANCODE_ESCAPE] = 0;
 		cleanup();
         exit(0);
 	}
@@ -35,5 +37,5 @@ static void draw(void)
     //blitRotated(logo, SCREEN_WIDTH/2, 150, 0);
 
     app.fontScale = 0.5f;
-    drawText("Temp Game Over", SCREEN_WIDTH / 2, 650, 128, 128, 128, TEXT_ALIGN_CENTER, 0);
+    drawText("Game Over! Press Space To Restart, ESC to Quit", SCREEN_WIDTH / 2, 650, 128, 128, 128, TEXT_ALIGN_CENTER, 0);
 }

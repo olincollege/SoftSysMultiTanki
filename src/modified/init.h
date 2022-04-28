@@ -29,5 +29,7 @@ extern void initBullets(void);
 extern void initFonts(void);
 extern void initEffect(void);
 extern void initSounds(void);
+extern void loadMusic(char *filename);
+extern void playMusic(int loop);
 
 extern App app;

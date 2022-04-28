@@ -19,7 +19,15 @@ static void logic(void)
 {
     if (app.playerInputs[0].keyboard[SDL_SCANCODE_SPACE])
 	{
+        app.playerInputs[0].keyboard[SDL_SCANCODE_SPACE] = 0;
 		initStage();
+	}
+
+    if (app.playerInputs[0].keyboard[SDL_SCANCODE_ESCAPE])
+	{
+        app.playerInputs[0].keyboard[SDL_SCANCODE_ESCAPE] = 0;
+		cleanup();
+        exit(0);
 	}
 }
 
@@ -29,5 +37,5 @@ static void draw(void)
     blitRotated(logo, SCREEN_WIDTH/2, 150, 0);
 
     app.fontScale = 0.5f;
-    drawText("Press Space To Start", SCREEN_WIDTH / 2, 650, 128, 128, 128, TEXT_ALIGN_CENTER, 0);
+    drawText("Press Space To Start, ESC to Quit", SCREEN_WIDTH / 2, 650, 128, 128, 128, TEXT_ALIGN_CENTER, 0);
 }
