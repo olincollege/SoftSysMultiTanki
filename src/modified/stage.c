@@ -28,6 +28,8 @@ static void drawUI(void);
 static SDL_Texture *targetterTexture;
 static SDL_Texture *tankTextures[4];
 
+int countdown = FPS * 4;
+
 void initStage(void)
 {
 	app.delegate.logic = logic;
