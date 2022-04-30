@@ -40,6 +40,24 @@ void leaveTankTrailEffect(void)
             e->y = p->y;
             e->angle = p->angle;
             e->health = FPS * 3;
+            
+            if (p->trailSound == 1)
+            {
+                if (p->playerIndex == 0)
+                {
+                    playSound(SND_TANK_MOVE, CH_PLAYER1_TANK_TRAIL);
+                }
+                else if (p->playerIndex == 1)
+                {
+                    playSound(SND_TANK_MOVE, CH_PLAYER2_TANK_TRAIL);
+                }
+                p->trailSound = 0;
+            } 
+            else
+            {
+                p->trailSound += 1;
+            }
+            
         }
     }
 }

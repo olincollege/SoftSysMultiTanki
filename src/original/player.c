@@ -88,6 +88,18 @@ void doPlayer(void)
 			continue;
 		}
 		
+		if (p->isDead == PLAYER_EXPLOSION_TIME)
+		{
+			if (playerBody->playerIndex == 0)
+			{
+				playSound(SND_TANK_EXPLOSION, CH_PLAYER1_TANK);
+			}
+			else if (playerBody->playerIndex == 1)
+			{
+				playSound(SND_TANK_EXPLOSION, CH_PLAYER2_TANK);
+			}
+		}
+
 		if (p->isDead == PLAYER_EXPLOSION_TIME * 0.65)
 		{
 			int x = 0;
@@ -314,6 +326,14 @@ void doPlayer(void)
 		
 		if (playerHead->reload == 0 && playerHead->ammo > 0 && app.playerInputs[playerBody->playerIndex].mouse.button[SDL_BUTTON_LEFT] && playerBody->isDead <= 0)
 		{
+			if (playerHead->playerIndex == 0)
+			{
+				playSound(SND_BULLET_FIRE, CH_PLAYER1_TANK);
+			}
+			else if (playerHead->playerIndex == 1)
+			{
+				playSound(SND_BULLET_FIRE, CH_PLAYER2_TANK);
+			}
 			fireBullet(playerHead);
 		}
 

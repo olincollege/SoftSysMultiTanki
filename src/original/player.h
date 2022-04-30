@@ -6,6 +6,7 @@ extern SDL_Texture *loadTexture(char *filename);
 extern void blitRotated(SDL_Texture *texture, int x, int y, float angle);
 extern void getEmptyPosition(int *x, int *y);
 extern void initGameOver(void);
+extern void playSound(int id, int channel);
 
 extern App app;
 extern Stage stage;

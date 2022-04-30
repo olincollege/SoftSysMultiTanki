@@ -69,6 +69,7 @@ struct Player {
 	Effect etrailHead, *etrailTail;
 	Effect bulletShot;
 	float trailDistance;
+	float trailSound;
 	SDL_Texture *texture;
 	Bullet bHead, *bTail;
 	Player *next;

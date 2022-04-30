@@ -32,6 +32,13 @@ void initSounds(void)
 	music = NULL;
 	
 	loadSounds();
+
+	Mix_Volume(CH_PLAYER1_TANK_TRAIL, 25);
+	Mix_Volume(CH_PLAYER2_TANK_TRAIL, 25);
+	Mix_Volume(CH_PLAYER1_TANK, 75);
+	Mix_Volume(CH_PLAYER2_TANK, 75);
+	Mix_Volume(CH_PLAYER1_BULLET, 50);
+	Mix_Volume(CH_PLAYER2_BULLET, 50);
 }
 
 void loadMusic(char *filename)
@@ -58,5 +65,9 @@ void playSound(int id, int channel)
 
 static void loadSounds(void)
 {
-	
+	sounds[SND_TANK_MOVE] = Mix_LoadWAV("sound/impactWood_light_001.ogg");
+	sounds[SND_BULLET_FIRE] = Mix_LoadWAV("sound/impactWood_heavy_004.ogg");
+	sounds[SND_BULLET_REFLECT] = Mix_LoadWAV("sound/impactWood_medium_002.ogg");
+	sounds[SND_BULLET_EXPLOSION] = Mix_LoadWAV("sound/impactPunch_heavy_004.ogg");
+	sounds[SND_TANK_EXPLOSION] = Mix_LoadWAV("sound/impactMining_000.ogg");
 }
