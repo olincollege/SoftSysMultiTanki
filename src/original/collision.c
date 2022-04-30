@@ -2,7 +2,11 @@
 
 void bulletSound(Player* p, Bullet* b)
 {
-    if (p->playerIndex == 0)
+    if (b->active == 0)
+    {
+
+    }
+    else if (p->playerIndex == 0)
     {
         if (b->health == 0)
         {

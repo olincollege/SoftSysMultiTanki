@@ -67,7 +67,7 @@ void initGame(void)
 	initEffect();
 	initFonts();
 	initSounds();
-
+	
 	loadMusic("sound/Run As Fast As You Can.mp3");
 	
 	playMusic(1);

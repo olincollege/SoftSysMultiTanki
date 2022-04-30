@@ -24,16 +24,25 @@ static void logic(void);
 static void draw(void);
 static void drawGrid(void);
 static void drawUI(void);
+static void drawCountDown(void);
+static void checkGameOver(void);
 
 static SDL_Texture *targetterTexture;
 static SDL_Texture *tankTextures[4];
+static SDL_Texture *countdownTextures[5];
 
-int countdown = FPS * 4;
+int countdown;
+int gameover;
+int lastLiveIndex;
 
 void initStage(void)
 {
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
+
+	countdown = FPS * 4;
+	gameover = 0;
+	lastLiveIndex = 0;
 	
 	stage.pTail = &stage.pHead;
 	stage.oTail = &stage.oHead;
@@ -41,6 +50,11 @@ void initStage(void)
 	targetterTexture = loadTexture("gfx/crosshair010.png");
 	tankTextures[0] = loadTexture("gfx/tank_blue.png");
 	tankTextures[1] = loadTexture("gfx/tank_red.png");
+	countdownTextures[0] = loadTexture("gfx/1.png");
+	countdownTextures[1] = loadTexture("gfx/2.png");
+	countdownTextures[2] = loadTexture("gfx/3.png");
+	countdownTextures[3] = loadTexture("gfx/start.png");
+	countdownTextures[4] = loadTexture("gfx/gameover.png");
 
 	for (int y = 0 ; y < GRID_HEIGHT ; y += 1)
 	{
@@ -76,6 +90,15 @@ void initStage(void)
 
 static void logic(void)
 {
+	if (countdown == 0 && gameover == 1)
+	{
+		initGameOver(lastLiveIndex);
+	}
+	else if (countdown > 0)
+	{
+		return;
+	}
+
 	doPlayer();
 	
 	doBullets();
@@ -87,6 +110,8 @@ static void logic(void)
 	collisionPlayerWallsWithMove();
 
 	collisionPlayerBullets();
+
+	checkGameOver();
 }
 
 static void draw(void)
@@ -104,6 +129,47 @@ static void draw(void)
 	drawUI();
 	
 	blit(targetterTexture, app.playerInputs[app.playerIndex].mouse.x, app.playerInputs[app.playerIndex].mouse.y, 1);
+
+	if (countdown > 0 && gameover == 0)
+	{
+		drawCountDown();
+		countdown -= 1;
+	} 
+	else if (countdown > 0 && gameover == 1)
+	{
+		blitRotated(countdownTextures[4], SCREEN_WIDTH / 2, SCREEN_HEIGHT/2, 0);
+		countdown -= 1;
+	}
+}
+
+static void checkGameOver(void)
+{
+	Player *p;
+
+	int livePlayersNum;
+	
+	for (p = stage.pHead.next ; p != NULL ; p = p->next)
+	{
+		if (p->isBody == 1)
+		{
+			if (p->health > 0)
+			{
+				livePlayersNum += 1;
+				lastLiveIndex = p->playerIndex;
+			}
+		}
+		else
+		{
+			continue;
+		}
+	}
+
+	if (livePlayersNum == 1 && gameover == 0)
+	{
+		gameover = 1;
+		countdown = FPS * 2;
+		playSound(SND_GAME_START, CH_GAME);
+	}
 }
 
 static void drawGrid(void)
@@ -156,5 +222,34 @@ static void drawUI(void)
 				x -= GRID_SIZE;
 			}
 		}
+	}
+}
+
+static void drawCountDown(void)
+{
+	if (countdown > FPS * 3)
+	{
+		blitRotated(countdownTextures[2], SCREEN_WIDTH / 2, SCREEN_HEIGHT/2, 0);
+	}
+	else if (countdown > FPS * 2)
+	{
+		blitRotated(countdownTextures[1], SCREEN_WIDTH / 2, SCREEN_HEIGHT/2, 0);
+	} 
+	else if (countdown > FPS * 1)
+	{
+		blitRotated(countdownTextures[0], SCREEN_WIDTH / 2, SCREEN_HEIGHT/2, 0);
+	}
+	else if (countdown > 0)
+	{
+		blitRotated(countdownTextures[3], SCREEN_WIDTH / 2, SCREEN_HEIGHT/2, 0);
+	}
+
+	if ((countdown == FPS * 4 || countdown == FPS * 3 || countdown == FPS * 2) && gameover == 0)
+	{
+		playSound(SND_COUNTDOWN, CH_GAME);
+	} 
+	else if (countdown == FPS * 1 && gameover == 0)
+	{
+		playSound(SND_GAME_START, CH_GAME);
 	}
 }

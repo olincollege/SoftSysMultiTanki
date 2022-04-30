@@ -70,4 +70,6 @@ static void loadSounds(void)
 	sounds[SND_BULLET_REFLECT] = Mix_LoadWAV("sound/impactWood_medium_002.ogg");
 	sounds[SND_BULLET_EXPLOSION] = Mix_LoadWAV("sound/impactPunch_heavy_004.ogg");
 	sounds[SND_TANK_EXPLOSION] = Mix_LoadWAV("sound/impactMining_000.ogg");
+	sounds[SND_COUNTDOWN] = Mix_LoadWAV("sound/impactMetal_light_003.ogg");
+	sounds[SND_GAME_START] = Mix_LoadWAV("sound/impactBell_heavy_000.ogg");
 }

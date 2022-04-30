@@ -2,6 +2,10 @@ EnterCommand.ttf
 	- By jeti
 	- https://www.dafont.com/enter-command.font
 
+Logo, Victory, Defeat image created with font Edit-Undo
+	- By Aenigma Fonts
+	- https://www.1001fonts.com/edit-undo-font.html
+
 Run As Fast As You Can.mp3
 	- By Pix
 	- https://www.youtube.com/watch?v=tQR6jyfK6Ps&list=PLdsGes2mFh92eHpOZVJQgoubb6rF0CcvU&index=4

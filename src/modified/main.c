@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	initGame();
 
 	initTitle();
-	
+
 	//initStage();
 	
 	then = SDL_GetTicks();
