@@ -26,16 +26,10 @@ void clear_buf(char* buf) {
 // first for connecting to other peer
 int matchmaking() {
     struct sockaddr_in server;
-    struct hostent * hp;
     
     server.sin_family = AF_INET;
     server.sin_port = htons(PORT);
-    hp = getaddrinfo(MATCHMAKING_HOST);
-    if ( hp == NULL )
-    {
-        perror("Unknown host");
-        exit(EXIT_FAILURE);
-    }
+    
     int sock;
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
         perror("socket creating error");
@@ -48,14 +42,11 @@ int matchmaking() {
 
     // receive data
     int ip_received;
-    while ((ip_received=recv(sock, peer_ip_addr, INET_ADDRSTRLEN, 0)) > 0) {
-            peer_ip_addr[ip_received]='\0';
-            printf("%s\n", peer_ip_addr);
-    }
-    if (ip_received == -1){
+    if ((ip_received=recv(sock, peer_ip_addr, INET_ADDRSTRLEN, 0)) == -1){
         perror("Can't read from host");
         exit(EXIT_FAILURE);
     }
+    printf("%s\n", peer_ip_addr);
 
     // close connection
     close(sock);
@@ -113,11 +104,9 @@ int main(int argc, char const *argv[]){
     }
 
     // connect to peer
-    int network_socket = 0, valread;
+    int network_socket, nBytes;
     struct sockaddr_in serv_addr;
     int addrlen = sizeof(serv_addr);
-    char hello[1024] = {0};
-    char buffer[2000] = {0};
 
     // create socket with UDP protocol (uses datagram)
     if ((network_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
@@ -143,10 +132,6 @@ int main(int argc, char const *argv[]){
     }
 
     // TODO: fork two different processes: receive file, send file
-
-    // for now, have separate code for both here.
-    // this code currently does not work, it is just
-    // for reference.
     if (fork()==0){
         // case for asking for file
         //printf("Wait for file name");
