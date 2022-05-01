@@ -13,7 +13,6 @@
 #define PORT 7777
 #define MAX_PLAYERS 2
 
-void sending();
 void determine_client_ip();
 
 int main(int argc, char const *argv[]){
@@ -96,6 +95,7 @@ int main(int argc, char const *argv[]){
                 // write ip address to writing end of pipe 1
                 write(fd1[1], client_ip_addr, strlen(client_ip_addr) + 1);
                 close(fd1[1]);
+
                 // wait until pipe 2 has information
                 while (read(fd2[0],&peer_ip,INET_ADDRSTRLEN) == 0) {
                     // do nothing
@@ -127,6 +127,9 @@ int main(int argc, char const *argv[]){
             printf("Peer ip: %s\n", peer_ip);
             fflush(stdout);
             send(connect_d,peer_ip,strlen(peer_ip), 0);
+            int converted_number = htonl(client_counter);
+            fflush(stdout);
+            send(connect_d,&converted_number,sizeof(converted_number), 0);
             exit(EXIT_SUCCESS);
         }
         // reset client counter

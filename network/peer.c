@@ -15,6 +15,7 @@
 #define FILENAME "test.json"
 
 char peer_ip_addr[INET_ADDRSTRLEN];
+int tank_no;
 
 // clear buffer
 void clear_buf(char* buf) {
@@ -47,6 +48,14 @@ int matchmaking() {
         exit(EXIT_FAILURE);
     }
     printf("%s\n", peer_ip_addr);
+    // receive data
+    int tank_no_received;
+    if ((tank_no_received=recv(sock, &tank_no, sizeof(int), 0))==-1){
+        perror("can't reed from host");
+        exit(EXIT_FAILURE);
+    }
+    printf("%d\n", ntohl(tank_no));
+
 
     // close connection
     close(sock);
