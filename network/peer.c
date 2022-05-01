@@ -42,20 +42,20 @@ int matchmaking() {
     connect(sock, (struct sockaddr *) &server, sizeof(server));
 
     // receive data
-    int ip_received;
-    if ((ip_received=recv(sock, peer_ip_addr, INET_ADDRSTRLEN, 0)) == -1){
-        perror("Can't read from host");
-        exit(EXIT_FAILURE);
-    }
-    printf("%s\n", peer_ip_addr);
-    // receive data
     int tank_no_received;
     if ((tank_no_received=recv(sock, &tank_no, sizeof(int), 0))==-1){
         perror("can't reed from host");
         exit(EXIT_FAILURE);
     }
     printf("%d\n", ntohl(tank_no));
-
+    
+    // receive data
+    int ip_received;
+    if ((ip_received=recv(sock, peer_ip_addr, INET_ADDRSTRLEN, 0)) == -1){
+        perror("Can't read from host");
+        exit(EXIT_FAILURE);
+    }
+    printf("%s\n", peer_ip_addr);
 
     // close connection
     close(sock);
