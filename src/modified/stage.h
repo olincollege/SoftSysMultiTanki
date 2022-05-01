@@ -35,6 +35,8 @@ extern void collisionPlayerBullets(void);
 extern void doEffect(void);
 extern void drawEffectOver(void);
 extern void drawEffectUnder(void);
+extern void initGameOver(int playerIndex);
+extern void playSound(int id, int channel);
 
 extern SDL_Texture *loadSprite(int num);
 extern SDL_Texture *loadTexture(char *filename);

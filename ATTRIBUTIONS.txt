@@ -1,0 +1,24 @@
+EnterCommand.ttf
+	- By jeti
+	- https://www.dafont.com/enter-command.font
+
+Logo, Victory, Defeat image created with font Edit-Undo
+	- By Aenigma Fonts
+	- https://www.1001fonts.com/edit-undo-font.html
+
+Run As Fast As You Can.mp3
+	- By Pix
+	- https://www.youtube.com/watch?v=tQR6jyfK6Ps&list=PLdsGes2mFh92eHpOZVJQgoubb6rF0CcvU&index=4
+
+Sound Resources
+	- By Kenney
+	- https://www.kenney.nl/assets
+
+Graphic Resources
+	- By Kenney
+	- https://www.kenney.nl/assets
+
+Codes in /src/imported and /src/modified
+	- By Parallel Realities
+	- https://www.parallelrealities.co.uk/tutorials/
+	- https://parallelrealities.itch.io/sdl2-tutorials

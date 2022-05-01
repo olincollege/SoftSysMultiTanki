@@ -1,5 +1,35 @@
 #include "collision.h"
 
+void bulletSound(Player* p, Bullet* b)
+{
+    if (b->active == 0)
+    {
+
+    }
+    else if (p->playerIndex == 0)
+    {
+        if (b->health == 0)
+        {
+            playSound(SND_BULLET_EXPLOSION, CH_PLAYER1_BULLET);
+        }
+        else
+        {
+            playSound(SND_BULLET_REFLECT, CH_PLAYER1_BULLET);
+        }
+    }
+    else if (p->playerIndex == 1)
+    {
+        if (b->health == 0)
+        {
+            playSound(SND_BULLET_EXPLOSION, CH_PLAYER2_BULLET);
+        }
+        else
+        {
+            playSound(SND_BULLET_REFLECT, CH_PLAYER2_BULLET);
+        }
+    }
+}
+
 void collisionWallsBullets(void)
 {
     Player *p;
@@ -27,6 +57,7 @@ void collisionWallsBullets(void)
                 if (getPointInsideRect(cp[0][0], cp[0][1], cp[1][0], cp[1][1], b->x, b->y) == 1)
                 {
                     b->health = 0;
+                    //bulletSound(p,b);
                     break;
                 }
 
@@ -43,6 +74,7 @@ void collisionWallsBullets(void)
                     b->angle = getReflectedAngle(b->angle, 0);
                     b->dy = -b->dy;
                     b->health -= 1;
+                    bulletSound(p,b);
                     break;
                 }
 
@@ -56,6 +88,7 @@ void collisionWallsBullets(void)
                     b->angle = getReflectedAngle(b->angle, 0);
                     b->dy = -b->dy;
                     b->health -= 1;
+                    bulletSound(p,b);
                     break;
                 }
 
@@ -69,6 +102,7 @@ void collisionWallsBullets(void)
                     b->angle = getReflectedAngle(b->angle, 1);
                     b->dx = -b->dx;
                     b->health -= 1;
+                    bulletSound(p,b);
                     break;
                 }
 
@@ -82,6 +116,7 @@ void collisionWallsBullets(void)
                     b->angle = getReflectedAngle(b->angle, 1);
                     b->dx = -b->dx;
                     b->health -= 1;
+                    bulletSound(p,b);
                     break;
                 }
             }

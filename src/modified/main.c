@@ -40,12 +40,15 @@ int main(int argc, char *argv[])
 	initGame();
 
 	initTitle();
-	
+
 	//initStage();
 	
 	then = SDL_GetTicks();
 	
 	remainder = 0;
+
+	SDL_Event e;
+	while (SDL_PollEvent(&e));
 
 	while (1)
 	{
