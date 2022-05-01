@@ -14,11 +14,6 @@
 #define sendrecvflag 0
 #define FILENAME "test.json"
 
-struct args_struct {
-  int *network_socket;
-  struct sockaddr_in *peer_address;
-}
-
 char peer_ip_addr[INET_ADDRSTRLEN];
 
 // clear buffer
@@ -52,7 +47,11 @@ int matchmaking() {
     connect(sock, (struct sockaddr *) &server, sizeof(server));
 
     // receive data
-    int ip_received = recv(sock, peer_ip_addr, INET_ADDRSTRLEN, 0);
+    int ip_received;
+    while ((ip_received=recv(sock, peer_ip_addr, INET_ADDRSTRLEN, 0)) > 0) {
+            peer_ip_addr[ip_received]='\0';
+            printf("%s\n", peer_ip_addr);
+    }
     if (ip_received == -1){
         perror("Can't read from host");
         exit(EXIT_FAILURE);
@@ -148,10 +147,7 @@ int main(int argc, char const *argv[]){
     // for now, have separate code for both here.
     // this code currently does not work, it is just
     // for reference.
-
-    int process = 0;
-    // send code
-    if (process==0) {
+    if (fork()==0){
         // case for asking for file
         //printf("Wait for file name");
         //nBytes = recvfrom(network_socket, net_buf,NET_BUF_SIZE, sendrecvflag,(struct sockaddr*)&serv_addr, &addrlen);
@@ -179,7 +175,7 @@ int main(int argc, char const *argv[]){
         fclose(fp);
     
     // receive code
-    else if (process==1) {
+    else {
         // if asking for name of file
         //printf("\nPlease enter file name to receive:\n");
         //scanf("%s", net_buf);
