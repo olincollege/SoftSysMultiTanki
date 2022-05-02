@@ -39,12 +39,13 @@ struct Bullet {
 	int isDead;
 	float x;
 	float y;
-	int w;
-	int h;
 	int health;
 	float dx;
 	float dy;
 	int angle;
+
+	int w;
+	int h;
 	float bp[2];
 	Effect etrailHead, *etrailTail;
 	float trailDistance;
@@ -53,25 +54,27 @@ struct Bullet {
 };
 
 struct Player {
-	int playerIndex;
-	int isBody;
 	int isDead;
 	float x;
 	float y;
-	int w;
-	int h;
 	int health;
-	int reload;
-	int ammo;
 	float dx;
 	float dy;
 	int angle;
+
+	Bullet bHead, *bTail;
+
+	int playerIndex;
+	int isBody;
+	int w;
+	int h;
+	int reload;
+	int ammo;
 	Effect etrailHead, *etrailTail;
 	Effect bulletShot;
 	float trailDistance;
 	float trailSound;
 	SDL_Texture *texture;
-	Bullet bHead, *bTail;
 	Player *next;
 };
 

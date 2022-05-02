@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	app.textureTail = &app.textureHead;
 
 	app.maxPlayer = MAX_PLAYER;
-	app.playerIndex = 0;
+	app.playerIndex = 1;
 	
 	initSDL();
 	

@@ -20,15 +20,15 @@ void initTitle(void)
 
 static void logic(void)
 {
-    if (app.playerInputs[0].keyboard[SDL_SCANCODE_SPACE])
+    if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE])
 	{
-        app.playerInputs[0].keyboard[SDL_SCANCODE_SPACE] = 0;
+        app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE] = 0;
 		initStage();
 	}
 
-    if (app.playerInputs[0].keyboard[SDL_SCANCODE_ESCAPE])
+    if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_ESCAPE])
 	{
-        app.playerInputs[0].keyboard[SDL_SCANCODE_ESCAPE] = 0;
+        app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_ESCAPE] = 0;
 		cleanup();
         exit(0);
 	}

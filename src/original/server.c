@@ -19,6 +19,7 @@ void doReceiveFromServer(void)
             y = p->y;
         }
     }
+    
     for (int i = 0; i < app.maxPlayer; i++)
     {
         if (app.playerIndex == i)
