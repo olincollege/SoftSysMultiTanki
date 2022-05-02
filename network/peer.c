@@ -10,19 +10,15 @@
 
 #define MATCHMAKING_HOST "127.0.0.1"//"157.245.235.105"
 #define PORT 7777
-#define NET_BUF_SIZE 32
-#define sendrecvflag 0
-#define FILENAME "test.json"
 
 char peer_ip_addr[INET_ADDRSTRLEN];
 int tank_no;
 
-// clear buffer
-void clear_buf(char* buf) {
-    int i;
-    for (i=0; i < NET_BUF_SIZE; i++)
-        buf[i] = '/0';
-}
+struct KeyInfo {
+   uint8_t  type;
+   uint8_t  name;
+   uint32_t data;
+};
 
 // first for connecting to other peer
 int matchmaking() {
@@ -62,50 +58,7 @@ int matchmaking() {
     return(0);
 }
 
-// function to send file
-char nofile[15] = "No file found!";
-int send_file(FILE* fp, char* buf, int buf_size){
-    int i, len;
-    // if file NULL
-    if (fp == NULL) {
-        strcpy(buf, nofile);
-        len = strlen(nofile);
-        buf[len] = EOF;
-        return(1);
-    }
-    // read file
-    char ch;
-    for (i = 0; i<buf_size;i++) {
-        // read from next pointer position
-        ch = fgetc(fp);
-        buf[i] = ch;
-        if (ch==EOF){
-            return(1);
-        }
-    }
-    return(0);
-}
-
-// function to receive file
-int recv_file(char* buf, int buf_size) {
-    int i;
-    char ch;
-    for (i=0; i<buf_size; i++) {
-        ch = buf[i];
-        if (ch == EOF)
-            return(1);
-        else
-            printf("%c", ch);
-    }
-    return(0);
-}
-
-
 int main(int argc, char const *argv[]){
-    // set up
-    FILE* fp;
-    char net_buf[NET_BUF_SIZE];
-
     // find other peer
     if (!matchmaking()) {
         perror("Matchmaking failed");
@@ -113,12 +66,12 @@ int main(int argc, char const *argv[]){
     }
 
     // connect to peer
-    int network_socket, nBytes;
+    int peer_sock;
     struct sockaddr_in serv_addr;
     int addrlen = sizeof(serv_addr);
 
     // create socket with UDP protocol (uses datagram)
-    if ((network_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
+    if ((peer_sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
     {
         perror("Socket creation error");
         exit(EXIT_FAILURE);
@@ -128,71 +81,78 @@ int main(int argc, char const *argv[]){
     serv_addr.sin_port = htons(PORT);
 
     // associate server socket address with socket descriptor
-    if (bind(network_socket, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    if (bind(peer_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {;
         perror("Bind failed");
         exit(EXIT_FAILURE);
     }
     // ready to accept connection requests
-    if (listen(network_socket, 5) < 0)
+    if (listen(peer_sock, 5) < 0)
     {
         perror("listen");
         exit(EXIT_FAILURE);
     }
 
-    // TODO: fork two different processes: receive file, send file
+    // send code
+    // TO DO: to be placed within input code
     if (fork()==0){
-        // case for asking for file
-        //printf("Wait for file name");
-        //nBytes = recvfrom(network_socket, net_buf,NET_BUF_SIZE, sendrecvflag,(struct sockaddr*)&serv_addr, &addrlen);
-        //FILENAME is netbuf instead in this case
-        strcpy(net_buf,FILENAME);
-        // open file
-        fp = fopen(net_buf, "r");
-        if (fp==NULL){
-            printf("\nFile open failed!\n");
+        // this is good reference for the packet
+        int keys_buf_size = 18;
+        char keys_buffer[keys_buf_size];
+
+        // for keyboard
+        // unpressed
+        uint8_t keyboard_up_type = 0;
+        uint16_t keyboard_up_data = 0; // which key
+        // pressed
+        uint8_t keyboard_down_type = 1;
+        uint16_t keyboard_down_data = 0; // which key
+
+        // for mouse button
+        uint8_t mouse_button_type = 2;
+        uint8_t mouse_button_data = 0; //1 for pressed
+
+        // for mouse state
+        // x
+        uint8_t mouse_state_x_type = 3;
+        uint32_t mouse_state_x_data = 0;
+        // y
+        uint8_t mouse_state_y_type = 4;
+        uint32_t mouse_state_y_data = 0;
+
+        // make sure to update data with input code
+
+        // put into buffer. draft for now
+        keys_buffer[0] = (char)keyboard_up_type;   //uint8_t
+        keys_buffer[1] = (char)keyboard_up_data;   //uint16_t
+        keys_buffer[3] = (char)keyboard_down_type; //uint8_t
+        keys_buffer[4] = (char)keyboard_down_data; //uint16_t
+        keys_buffer[6] = (char)mouse_button_type;  //uint8_t
+        keys_buffer[7] = (char)mouse_button_data;  //uint8_t
+        keys_buffer[8] = (char)mouse_state_x_type; //uint8_t
+        keys_buffer[9] = (char)mouse_state_x_data; //uint32_t
+        keys_buffer[13] = (char)mouse_state_y_type; //uint8_t
+        keys_buffer[14] = (char)mouse_state_y_data; //uint32_t
+
+        // send packet
+        if (send(peer_sock, keys_buffer, keys_buf_size, 0) == -1){
+            perror("Can't read from host");
             exit(EXIT_FAILURE);
         }
-        while(1) {
-            if (sendFile(fp, net_buf, NET_BUF_SIZE)) {
-                sendto(network_socket, net_buf, NET_BUF_SIZE,
-                sendrecvflag, (struct sockaddr*)&serv_addr, addrlen);
-                break;
-            }
-            // send file
-            sendto(network_socket, net_buf, NET_BUF_SIZE,
-            sendrecvflag, (struct sockaddr*)&serv_addr, addrlen);
-            clear_buf(net_buf);
-        }
     }
-    if (fp!=NULL)
-        fclose(fp);
     
     // receive code
     else {
-        // if asking for name of file
-        //printf("\nPlease enter file name to receive:\n");
-        //scanf("%s", net_buf);
-        //sendto(network_socket, net_buf, NET_BUF_SIZE,
-        //       sendrecvflag, (struct sockaddr*)&serv_addr,
-        //       addrlen);
+        // setup packet
+        int keys_buf_size = 18;
+        char keys_buffer[keys_buf_size];
 
-        // receive
-        while (1) {
-            // receive file
-            clear_buf(net_buf);
-            nBytes = recvfrom(network_socket, net_buf, NET_BUF_SIZE,
-            sendrecvflag, (struct sockaddr*)&serv_addr, addrlen);
-            clear_buf(net_buf);
-
-            // process file
-            if (recv_file(net_buf, NET_BUF_SIZE)) {
-                break;
-            }
+        // receive packet
+        if (recv(peer_sock, keys_buffer, keys_buf_size, 0) == -1){
+            perror("Can't read from host");
+            exit(EXIT_FAILURE);
         }
-
+        // parse packet
     }
-
-    atexit (close(network_socket));
-    
+    atexit(close(peer_sock));
 }
