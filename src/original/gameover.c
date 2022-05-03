@@ -64,7 +64,7 @@ static void draw(void)
     blitRotated(logo, SCREEN_WIDTH/2, 200, 0);
     blitRotated(winner, SCREEN_WIDTH/2, 400, 0);
     app.fontScale = 1.0f;
-    if (win)
+    if (win == 1)
     {
         drawText("WINNER!", SCREEN_WIDTH / 2, 450, 0, 134, 212, TEXT_ALIGN_CENTER, 0);
     }
@@ -93,7 +93,7 @@ static void draw(void)
     }
 
     app.fontScale = title_scale;
-    if (win)
+    if (win == 1)
     {
         drawText("Game Over! Press Space To Restart, ESC to Quit", SCREEN_WIDTH / 2, 650, 0, 134, 212, TEXT_ALIGN_CENTER, 0);
     }

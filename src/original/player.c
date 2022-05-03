@@ -36,14 +36,14 @@ void initPlayer(void)
 			case 0:
 				playerBody->texture = loadTexture("gfx/tankBody_blue_outline.png");
 				playerHead->texture = loadTexture("gfx/tankBlue_barrel2_outline.png");
-				playerBody->x = 5 * GRID_SIZE;
-				playerBody->y = 5 * GRID_SIZE;
+				playerBody->x = 4 * GRID_SIZE;
+				playerBody->y = 4 * GRID_SIZE;
 				break;
 			case 1:
 				playerBody->texture = loadTexture("gfx/tankBody_red_outline.png");
 				playerHead->texture = loadTexture("gfx/tankRed_barrel2_outline.png");
-				playerBody->x = 15 * GRID_SIZE;
-				playerBody->y = 5 * GRID_SIZE;
+				playerBody->x = 17 * GRID_SIZE;
+				playerBody->y = 11 * GRID_SIZE;
 				break;
 			default:
 				playerBody->texture = loadTexture("gfx/tankBody_blue_outline.png");
