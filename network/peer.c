@@ -8,16 +8,52 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 
-#define MATCHMAKING_HOST "127.0.0.1"//"157.245.235.105"
+/*
+main.c
+input.c: record your input
+structs.c: playerIndex (0,1)
+player.c: Player *p
+head angle
+body body angle + location
+
+app.playerIndex
+ignore begining of server.
+
+need:
+ x y
+ dx dy
+ angle
+
+next:
+ bullets incl in player
+ bp collision detection bullet points
+
+ at best, send whole player over
+*/
+
+#define MATCHMAKING_HOST "157.245.235.105"
 #define PORT 7777
 
 char peer_ip_addr[INET_ADDRSTRLEN];
 int tank_no;
 
 struct KeyInfo {
-   uint8_t  type;
-   uint8_t  name;
-   uint32_t data;
+    uint8_t keyboard_up_type;
+    uint16_t keyboard_up_data; // which key
+    uint8_t keyboard_down_type;
+    uint16_t keyboard_down_data; // which key
+
+    // for mouse button
+    uint8_t mouse_button_type;
+    uint8_t mouse_button_data; //1 for pressed
+
+    // for mouse state
+    // x
+    uint8_t mouse_state_x_type;
+    uint32_t mouse_state_x_data;
+    // y
+    uint8_t mouse_state_y_type;
+    uint32_t mouse_state_y_data;
 };
 
 // first for connecting to other peer
@@ -43,7 +79,8 @@ int matchmaking() {
         perror("can't reed from host");
         exit(EXIT_FAILURE);
     }
-    printf("%d\n", ntohl(tank_no));
+    tank_no = ntohl(tank_no);
+    printf("%i\n", tank_no);
     
     // receive data
     int ip_received;
@@ -60,116 +97,190 @@ int matchmaking() {
 
 int main(int argc, char const *argv[]){
     // find other peer
-    if (!matchmaking()) {
+    if (matchmaking() == -1) {
         perror("Matchmaking failed");
         exit(EXIT_FAILURE);
     }
 
-    // connect to peer
-    int peer_sock;
-    struct sockaddr_in serv_addr;
-    int addrlen = sizeof(serv_addr);
+    /* set up server
+    int network_socket;
+    struct sockaddr_in server_address, peer_address;
 
-    // create socket with UDP protocol (uses datagram)
-    if ((peer_sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
+    // create socket file descriptor with UDP protocol (uses datagram)
+    if ((network_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     {
-        perror("Socket creation error");
+        perror("socket failed");
         exit(EXIT_FAILURE);
     }
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_aton(peer_ip_addr, &serv_addr);
-    serv_addr.sin_port = htons(PORT);
+    // Forcefully attaching socket to the port
+
+    server_address.sin_family = AF_INET;
+    server_address.sin_addr.s_addr = INADDR_ANY;
+    server_address.sin_port = htons(PORT);
 
     // associate server socket address with socket descriptor
-    if (bind(peer_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
-    {;
-        perror("Bind failed");
-        exit(EXIT_FAILURE);
-    }
-    // ready to accept connection requests
-    if (listen(peer_sock, 5) < 0)
+    if (bind(network_socket, (struct sockaddr *)&server_address, sizeof(server_address)) < 0)
     {
-        perror("listen");
+        perror("bind failed");
         exit(EXIT_FAILURE);
     }
 
-    //TO DO: organize by tank, apply to input and server
+    socklen_t serv_len = sizeof(server_address);
+
+    // connect to peer
+    peer_address.sin_family = AF_INET;
+    peer_address.sin_addr.s_addr = inet_addr(peer_ip_addr);
+    peer_address.sin_port = htons(PORT);
+
+    socklen_t peer_len = sizeof(peer_address);
+
+    //TO DO: organize by tank, apply to input and server*/
 
     // this is good reference for the packet
     int keys_buf_size = 18;
+    char my_keys_buffer[keys_buf_size];
+    char peer_keys_buffer[keys_buf_size];
+
+    struct KeyInfo my_keys;
+    struct KeyInfo peer_keys = {0,0,0,0,0,0,0,0,0,0};
+
     // for keyboard
     // unpressed
-    uint8_t keyboard_up_type = 0;
-    uint16_t keyboard_up_data = 0; // which key
+    my_keys.keyboard_up_type = 0;
+    my_keys.keyboard_up_data = 0; // which key
     // pressed
-    uint8_t keyboard_down_type = 1;
-    uint16_t keyboard_down_data = 0; // which key
+    my_keys.keyboard_down_type = 1;
+    my_keys.keyboard_down_data = 0; // which key
 
     // for mouse button
-    uint8_t mouse_button_type = 2;
-    uint8_t mouse_button_data = 0; //1 for pressed
+    my_keys.mouse_button_type = 2;
+    my_keys.mouse_button_data = 0; //1 for pressed
 
     // for mouse state
     // x
-    uint8_t mouse_state_x_type = 3;
-    uint32_t mouse_state_x_data = 0;
+    my_keys.mouse_state_x_type = 3;
+    my_keys.mouse_state_x_data = 0;
     // y
-    uint8_t mouse_state_y_type = 4;
-    uint32_t mouse_state_y_data = 0;
+    my_keys.mouse_state_y_type = 4;
+    my_keys.mouse_state_y_data = 0;
 
-    // send code
-    // TO DO: to be placed within input code
-    if (fork()==0){
-        // setup packet
-        char keys_buffer[keys_buf_size];
+    // sending example
+    if (tank_no==1) {
+        // setup connection
+        int sockfd;
+        char buffer[1024];
+        struct sockaddr_in servaddr, cliaddr;
+        char *hello = "Hello from server";
+        if ((sockfd= socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
+        {
+            perror("socket failed");
+            exit(EXIT_FAILURE);
+        }
 
-        // make sure to update data with input code
+        memset(&servaddr, 0, sizeof(servaddr));
+        memset(&cliaddr, 0, sizeof(cliaddr));
+
+        servaddr.sin_family    = AF_INET; // IPv4
+        servaddr.sin_addr.s_addr = INADDR_ANY;
+        servaddr.sin_port = htons(PORT);
+
+        // Bind the socket with the server address
+        if ( bind(sockfd, (const struct sockaddr *)&servaddr, 
+                sizeof(servaddr)) < 0 )
+        {
+            perror("bind failed");
+            exit(EXIT_FAILURE);
+        }
+        
+        int len, n;
+    
+        len = sizeof(cliaddr);  //len is value/result
+    
+        n = recvfrom(sockfd, (char *)buffer, 1024, 
+                    MSG_WAITALL, ( struct sockaddr *) &cliaddr,
+                    &len);
+        buffer[n] = '\0';
+        printf("Client : %s\n", buffer);
+        sendto(sockfd, (const char *)hello, strlen(hello), 
+            MSG_CONFIRM, (const struct sockaddr *) &cliaddr,
+                len);
+        printf("Hello message sent.\n");
 
         // put into buffer
-        memcpy(&keys_buffer[0],&keyboard_up_type,1); //uint8_t
-        memcpy(&keys_buffer[1],&keyboard_up_data,2); //uint16_t
-        memcpy(&keys_buffer[3],&keyboard_down_type,1); //uint8_t
-        memcpy(&keys_buffer[4],&keyboard_down_data,2); //uint16_t
-        memcpy(&keys_buffer[6],&mouse_button_type,1); //uint8_t
-        memcpy(&keys_buffer[7],&mouse_button_data,1); //uint8_t
-        memcpy(&keys_buffer[8],&mouse_state_x_type,1); //uint8_t 
-        memcpy(&keys_buffer[9],&mouse_state_x_data,4); //uint32_t
-        memcpy(&keys_buffer[13],&mouse_state_y_type,1); //uint8_t 
-        memcpy(&keys_buffer[14],&mouse_state_y_data,4); //uint32_t
-
+        memcpy(&my_keys_buffer[0],&my_keys.keyboard_up_type,1); //uint8_t
+        memcpy(&my_keys_buffer[1],&my_keys.keyboard_up_data,2); //uint16_t
+        memcpy(&my_keys_buffer[3],&my_keys.keyboard_down_type,1); //uint8_t
+        memcpy(&my_keys_buffer[4],&my_keys.keyboard_down_data,2); //uint16_t
+        memcpy(&my_keys_buffer[6],&my_keys.mouse_button_type,1); //uint8_t
+        memcpy(&my_keys_buffer[7],&my_keys.mouse_button_data,1); //uint8_t
+        memcpy(&my_keys_buffer[8],&my_keys.mouse_state_x_type,1); //uint8_t 
+        memcpy(&my_keys_buffer[9],&my_keys.mouse_state_x_data,4); //uint32_t
+        memcpy(&my_keys_buffer[13],&my_keys.mouse_state_y_type,1); //uint8_t 
+        memcpy(&my_keys_buffer[14],&my_keys.mouse_state_y_data,4); //uint32_t
         // send packet
-        if (send(peer_sock, &keys_buffer, keys_buf_size, 0) == -1){
-            perror("Can't read from host");
-            exit(EXIT_FAILURE);
-        }
-
-        // LOOP AROUND THIS
+        sendto(sockfd, (const char *)my_keys_buffer, strlen(my_keys_buffer), 
+            MSG_CONFIRM, (const struct sockaddr *) &cliaddr,
+                len);
+        printf("Packet sent.\n");
+        
     }
+    if (tank_no == 2) {
+        // setup connection
+        int sockfd;
+        char buffer[1024];
+        char *hello = "Hello from client";
+        struct sockaddr_in     servaddr;
     
-    // receive code
-    else {
-        // setup packet
-        int keys_buf_size = 18;
-        char keys_buffer[keys_buf_size];
-
-        // receive packet
-        if (recv(peer_sock, keys_buffer, keys_buf_size, 0) == -1){
-            perror("Can't read from host");
+        // Creating socket file descriptor
+        if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
+            perror("socket creation failed");
             exit(EXIT_FAILURE);
         }
-        // parse packet
-        memcpy(&keyboard_up_type,&keys_buffer[0],1); //uint8_t
-        memcpy(&keyboard_up_data,&keys_buffer[1],2); //uint16_t
-        memcpy(&keyboard_down_type,&keys_buffer[3],1); //uint8_t
-        memcpy(&keyboard_down_data,&keys_buffer[4],2); //uint16_t
-        memcpy(&mouse_button_type,&keys_buffer[6],1); //uint8_t
-        memcpy(&mouse_button_data,&keys_buffer[7],1); //uint8_t
-        memcpy(&mouse_state_x_type,&keys_buffer[8],1); //uint8_t 
-        memcpy(&mouse_state_x_data,&keys_buffer[9],4); //uint32_t
-        memcpy(&mouse_state_y_type,&keys_buffer[13],1); //uint8_t 
-        memcpy(&mouse_state_y_data,&keys_buffer[14],4); //uint32_t
+    
+        memset(&servaddr, 0, sizeof(servaddr));
+        
+        // Filling server information
+        servaddr.sin_family = AF_INET;
+        servaddr.sin_port = htons(PORT);
+        servaddr.sin_addr.s_addr = INADDR_ANY;
+        
+        int n,m, len;
+        
+        sendto(sockfd, (const char *)hello, strlen(hello),
+            MSG_CONFIRM, (const struct sockaddr *) &servaddr, 
+                sizeof(servaddr));
+        printf("Hello message sent.\n");
+            
+        n = recvfrom(sockfd, (char *)buffer, 1024, 
+                    MSG_WAITALL, (struct sockaddr *) &servaddr,
+                    &len);
+        buffer[n] = '\0';
+        printf("Server : %s\n", buffer);
 
-        // LOOP AROUND THIS
+        m = recvfrom(sockfd, (char *)peer_keys_buffer, keys_buf_size, 
+                    MSG_WAITALL, (struct sockaddr *) &servaddr,
+                    &len);
+        //peer_keys_buffer[m] = '\0';
+        printf("Server : %s\n", peer_keys_buffer);
+
+        // parse packet
+        //apply ntohl for int
+
+        memcpy(&peer_keys.keyboard_up_type,&peer_keys_buffer[0],1); //uint8_t
+        memcpy(&peer_keys.keyboard_up_data,&peer_keys_buffer[1],2); //uint16_t
+        memcpy(&peer_keys.keyboard_down_type,&peer_keys_buffer[3],1); //uint8_t
+        memcpy(&peer_keys.keyboard_down_data,&peer_keys_buffer[4],2); //uint16_t
+        memcpy(&peer_keys.mouse_button_type,&peer_keys_buffer[6],1); //uint8_t
+        memcpy(&peer_keys.mouse_button_data,&peer_keys_buffer[7],1); //uint8_t
+        memcpy(&peer_keys.mouse_state_x_type,&peer_keys_buffer[8],1); //uint8_t 
+        memcpy(&peer_keys.mouse_state_x_data,&peer_keys_buffer[9],4); //uint32_t
+        memcpy(&peer_keys.mouse_state_y_type,&peer_keys_buffer[13],1); //uint8_t 
+        memcpy(&peer_keys.mouse_state_y_data,&peer_keys_buffer[14],4); //uint32_t
+        
+        printf("%i", peer_keys.keyboard_down_type);
+        close(sockfd);
     }
-    atexit(close(peer_sock));
+    // receiving
+    // TO DO: to be placed within input code
+   
 }
