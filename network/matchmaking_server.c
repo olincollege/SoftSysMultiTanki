@@ -96,7 +96,7 @@ int main(int argc, char const *argv[]){
                 write(fd1[1], client_ip_addr, strlen(client_ip_addr) + 1);
                 close(fd1[1]);
                 // tank no.
-                int converted_number = htonl(client_counter);
+                int converted_number = htonl(client_counter-1);
                 fflush(stdout);
                 send(connect_d,&converted_number,sizeof(converted_number), 0);
 
@@ -118,7 +118,7 @@ int main(int argc, char const *argv[]){
                 write(fd2[1], client_ip_addr, strlen(client_ip_addr) + 1);
                 close(fd2[1]);
                 // tank no.
-                int converted_number = htonl(client_counter);
+                int converted_number = htonl(client_counter-1);
                 fflush(stdout);
                 send(connect_d,&converted_number,sizeof(converted_number), 0);
                 // wait until pipe 2 has information

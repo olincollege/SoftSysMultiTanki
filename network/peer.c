@@ -56,6 +56,11 @@ struct KeyInfo {
     uint32_t mouse_state_y_data;
 };
 
+void btox(char *xp, unsigned char *bb, int n) {
+    const char xx[]= "0123456789ABCDEF";
+    while (--n >= 0) xp[n] = xx[(bb[n>>1] >> ((1 - (n&1)) << 2)) & 0xF];
+}
+
 // first for connecting to other peer
 int matchmaking() {
     struct sockaddr_in server;
@@ -103,36 +108,6 @@ int main(int argc, char const *argv[]){
     }
 
     /* set up server
-    int network_socket;
-    struct sockaddr_in server_address, peer_address;
-
-    // create socket file descriptor with UDP protocol (uses datagram)
-    if ((network_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
-    {
-        perror("socket failed");
-        exit(EXIT_FAILURE);
-    }
-    // Forcefully attaching socket to the port
-
-    server_address.sin_family = AF_INET;
-    server_address.sin_addr.s_addr = INADDR_ANY;
-    server_address.sin_port = htons(PORT);
-
-    // associate server socket address with socket descriptor
-    if (bind(network_socket, (struct sockaddr *)&server_address, sizeof(server_address)) < 0)
-    {
-        perror("bind failed");
-        exit(EXIT_FAILURE);
-    }
-
-    socklen_t serv_len = sizeof(server_address);
-
-    // connect to peer
-    peer_address.sin_family = AF_INET;
-    peer_address.sin_addr.s_addr = inet_addr(peer_ip_addr);
-    peer_address.sin_port = htons(PORT);
-
-    socklen_t peer_len = sizeof(peer_address);
 
     //TO DO: organize by tank, apply to input and server*/
 
@@ -147,10 +122,10 @@ int main(int argc, char const *argv[]){
     // for keyboard
     // unpressed
     my_keys.keyboard_up_type = 0;
-    my_keys.keyboard_up_data = 0; // which key
+    my_keys.keyboard_up_data = htons(0); // which key
     // pressed
     my_keys.keyboard_down_type = 1;
-    my_keys.keyboard_down_data = 0; // which key
+    my_keys.keyboard_down_data = htons(0); // which key
 
     // for mouse button
     my_keys.mouse_button_type = 2;
@@ -159,13 +134,13 @@ int main(int argc, char const *argv[]){
     // for mouse state
     // x
     my_keys.mouse_state_x_type = 3;
-    my_keys.mouse_state_x_data = 0;
+    my_keys.mouse_state_x_data = htonl(20);
     // y
     my_keys.mouse_state_y_type = 4;
-    my_keys.mouse_state_y_data = 0;
+    my_keys.mouse_state_y_data = htonl(0);
 
     // sending example
-    if (tank_no==1) {
+    if (tank_no==0) {
         // setup connection
         int sockfd;
         char buffer[1024];
@@ -206,6 +181,8 @@ int main(int argc, char const *argv[]){
                 len);
         printf("Hello message sent.\n");
 
+        for (int i=1; i<5; i++){
+        my_keys.mouse_state_x_data = htonl(i);
         // put into buffer
         memcpy(&my_keys_buffer[0],&my_keys.keyboard_up_type,1); //uint8_t
         memcpy(&my_keys_buffer[1],&my_keys.keyboard_up_data,2); //uint16_t
@@ -218,13 +195,15 @@ int main(int argc, char const *argv[]){
         memcpy(&my_keys_buffer[13],&my_keys.mouse_state_y_type,1); //uint8_t 
         memcpy(&my_keys_buffer[14],&my_keys.mouse_state_y_data,4); //uint32_t
         // send packet
-        sendto(sockfd, (const char *)my_keys_buffer, strlen(my_keys_buffer), 
+        sendto(sockfd, (const char *)my_keys_buffer, keys_buf_size, 
             MSG_CONFIRM, (const struct sockaddr *) &cliaddr,
                 len);
         printf("Packet sent.\n");
+        }
         
     }
-    if (tank_no == 2) {
+    if (tank_no == 1) {
+        // receiving example
         // setup connection
         int sockfd;
         char buffer[1024];
@@ -254,13 +233,18 @@ int main(int argc, char const *argv[]){
         n = recvfrom(sockfd, (char *)buffer, 1024, 
                     MSG_WAITALL, (struct sockaddr *) &servaddr,
                     &len);
-        buffer[n] = '\0';
         printf("Server : %s\n", buffer);
 
+        for (int i=1; i<5; i++){
         m = recvfrom(sockfd, (char *)peer_keys_buffer, keys_buf_size, 
                     MSG_WAITALL, (struct sockaddr *) &servaddr,
                     &len);
-        //peer_keys_buffer[m] = '\0';
+        peer_keys_buffer[m] = '\0';
+
+        // debugging
+        char hex_buffer[1024];
+        btox(hex_buffer, peer_keys_buffer, m*2);
+        printf("Server %d bytes: %s\n", m, hex_buffer);
         printf("Server : %s\n", peer_keys_buffer);
 
         // parse packet
@@ -276,11 +260,18 @@ int main(int argc, char const *argv[]){
         memcpy(&peer_keys.mouse_state_x_data,&peer_keys_buffer[9],4); //uint32_t
         memcpy(&peer_keys.mouse_state_y_type,&peer_keys_buffer[13],1); //uint8_t 
         memcpy(&peer_keys.mouse_state_y_data,&peer_keys_buffer[14],4); //uint32_t
-        
-        printf("%i", peer_keys.keyboard_down_type);
+
+        // network to host byte order
+        peer_keys.keyboard_up_data = ntohs(peer_keys.keyboard_up_data);
+        peer_keys.keyboard_down_data = ntohs(peer_keys.keyboard_down_data);
+        peer_keys.mouse_state_x_data = ntohl(peer_keys.mouse_state_x_data);
+        peer_keys.mouse_state_y_data = ntohl(peer_keys.mouse_state_y_data);
+
+        // byte data
+        printf("%i\n", peer_keys.mouse_state_x_data);
+        }
         close(sockfd);
     }
-    // receiving
     // TO DO: to be placed within input code
    
 }
