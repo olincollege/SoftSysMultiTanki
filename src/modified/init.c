@@ -20,6 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "init.h"
 
+/*
+ * Function: initSDL
+ * ----------------------------
+ *  Initialize SDL renderer, window, mixer, and TTF.
+ */
 void initSDL(void)
 {
 	int rendererFlags, windowFlags;
@@ -60,7 +65,11 @@ void initSDL(void)
 
 	srand(time(0));
 }
-
+/*
+ * Function: initGame
+ * ----------------------------
+ *  Initialize the game by loading necessary resources like textures and sounds.
+ */
 void initGame(void)
 {
 	initBullets();
@@ -73,6 +82,11 @@ void initGame(void)
 	playMusic(1);
 }
 
+/*
+ * Function: cleanup
+ * ----------------------------
+ *  Clean up the current SDL renderer and window, and quit the game.
+ */
 void cleanup(void)
 {
 	SDL_DestroyRenderer(app.renderer);
