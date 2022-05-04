@@ -22,32 +22,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static void capFrameRate(long *then, float *remainder);
 
-struct MultiplayerInfo peer_info;
-
-void *send_to_serv(void *threadid){
-	long tid;
-	tid = (long)threadid;
-	printf("thread #%ld!\n", tid);
-	doSendToServer(peer_info);
-	pthread_exit(NULL);
-}
-void *recv_from_serv(void *threadid){
-	long tid;
-	tid = (long)threadid;
-	printf("thread #%ld!\n", tid);
-	doReceiveFromServer(peer_info);
-	pthread_exit(NULL);
-}
-
 
 int main(int argc, char *argv[])
 {
 	long then;
 	float remainder;
-
-	pthread_t threads[2];
-	int rc;
-	long t;
 	
 	memset(&app, 0, sizeof(App));
 	app.textureTail = &app.textureHead;
@@ -56,11 +35,11 @@ int main(int argc, char *argv[])
 
 	// connect to matchmaking server
 	// get peer ip address and current tank number
-	peer_info = doMatchmaking();
-	// create connection between peers
-	peer_info = setupConnection(peer_info);
-
+	struct MultiplayerInfo peer_info = doMatchmaking();
+	// apply tank number
 	app.playerIndex = peer_info.tank_no;
+	// create connection between peers
+	setupConnection(peer_info);
 	
 	initSDL();
 	
@@ -78,21 +57,6 @@ int main(int argc, char *argv[])
 
 	SDL_Event e;
 	while (SDL_PollEvent(&e));
-
-	t=0;
-	printf("In main: creating thread %ld\n", t);
-	rc = pthread_create(&threads[1], NULL, send_to_serv, (void *)t);
-	if (rc){
-		printf("ERROR; return code from pthread_create() is %d\n", rc);
-		exit(-1);
-	}
-	t=1;
-	printf("In main: creating thread %ld\n", t);
-	rc = pthread_create(&threads[2], NULL, recv_from_serv, (void *)t);
-	if (rc){
-		printf("ERROR; return code from pthread_create() is %d\n", rc);
-		exit(-1);
-	}
 
 	while (1)
 	{

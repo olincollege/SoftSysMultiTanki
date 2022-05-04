@@ -5,7 +5,17 @@ struct KeyInfo my_keys;
 struct KeyInfo peer_keys;
 
 int keys_buf_size = 13;
+pthread_t sender, receiver;
 
+void *doReceiveFromServer(void *arguments);
+void *doSendToServer(void *arguments);
+
+struct args_struct {
+  int *network_socket;
+  struct sockaddr_in *peer_address;
+};
+
+// for debugging
 void btox(char *xp, char *bb, int n) {
     const char xx[]= "0123456789ABCDEF";
     while (--n >= 0) xp[n] = xx[(bb[n>>1] >> ((1 - (n&1)) << 2)) & 0xF];
@@ -34,6 +44,7 @@ struct MultiplayerInfo doMatchmaking(void)
     server.sin_family = AF_INET;
     server.sin_port = htons(PORT);
 
+    // create socket file descriptor
     int sock;
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
         perror("socket creating error");
@@ -73,41 +84,55 @@ struct MultiplayerInfo doMatchmaking(void)
 }
 
 // create socket file descriptor, server and client
-struct MultiplayerInfo setupConnection(struct MultiplayerInfo net_info){
+int setupConnection(struct MultiplayerInfo net_info){
     // create file descriptor
-    if ((net_info.sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
+    int network_socket;
+    if ((network_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
         perror("Socket failed");
         exit(EXIT_FAILURE);
     }
-    // clear
-    memset(&net_info.servaddr, 0, sizeof(net_info.servaddr));
-    memset(&net_info.cliaddr, 0, sizeof(net_info.cliaddr));
-    // servaddr info
-    net_info.servaddr.sin_family = AF_INET; // IPv4
-    net_info.servaddr.sin_port   = htons(PORT);
+    struct sockaddr_in server_address, peer_address;
+    server_address.sin_family = AF_INET;
+    server_address.sin_addr.s_addr = INADDR_ANY; // localhost
+    server_address.sin_port = htons(PORT);
 
-    // server
-    if (net_info.tank_no == 0){
-        // set to localhost
-        net_info.servaddr.sin_addr.s_addr = INADDR_ANY;
-        // bind the socket with the server address
-        if (bind(net_info.sockfd, (const struct sockaddr *)&net_info.servaddr, sizeof(net_info.servaddr)) < 0 ){
-            perror("Bind failed");
-            exit(EXIT_FAILURE);
-        }
+    // bind socket to server address
+    if (bind(network_socket, (const struct sockaddr *)&server_address, sizeof(server_address)) < 0 ){
+        perror("Bind failed");
+        exit(EXIT_FAILURE);
     }
-    //client
-    if (net_info.tank_no == 1){
-        // connect to host ip
-        net_info.servaddr.sin_addr.s_addr = inet_addr(net_info.peer_ip_addr);
-    }
-    return net_info;
+    socklen_t len = sizeof(server_address);
+    getsockname(network_socket, (struct sockaddr *)&server_address, &len);
+
+    // connect to peer
+    peer_address.sin_family = AF_INET;
+    peer_address.sin_addr.s_addr = inet_addr(net_info.peer_ip_addr);
+    peer_address.sin_port = htons(PORT);
+
+    // set up pthread args
+    struct args_struct p_thread_args;
+    p_thread_args.network_socket = &network_socket;
+    p_thread_args.peer_address = &peer_address;
+    
+    //pthread create: for both send and receive
+    pthread_create(&sender, NULL, doSendToServer, (void *)&p_thread_args);
+    pthread_create(&receiver, NULL, doReceiveFromServer, (void *)&p_thread_args);
+
+    // join pthread
+    pthread_join(sender, NULL);
+    pthread_join(receiver, NULL);
+
+    //close socket
+    close(network_socket);
+
+    return 0;
 }
 
 // network code to send current values to server
-void doSendToServer(struct MultiplayerInfo net_info)
+void *doSendToServer(void *arguments)
 {
     // get inputs
+    struct args_struct *args = arguments;
     char my_keys_buffer[keys_buf_size];
 
     for (;;) {
@@ -133,23 +158,22 @@ void doSendToServer(struct MultiplayerInfo net_info)
     memcpy(&my_keys_buffer[4], &my_keys.mouse_button_data, 1); //uint8_t
     memcpy(&my_keys_buffer[5], &my_keys.mouse_state_x_data, 4); //int32_t
     memcpy(&my_keys_buffer[9], &my_keys.mouse_state_y_data, 4); //int32_t
-    // clean later - use sizeof(typeof(my_keys.etc) in last arg)
 
     //send packet
-    //server
-    fflush(stdout);
-    if (app.playerIndex == 0){
-        // send
-        sendto(net_info.sockfd, (const char *)my_keys_buffer, keys_buf_size, 
-            MSG_CONFIRM, (const struct sockaddr *) &net_info.cliaddr,
-            (socklen_t) sizeof(net_info.cliaddr));
+    if (my_keys_buffer[0] == '\0')
+    {
+      continue;
     }
-    //client
-    if (app.playerIndex == 1){
-        sendto(net_info.sockfd, (const char *)my_keys_buffer, keys_buf_size,
-            MSG_CONFIRM, (const struct sockaddr *) &net_info.servaddr, 
-            (socklen_t) sizeof(net_info.servaddr));
+
+    unsigned int peer_struct_length = sizeof(*args->peer_address);
+    int res = sendto(*args->network_socket, my_keys_buffer, keys_buf_size, 0, (struct sockaddr *)args->peer_address, peer_struct_length);
+    if (res < 0)
+    {
+      printf("Unable to send message\n");
+      exit(-1);
     }
+
+    memset(my_keys_buffer, 0, keys_buf_size);
     /* debugging
     char hex_buffer[1024];
     int m = keys_buf_size;
@@ -159,69 +183,52 @@ void doSendToServer(struct MultiplayerInfo net_info)
 }
 
 // network code to receive values from server and apply
-void doReceiveFromServer(struct MultiplayerInfo net_info)
+void *doReceiveFromServer(void *arguments)
 {
     // receive inputs
-    char peer_keys_buffer[keys_buf_size];
-    for (;;){
-    // receive packet
-    //server
-    int n;
-    socklen_t len;
-    memset(peer_keys_buffer, 0, keys_buf_size);
-    if (app.playerIndex == 0){
-        len = sizeof(net_info.cliaddr);
-        printf("hello!");
-        fflush(stdout);
-        n = recvfrom(net_info.sockfd, (char *)peer_keys_buffer, keys_buf_size, 
-                    0, ( struct sockaddr *) &net_info.cliaddr,&len);
-        peer_keys_buffer[n] = '\0';
-        printf("bye!");
-    }
-    //client
-    if (app.playerIndex == 1){
-        printf("hello!");
-        fflush(stdout);
-        n = recvfrom(net_info.sockfd, (char *)peer_keys_buffer, keys_buf_size, 
-                    0, (struct sockaddr *) &net_info.servaddr,&len);
-        peer_keys_buffer[n] = '\0';
-        printf("bye!");
-    }
+    struct args_struct *args = arguments;
+    while (1){
+        // receive packet
+        char peer_keys_buffer[keys_buf_size];
+        unsigned int peer_struct_length = sizeof(*args->peer_address);
+        recvfrom(*args->network_socket, peer_keys_buffer, keys_buf_size, 0, (struct sockaddr *)args->peer_address, &peer_struct_length);
 
-    // parse packet
-    memcpy(&peer_keys.w_key_data, &peer_keys_buffer[0], 1); //uint8_t
-    memcpy(&peer_keys.a_key_data, &peer_keys_buffer[1], 1); //uint8_t
-    memcpy(&peer_keys.s_key_data, &peer_keys_buffer[2], 1); //uint8_t
-    memcpy(&peer_keys.d_key_data, &peer_keys_buffer[3], 1); //uint8_t
-    memcpy(&peer_keys.mouse_button_data, &peer_keys_buffer[4], 1); //uint8_t
-    memcpy(&peer_keys.mouse_state_x_data, &peer_keys_buffer[5], 4); //int32_t
-    memcpy(&peer_keys.mouse_state_y_data, &peer_keys_buffer[9], 4); //int32_t
+        // parse packet
+        memcpy(&peer_keys.w_key_data, &peer_keys_buffer[0], 1); //uint8_t
+        memcpy(&peer_keys.a_key_data, &peer_keys_buffer[1], 1); //uint8_t
+        memcpy(&peer_keys.s_key_data, &peer_keys_buffer[2], 1); //uint8_t
+        memcpy(&peer_keys.d_key_data, &peer_keys_buffer[3], 1); //uint8_t
+        memcpy(&peer_keys.mouse_button_data, &peer_keys_buffer[4], 1); //uint8_t
+        memcpy(&peer_keys.mouse_state_x_data, &peer_keys_buffer[5], 4); //int32_t
+        memcpy(&peer_keys.mouse_state_y_data, &peer_keys_buffer[9], 4); //int32_t
 
-    // convert to host byte order
-    peer_keys = n_to_h(peer_keys);
+        // convert to host byte order
+        peer_keys = n_to_h(peer_keys);
 
-    // apply inputs
-    for (int i = 0; i < app.maxPlayer; i++)
-    {
-        if (app.playerIndex == i)
+        // apply inputs
+        for (int i = 0; i < app.maxPlayer; i++)
         {
-            // continue if my index
-            continue;
+            if (app.playerIndex == i)
+            {
+                // continue if my index
+                continue;
+            }
+
+            // run input
+            app.playerInputs[i].keyboard[SDL_SCANCODE_W] = peer_keys.w_key_data;
+            app.playerInputs[i].keyboard[SDL_SCANCODE_A] = peer_keys.a_key_data;
+            app.playerInputs[i].keyboard[SDL_SCANCODE_S] = peer_keys.s_key_data;
+            app.playerInputs[i].keyboard[SDL_SCANCODE_D] = peer_keys.d_key_data;
+            app.playerInputs[i].mouse.button[SDL_BUTTON_LEFT] = peer_keys.mouse_button_data;
+
+            app.playerInputs[i].mouse.x = peer_keys.mouse_state_x_data;
+            app.playerInputs[i].mouse.y = peer_keys.mouse_state_y_data;
         }
-
-        // run input
-        app.playerInputs[i].keyboard[SDL_SCANCODE_W] = peer_keys.w_key_data;
-        app.playerInputs[i].keyboard[SDL_SCANCODE_A] = peer_keys.a_key_data;
-        app.playerInputs[i].keyboard[SDL_SCANCODE_S] = peer_keys.s_key_data;
-        app.playerInputs[i].keyboard[SDL_SCANCODE_D] = peer_keys.d_key_data;
-        app.playerInputs[i].mouse.button[SDL_BUTTON_LEFT] = peer_keys.mouse_button_data;
-
-        app.playerInputs[i].mouse.x = peer_keys.mouse_state_x_data;
-        app.playerInputs[i].mouse.y = peer_keys.mouse_state_y_data;
-    }
-    // debuggy
-    if (app.playerIndex == 1){
-        printf("%i\n", peer_keys.w_key_data);
-    }
+        // debuggy
+        if (app.playerIndex == 1){
+            printf("%i\n", peer_keys.w_key_data);
+        }
+        // clear
+        memset(peer_keys_buffer, 0, sizeof(peer_keys_buffer));
     }
 }

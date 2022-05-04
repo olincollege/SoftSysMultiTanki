@@ -82,9 +82,6 @@ struct Player {
 struct MultiplayerInfo{
 	int tank_no;
 	char peer_ip_addr[16];
-	int sockfd;
-	struct sockaddr_in servaddr;
-	struct sockaddr_in cliaddr;
 };
 
 struct KeyInfo {

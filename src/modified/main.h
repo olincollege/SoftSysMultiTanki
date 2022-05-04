@@ -28,9 +28,7 @@ extern void initStage(void);
 extern void prepareScene(void);
 extern void presentScene(void);
 extern struct MultiplayerInfo doMatchmaking(void);
-extern struct MultiplayerInfo setupConnection(struct MultiplayerInfo);
-extern void doSendToServer(struct MultiplayerInfo);
-extern void doReceiveFromServer(struct MultiplayerInfo);
+extern int setupConnection(struct MultiplayerInfo);
 extern void initTitle(void);
 
 App app;
