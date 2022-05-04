@@ -1,5 +1,18 @@
+/*
+	Copyright 2022 SeungU Lyu
+*/
+
 #include "collision.h"
 
+/*
+ * Function: bulletSound
+ * ----------------------------
+ *  Play sound when the bullet hits the wall.
+ *  Plays differnt sound according to whether the bullet is reflecting or exploding.
+ *
+ *  p: pointer to the Player who is shooting the bullet
+ *  b: pointer to the Bullet which is hitting the wall
+ */
 void bulletSound(Player* p, Bullet* b)
 {
     if (b->active == 0)
@@ -30,6 +43,15 @@ void bulletSound(Player* p, Bullet* b)
     }
 }
 
+/*
+ * Function: collisionWallsBullets
+ * ----------------------------
+ *  Checks bullet collision with walls.
+ *  The way it checks collision is by creating line connecting bullet's center and the tip of the head
+ *  and check if that intersect with each sides of the wall.
+ *  This enables us to know which axis the bullet hit the wall and make it easier to calculate the angle of reflection.
+ *  To prevent bug, if the bullet's center is inside the wall (penetrated through the wall) then the bullet's health is set to 0.
+ */
 void collisionWallsBullets(void)
 {
     Player *p;
@@ -124,6 +146,12 @@ void collisionWallsBullets(void)
     }
 }
 
+/*
+ * Function: collisionWallsBullets
+ * ----------------------------
+ *  Checks Player collision with walls.
+ *  If player's next move overlaps with any of the wall, undo the move.
+ */
 void collisionPlayerWallsWithMove(void)
 {
     Player *p;
@@ -168,6 +196,12 @@ void collisionPlayerWallsWithMove(void)
 	}
 }
 
+/*
+ * Function: collisionWallsBullets
+ * ----------------------------
+ *  Checks Player collision with bullets.
+ *  If the bullet's center is inside the player's rectangle, set bullet health to 0 and trigger Player's isDead variable.
+ */
 void collisionPlayerBullets(void)
 {
     Player *p;

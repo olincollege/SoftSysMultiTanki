@@ -1,7 +1,16 @@
+/*
+	Copyright 2022 SeungU Lyu
+*/
+
 #include "player.h"
 
 static SDL_Texture *playerExplosion[5];
 
+/*
+ * Function: initPlayer
+ * ----------------------------
+ *  Initialize players by loading necessary textures, allocating memory, and assigning default values.
+ */
 void initPlayer(void)
 {
 	playerExplosion[0] = loadTexture("gfx/explosion.png");
@@ -68,6 +77,12 @@ void initPlayer(void)
 	}
 }
 
+/*
+ * Function: doPlayer
+ * ----------------------------
+ *  Calculates player movement from user input and checks if bullet is firing.
+ *	Also plays player related sounds.
+ */
 void doPlayer(void)
 {
 	Player *playerHead;
@@ -313,8 +328,6 @@ void doPlayer(void)
 		
 		playerBody->angle = currentAngle;
 
-		//printf("%d\n", playerBody->angle);
-		
 		playerHead->angle = getAngle(playerHead->x, playerHead->y, app.playerInputs[playerBody->playerIndex].mouse.x, app.playerInputs[playerBody->playerIndex].mouse.y);
 		playerHead->x = playerBody->x;
 		playerHead->y = playerBody->y;
@@ -333,10 +346,16 @@ void doPlayer(void)
 		}
 
 		playerHead->reload = MAX(playerHead->reload - 1, 0);
-		//printf("(%f, %f)\n", playerBody->x, playerBody->y);
 	}
 }
 
+/*
+ * Function: drawPlayers
+ * ----------------------------
+ *  Draws graphics related to the players. 
+ *	Tank texure will be displayed unless the Player is dead.
+ *	If player is dead, shows explosion textures over time.
+ */
 void drawPlayers(void)
 {
 	Player *p;

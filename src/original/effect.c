@@ -1,3 +1,7 @@
+/*
+	Copyright 2022 SeungU Lyu
+*/
+
 #include "effect.h"
 
 static SDL_Texture *tankTrailTexture;
@@ -6,6 +10,11 @@ static SDL_Texture *bulletTrailTexture2;
 static SDL_Texture *bulletTrailTexture3;
 static SDL_Texture *bulletTrailTexture4;
 
+/*
+ * Function: initBullets
+ * ----------------------------
+ *  Load all the graphic resources for effects.
+ */
 void initEffect(void)
 {
     tankTrailTexture = loadTexture("gfx/tracksSmall_light.png");
@@ -15,6 +24,13 @@ void initEffect(void)
     bulletTrailTexture4 = loadTexture("gfx/smoke_06_resized.png");
 }
 
+/*
+ * Function: leaveTankTrailEffect
+ * ----------------------------
+ *  Leave trail behind the tank if the tank moved enough distance.
+ *  This is done by creating a new Effect struct and attaching the pointer to Player's etrailTail.
+ *  Also play sound whenever a new trail is created.
+ */
 void leaveTankTrailEffect(void)
 {
     Player *p;
@@ -62,6 +78,12 @@ void leaveTankTrailEffect(void)
     }
 }
 
+/*
+ * Function: leaveTankTrailEffect
+ * ----------------------------
+ *  Leave trail behind the bullet if the bullet moved enough distance.
+ *  This is done by creating a new Effect struct and attaching the pointer to Bullet's etrailTail.
+ */
 void leaveBulletTrailEffect(void)
 {
     Player *p;
@@ -110,6 +132,11 @@ void leaveBulletTrailEffect(void)
     }
 }
 
+/*
+ * Function: updateBulletShotEffect
+ * ----------------------------
+ *  Update the position of players' bullet-shot-effect position and angles.
+ */
 void updateBulletShotEffect(void)
 {
     Player *p;
@@ -117,7 +144,6 @@ void updateBulletShotEffect(void)
     {
         if (p->isBody == 0 && p->bulletShot.health > 0)
         {
-            //printf("check %i\n", p->bulletShot.health);
             p->bulletShot.x = p->x + (PLAYER_BARREL_HEIGHT * sin((PI/180) * p->angle));
             p->bulletShot.y = p->y - (PLAYER_BARREL_HEIGHT * cos((PI/180) * p->angle));
             p->bulletShot.angle = p->angle;
@@ -125,6 +151,11 @@ void updateBulletShotEffect(void)
     }
 }
 
+/*
+ * Function: doEffect
+ * ----------------------------
+ *  Execute functions related to effects one by one.
+ */
 void doEffect(void)
 {
     leaveTankTrailEffect();
@@ -132,48 +163,36 @@ void doEffect(void)
     updateBulletShotEffect();
 }
 
+/*
+ * Function: drawEffectUnder
+ * ----------------------------
+ *  Draw all the effects that should be under the tank.
+ *  This includes the tank trail.
+ */
 void drawEffectUnder(void)
 {
     Player *p;
     for (p = stage.pHead.next; p != NULL ; p = p->next)
     {
         Effect *e;
-        //Effect *prev = &(p->etrailHead);
 
         if (p->isBody == 1)
         {
             for (e = p->etrailHead.next; e != NULL ; e = e->next)
             {
                 blitRotated(e->texture, e->x, e->y, e->angle);
-
-                // if (--e->health <= 0)
-                // {
-                //     if (e == p->etrailTail)
-                //     {
-                //         p->etrailTail = prev;
-                //     }
-
-                //     prev->next = e->next;
-                //     free(e);
-                //     e = prev;
-                // }
-                
-                // prev = e;
             }
         }
-
-        // if (p->isBody == 0)
-        // {
-        //     if (p->bulletShot.health > 0)
-        //     {
-        //         blitRotated(p->bulletShot.texture, p->bulletShot.x, p->bulletShot.y, p->bulletShot.angle);
-        //         //printf("check %i\n", p->bulletShot.angle);
-        //         p->bulletShot.health -= 1;
-        //     }
-        // }
     }
 }
 
+/*
+ * Function: drawEffectOver
+ * ----------------------------
+ *  Draw all the effects that should be above the tank.
+ *  This includes the bullet trail.
+ *  The function also frees the bullet trails that is outdated.
+ */
 void drawEffectOver(void)
 {
     Player *p;
@@ -188,7 +207,6 @@ void drawEffectOver(void)
         if (p->bulletShot.health > 0)
         {
             blitRotated(p->bulletShot.texture, p->bulletShot.x, p->bulletShot.y, p->bulletShot.angle);
-            //printf("check %i\n", p->bulletShot.angle);
             p->bulletShot.health -= 1;
         }
 

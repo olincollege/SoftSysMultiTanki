@@ -38,7 +38,8 @@ int lastLiveIndex;
 /*
  * Function: initStage
  * ----------------------------
- *  Initialized the game stage based on map data stored inside map.c
+ *  Initialized the game stage the changing logic/draw delegate and loading necessary textures.
+ *	MapTile structs are created based on map data stored inside map.c.
  */
 void initStage(void)
 {

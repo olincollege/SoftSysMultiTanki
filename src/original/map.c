@@ -1,3 +1,7 @@
+/*
+	Copyright 2022 SeungU Lyu
+*/
+
 #include "map.h"
 
 int gdata[GRID_HEIGHT][GRID_WIDTH] = 
@@ -38,6 +42,14 @@ int wdata[GRID_HEIGHT][GRID_WIDTH] =
     { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
 };
 
+/*
+ * Function: getEmptyPosition
+ * ----------------------------
+ *  Get empty position on the map without walls and assign the value to pointers.
+ *
+ *  x: pointer to assign the x value
+ *  y: pointer to assign the y value
+ */
 void getEmptyPosition(int *x, int *y)
 {
     int i = rand() % (GRID_WIDTH -4) + 2;
@@ -52,6 +64,13 @@ void getEmptyPosition(int *x, int *y)
     *y = j;
 }
 
+/*
+ * Function: loadSprite
+ * ----------------------------
+ *  Load texture that is assigned to each index.
+ *
+ *  num: index of the texture that will be loaded
+ */
 SDL_Texture* loadSprite(int num)
 {
     SDL_Texture *t;

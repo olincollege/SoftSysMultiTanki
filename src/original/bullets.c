@@ -1,3 +1,7 @@
+/*
+	Copyright 2022 SeungU Lyu
+*/
+
 #include "bullets.h"
 
 static SDL_Texture *bulletTexture1;
@@ -5,6 +9,11 @@ static SDL_Texture *bulletTexture2;
 static SDL_Texture *testBullet;
 static SDL_Texture *bulletExplosion[5];
 
+/*
+ * Function: initBullets
+ * ----------------------------
+ *  Load all the graphic resources for bullet.
+ */
 void initBullets(void)
 {
 	bulletTexture1 = loadTexture("gfx/bulletBlue3_outline.png");
@@ -17,6 +26,14 @@ void initBullets(void)
 	bulletExplosion[4] = loadTexture("gfx/explosionSmoke5.png");
 }
 
+/*
+ * Function: fireBullet
+ * ----------------------------
+ *  Fires a bullet from a player. 
+ *	New bullet will replace the bTail of the player.
+ *
+ *  playerHead: pointer to the Player who is shooting the bullet
+ */
 void fireBullet(Player* playerHead)
 {
 	Bullet *b;
@@ -60,6 +77,13 @@ void fireBullet(Player* playerHead)
 	playerHead->bulletShot.health = PLAYER_RELOAD;
 }
 
+/*
+ * Function: doBullets
+ * ----------------------------
+ *  Calculates bullets next position in the frame.
+ *	Checks if the bullet has 0 health, and if it does make it inactive.
+ *	If inactive bullet has no trail left, destroy the bullet and free the memory.
+ */
 void doBullets(void)
 {
 	Player *p;
@@ -124,6 +148,12 @@ void doBullets(void)
 	}
 }
 
+/*
+ * Function: drawBullets
+ * ----------------------------
+ *  Draw all the bullets available in the game.
+ *	Draw the bullet texture when it is active, else draw the explosion texture.
+ */
 void drawBullets(void)
 {
 	Player *p;
