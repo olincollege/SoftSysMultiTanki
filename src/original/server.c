@@ -1,6 +1,6 @@
 #include "server.h"
 
-#define PEER_PORT 7777
+#define PEER_PORT 8888
 #define MY_PORT 7777
 
 char peer_ip_addr[INET_ADDRSTRLEN]; // store peer ipv4
@@ -185,6 +185,7 @@ void *doSendToServer(void *arguments)
     btox(hex_buffer, my_keys_buffer, m*2);
     printf("Server %d bytes: %s\n", m, hex_buffer);
     //}
+    return(NULL);
 }
 
 // network code to receive values from server and apply
@@ -242,4 +243,5 @@ void *doReceiveFromServer(void *arguments)
         // clear
         //memset(peer_keys_buffer, 0, sizeof(peer_keys_buffer));
     //}
+    return(NULL);
 }
