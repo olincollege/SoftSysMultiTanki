@@ -34,4 +34,5 @@ To run:
 
 ## Known Issues
 
-- If no sound plays or there is a big delay, try re-starting the game
+- If no sound plays or there is a big delay, try launching the game again
+- The reset function is not implemented yet, so re-starting the game after a game over will cause memory leak

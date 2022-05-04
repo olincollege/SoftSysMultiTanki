@@ -1,3 +1,7 @@
+/*
+	Copyright 2022 SeungU Lyu
+*/
+
 #include "gameover.h"
 
 static void logic(void);
@@ -13,6 +17,12 @@ extern int gameover;
 
 int win = 0;
 
+/*
+ * Function: initGameOver
+ * ----------------------------
+ *  Initialize game over screen by changing logic/draw delegate and loading necessary textures.
+ *  The loaded texture depends on the win condition of the user.
+ */
 void initGameOver(int playerIndex)
 {
     app.delegate.logic = logic;
@@ -41,6 +51,14 @@ void initGameOver(int playerIndex)
     increase = 0;
 }
 
+/*
+ * Function: logic
+ * ----------------------------
+ *  Logic for the game over screen.
+ *  Detects if user input was SPACE or ESCAPE.
+ *  If SPACE, return to the title screen.
+ *  If ESC, exit the game.
+ */
 static void logic(void)
 {
     if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE])
@@ -58,9 +76,14 @@ static void logic(void)
 	}
 }
 
+/*
+ * Function: draw
+ * ----------------------------
+ *  Draw the game over screen.
+ *  The game over screen graphics depends on the win condition of the user.
+ */
 static void draw(void)
 {
-    //blitRotated(titleBackground, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0);
     blitRotated(logo, SCREEN_WIDTH/2, 200, 0);
     blitRotated(winner, SCREEN_WIDTH/2, 400, 0);
     app.fontScale = 1.0f;
@@ -103,7 +126,12 @@ static void draw(void)
     }
 }
 
+/*
+ * Function: reset
+ * ----------------------------
+ *  Reset the game by freeing allocated datas and resetting variable values.
+ */
 void reset(void)
 {
-    
+    //TODO: Implement this function.
 }

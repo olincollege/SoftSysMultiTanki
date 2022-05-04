@@ -1,3 +1,7 @@
+/*
+	Copyright 2022 SeungU Lyu
+*/
+
 #include "title.h"
 
 static void logic(void);
@@ -9,6 +13,11 @@ static SDL_Texture *logo;
 float title_scale = 0.5f;
 int increase = 0;
 
+/*
+ * Function: initTitle
+ * ----------------------------
+ *  Initialize title screen by changing logic/draw delegate and loading necessary textures.
+ */
 void initTitle(void)
 {
     app.delegate.logic = logic;
@@ -18,6 +27,14 @@ void initTitle(void)
     logo = loadTexture("gfx/logo4.png");
 }
 
+/*
+ * Function: logic
+ * ----------------------------
+ *  Logic for the title screen.
+ *  Detects if user input was SPACE or ESCAPE.
+ *  If SPACE, start the game and move to stage screen.
+ *  If ESC, exit the game.
+ */
 static void logic(void)
 {
     if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE])
@@ -34,6 +51,11 @@ static void logic(void)
 	}
 }
 
+/*
+ * Function: draw
+ * ----------------------------
+ *  Draw the title screen.
+ */
 static void draw(void)
 {
     blitRotated(titleBackground, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 0);
