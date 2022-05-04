@@ -27,8 +27,6 @@ extern void initSDL(void);
 extern void initStage(void);
 extern void prepareScene(void);
 extern void presentScene(void);
-extern struct MultiplayerInfo doMatchmaking(void);
-extern int setupConnection(struct MultiplayerInfo);
 extern void initTitle(void);
 
 App app;

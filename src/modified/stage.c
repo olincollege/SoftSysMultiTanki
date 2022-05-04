@@ -35,6 +35,17 @@ int countdown;
 int gameover;
 int lastLiveIndex;
 
+struct args_struct {
+  struct MultiplayerInfo *p_info;
+};
+
+void *run_connection(void *arguments)
+{
+	struct args_struct *args = arguments;
+	setupConnection(*args->p_info);
+	return(0);
+}
+
 /*
  * Function: initStage
  * ----------------------------
@@ -43,6 +54,24 @@ int lastLiveIndex;
  */
 void initStage(void)
 {
+	if (app.isMulti)
+	{
+		// connect to matchmaking server
+		struct MultiplayerInfo peer_info = doMatchmaking();
+		// apply tank number
+		app.playerIndex = peer_info.tank_no;
+
+		// create connection between peers
+		// setup pthread
+		pthread_t thread;
+		// set up pthread args
+		struct args_struct p_thread_args;
+		p_thread_args.p_info = &peer_info;
+		int iret1;
+		if ( (iret1 = pthread_create(&thread, NULL, run_connection, (void *)&p_thread_args ))){
+			perror("Failed pthread");
+		}
+	}
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 

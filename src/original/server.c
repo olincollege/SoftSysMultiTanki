@@ -1,6 +1,6 @@
 #include "server.h"
 
-#define PEER_PORT 8888
+#define PEER_PORT 7777
 #define MY_PORT 7777
 
 char peer_ip_addr[INET_ADDRSTRLEN]; // store peer ipv4

@@ -116,6 +116,7 @@ typedef struct {
 	PlayerInput playerInputs[MAX_PLAYER];
 	Texture textureHead, *textureTail;
 	float fontScale;
+	int isMulti;
 } App;
 
 typedef struct {

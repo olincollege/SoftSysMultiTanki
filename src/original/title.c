@@ -43,6 +43,13 @@ static void logic(void)
 		initStage();
 	}
 
+    if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_Q])
+	{
+        app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_Q] = 0;
+        app.isMulti = 1;
+		initStage();
+	}
+
     if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_ESCAPE])
 	{
         app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_ESCAPE] = 0;

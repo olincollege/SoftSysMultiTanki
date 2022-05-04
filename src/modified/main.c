@@ -20,19 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "main.h"
 
-struct args_struct {
-  struct MultiplayerInfo *p_info;
-};
-
 static void capFrameRate(long *then, float *remainder);
-
-void *run_connection(void *arguments)
-{
-	struct args_struct *args = arguments;
-	setupConnection(*args->p_info);
-	return(0);
-}
-
 
 int main(int argc, char *argv[])
 {
@@ -44,12 +32,6 @@ int main(int argc, char *argv[])
 
 	app.maxPlayer = MAX_PLAYER;
 
-	// connect to matchmaking server
-	// get peer ip address and current tank number
-	struct MultiplayerInfo peer_info = doMatchmaking();
-	// apply tank number
-	app.playerIndex = peer_info.tank_no;
-	
 	initSDL();
 	
 	atexit(cleanup);
@@ -66,17 +48,6 @@ int main(int argc, char *argv[])
 
 	SDL_Event e;
 	while (SDL_PollEvent(&e));
-
-	// create connection between peers
-	// setup pthread
-	pthread_t thread;
-	// set up pthread args
-	struct args_struct p_thread_args;
-	p_thread_args.p_info = &peer_info;
-	int iret1;
-	if ( (iret1 = pthread_create(&thread, NULL, run_connection, (void *)&p_thread_args ))){
-		perror("Failed pthread");
-	}
 
 	while (1)
 	{

@@ -41,6 +41,9 @@ extern void playSound(int id, int channel);
 extern SDL_Texture *loadSprite(int num);
 extern SDL_Texture *loadTexture(char *filename);
 
+extern struct MultiplayerInfo doMatchmaking(void);
+extern int setupConnection(struct MultiplayerInfo);
+
 extern App app;
 extern Stage stage;
 
