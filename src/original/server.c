@@ -1,5 +1,8 @@
 #include "server.h"
 
+#define PEER_PORT 7777
+#define MY_PORT 7777
+
 char peer_ip_addr[INET_ADDRSTRLEN]; // store peer ipv4
 struct KeyInfo my_keys;
 struct KeyInfo peer_keys;
@@ -58,7 +61,7 @@ struct MultiplayerInfo doMatchmaking(void)
     // receive data
     int tank_no_received;
     if ((tank_no_received=recv(sock, &tank_no, sizeof(int), 0))==-1){
-        perror("can't reed from host");
+        perror("Can't read from host");
         exit(EXIT_FAILURE);
     }
     tank_no = ntohl(tank_no);
@@ -94,7 +97,7 @@ int setupConnection(struct MultiplayerInfo net_info){
     struct sockaddr_in server_address, peer_address;
     server_address.sin_family = AF_INET;
     server_address.sin_addr.s_addr = INADDR_ANY; // localhost
-    server_address.sin_port = htons(PORT);
+    server_address.sin_port = htons(MY_PORT);
 
     // bind socket to server address
     if (bind(network_socket, (const struct sockaddr *)&server_address, sizeof(server_address)) < 0 ){
@@ -107,20 +110,22 @@ int setupConnection(struct MultiplayerInfo net_info){
     // connect to peer
     peer_address.sin_family = AF_INET;
     peer_address.sin_addr.s_addr = inet_addr(net_info.peer_ip_addr);
-    peer_address.sin_port = htons(PORT);
+    peer_address.sin_port = htons(PEER_PORT);
 
     // set up pthread args
     struct args_struct p_thread_args;
     p_thread_args.network_socket = &network_socket;
     p_thread_args.peer_address = &peer_address;
     
+    while (1) {
     //pthread create: for both send and receive
     pthread_create(&sender, NULL, doSendToServer, (void *)&p_thread_args);
     pthread_create(&receiver, NULL, doReceiveFromServer, (void *)&p_thread_args);
-
-    // join pthread
+    
+    //join pthread
     pthread_join(sender, NULL);
     pthread_join(receiver, NULL);
+    }
 
     //close socket
     close(network_socket);
@@ -135,8 +140,8 @@ void *doSendToServer(void *arguments)
     struct args_struct *args = arguments;
     char my_keys_buffer[keys_buf_size];
 
-    for (;;) {
-    memset(my_keys_buffer, 0, keys_buf_size);
+    //while (1) {
+    //memset(my_keys_buffer, 0, keys_buf_size);
     // mouse state
     my_keys.mouse_button_data = app.playerInputs[app.playerIndex].mouse.button[SDL_BUTTON_LEFT];
     my_keys.mouse_state_x_data = app.playerInputs[app.playerIndex].mouse.x;
@@ -160,10 +165,10 @@ void *doSendToServer(void *arguments)
     memcpy(&my_keys_buffer[9], &my_keys.mouse_state_y_data, 4); //int32_t
 
     //send packet
-    if (my_keys_buffer[0] == '\0')
-    {
-      continue;
-    }
+    //if (my_keys_buffer[0] == '\0')
+    //{
+    //  continue;
+    //}
 
     unsigned int peer_struct_length = sizeof(*args->peer_address);
     int res = sendto(*args->network_socket, my_keys_buffer, keys_buf_size, 0, (struct sockaddr *)args->peer_address, peer_struct_length);
@@ -173,13 +178,13 @@ void *doSendToServer(void *arguments)
       exit(-1);
     }
 
-    memset(my_keys_buffer, 0, keys_buf_size);
-    /* debugging
+    //memset(my_keys_buffer, 0, keys_buf_size);
+    // debugging
     char hex_buffer[1024];
     int m = keys_buf_size;
     btox(hex_buffer, my_keys_buffer, m*2);
-    printf("Server %d bytes: %s\n", m, hex_buffer);*/
-    }
+    printf("Server %d bytes: %s\n", m, hex_buffer);
+    //}
 }
 
 // network code to receive values from server and apply
@@ -187,8 +192,9 @@ void *doReceiveFromServer(void *arguments)
 {
     // receive inputs
     struct args_struct *args = arguments;
-    while (1){
+    //while (1){
         // receive packet
+        printf("Hello!");
         char peer_keys_buffer[keys_buf_size];
         unsigned int peer_struct_length = sizeof(*args->peer_address);
         recvfrom(*args->network_socket, peer_keys_buffer, keys_buf_size, 0, (struct sockaddr *)args->peer_address, &peer_struct_length);
@@ -225,10 +231,15 @@ void *doReceiveFromServer(void *arguments)
             app.playerInputs[i].mouse.y = peer_keys.mouse_state_y_data;
         }
         // debuggy
-        if (app.playerIndex == 1){
-            printf("%i\n", peer_keys.w_key_data);
-        }
+        char hex_buffer[1024];
+        int m = keys_buf_size;
+        btox(hex_buffer, peer_keys_buffer, m*2);
+        printf("Server %d bytes: %s\n", m, hex_buffer);
+
+        //if (app.playerIndex == 1){
+        //    printf("%i\n", peer_keys.w_key_data);
+        //}
         // clear
-        memset(peer_keys_buffer, 0, sizeof(peer_keys_buffer));
-    }
+        //memset(peer_keys_buffer, 0, sizeof(peer_keys_buffer));
+    //}
 }
