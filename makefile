@@ -7,7 +7,7 @@ CXXFLAGS += `sdl2-config --cflags`
 CXXFLAGS += -Wall -Wempty-body -Werror -Wstrict-prototypes -Werror=maybe-uninitialized -Warray-bounds
 CXXFLAGS += -g -lefence
 
-LDFLAGS += `sdl2-config --libs` -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lm
+LDFLAGS += `sdl2-config --libs` -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lm -pthread
 
 # linking the program.
 $(PROG): $(OBJS)

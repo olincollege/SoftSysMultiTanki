@@ -3,6 +3,7 @@ typedef struct Player Player;
 typedef struct Bullet Bullet;
 typedef struct MapTile MapTile;
 typedef struct Effect Effect;
+typedef struct KeyInfo KeyInfo;
 
 typedef struct {
 	void (*logic)(void);
@@ -76,6 +77,24 @@ struct Player {
 	float trailSound;
 	SDL_Texture *texture;
 	Player *next;
+};
+
+struct MultiplayerInfo{
+	int tank_no;
+	char peer_ip_addr[16];
+	int sockfd;
+	struct sockaddr_in servaddr;
+	struct sockaddr_in cliaddr;
+};
+
+struct KeyInfo {
+    uint8_t w_key_data;
+	uint8_t a_key_data;
+	uint8_t s_key_data;
+	uint8_t d_key_data;
+    uint8_t mouse_button_data;
+    int32_t mouse_state_x_data;
+    int32_t mouse_state_y_data;
 };
 
 struct MapTile {

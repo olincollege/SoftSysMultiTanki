@@ -3,6 +3,9 @@
 #define STRNCPY(dest, src, n) strncpy(dest, src, n); dest[n - 1] = '\0'
 #define PI                   3.14159265358979323846
 
+#define MATCHMAKING_HOST 		"157.245.235.105"
+#define PORT 					7777
+#define KEY_BUF_SIZE			46
 #define PLAYER_INDEX            0
 #define MAX_PLAYER              2
 
