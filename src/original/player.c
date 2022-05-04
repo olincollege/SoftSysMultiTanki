@@ -81,7 +81,7 @@ void initPlayer(void)
  * Function: doPlayer
  * ----------------------------
  *  Calculates player movement from user input and checks if bullet is firing.
- *	Also plays player related sounds.
+ *  Also plays player related sounds.
  */
 void doPlayer(void)
 {
@@ -353,8 +353,8 @@ void doPlayer(void)
  * Function: drawPlayers
  * ----------------------------
  *  Draws graphics related to the players. 
- *	Tank texure will be displayed unless the Player is dead.
- *	If player is dead, shows explosion textures over time.
+ *  Tank texure will be displayed unless the Player is dead.
+ *  If player is dead, shows explosion textures over time.
  */
 void drawPlayers(void)
 {

@@ -30,7 +30,7 @@ void initBullets(void)
  * Function: fireBullet
  * ----------------------------
  *  Fires a bullet from a player. 
- *	New bullet will replace the bTail of the player.
+ *  New bullet will replace the bTail of the player.
  *
  *  playerHead: pointer to the Player who is shooting the bullet
  */
@@ -81,8 +81,8 @@ void fireBullet(Player* playerHead)
  * Function: doBullets
  * ----------------------------
  *  Calculates bullets next position in the frame.
- *	Checks if the bullet has 0 health, and if it does make it inactive.
- *	If inactive bullet has no trail left, destroy the bullet and free the memory.
+ *  Checks if the bullet has 0 health, and if it does make it inactive.
+ *  If inactive bullet has no trail left, destroy the bullet and free the memory.
  */
 void doBullets(void)
 {
@@ -152,7 +152,7 @@ void doBullets(void)
  * Function: drawBullets
  * ----------------------------
  *  Draw all the bullets available in the game.
- *	Draw the bullet texture when it is active, else draw the explosion texture.
+ *  Draw the bullet texture when it is active, else draw the explosion texture.
  */
 void drawBullets(void)
 {

@@ -39,7 +39,7 @@ int lastLiveIndex;
  * Function: initStage
  * ----------------------------
  *  Initialized the game stage the changing logic/draw delegate and loading necessary textures.
- *	MapTile structs are created based on map data stored inside map.c.
+ *  MapTile structs are created based on map data stored inside map.c.
  */
 void initStage(void)
 {
@@ -98,7 +98,7 @@ void initStage(void)
  * Function: logic
  * ----------------------------
  *  Execute functions related to the game logic one by one. 
- *	Player, Bullet, Effect calculation, collision detection, and check game over all happens in this function.
+ *  Player, Bullet, Effect calculation, collision detection, and check game over all happens in this function.
  */
 static void logic(void)
 {
@@ -162,7 +162,7 @@ static void draw(void)
  * Function: checkGameOver
  * ----------------------------
  *  Check the game over state of the game by going through all the players and checking their health.
- *	If only one player is alive, toggle the gameover flag and get ready to end the game.
+ *  If only one player is alive, toggle the gameover flag and get ready to end the game.
  */
 static void checkGameOver(void)
 {
@@ -261,7 +261,7 @@ static void drawUI(void)
  * Function: drawCountDown
  * ----------------------------
  *  Draws the game start countdown based on the countdown variable.
- *	Also plays sound but it is not the best behavior, will need to create another function just for that.
+ *  Also plays sound but it is not the best behavior, will need to create another function just for that.
  */
 static void drawCountDown(void)
 {
