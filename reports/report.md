@@ -41,7 +41,8 @@ The first stretch goal would be to have the shells bounce off the walls from the
 - Head First C, Chapter 11: Sockets and networking, David and Dawn Griffiths
 - Computer Systems, A Programmer's Perspective Chapter 11: Network Programming, Randal Bryant
 - [GeeksforGeeks Socket Programming in C](https://www.geeksforgeeks.org/socket-programming-cc/)
-- [GeeksforGeeks Example for fork and pipe](https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/)
+- [GeeksforGeeks UDP Client Server](https://www.geeksforgeeks.org/udp-client-server-using-connect-c-implementation/)
+- [Get local IP address using DNS server connection](https://www.binarytides.com/get-local-ip-c-linux/)
 - [IBM's C Socket Documentation](https://www.ibm.com/docs/en/zos/2.3.0?topic=interfaces-c-socket-application-programming-interface)
 
 #### SDL
@@ -83,11 +84,13 @@ The game is done with most of the MVP and the stretch goals. We were able to fin
 
 1. **UDP**: For the network protocol between the two players, we needed something that was fast. In comparison to TCP, where UDP lacks in keeping integrity of packets and error checking ("handshake protocol" that TCP has), it gains in speed, which is important for an online game. Online games use UDP, due to this speed and flexibility as it is connectionless. So, we decided on using User Datagram Protocol.
 
-2. **P2P**: Next, we needed to figure out how the two players will communicate to each other. Peer-to-peer seemed ideal. Like with the decision for UDP, we want a connection that is fast and reliable. This decision was also based on how online games often go about this - for example, Destiny 2 uses a hybrid of server/client and peer to peer, with the server with environment information and peer to peer for individual user activity.
+2. **P2P vs Client-Server**: Next, we needed to figure out how the two players will communicate to each other. Peer-to-peer seemed ideal. Like with the decision for UDP, we want a connection that is fast and reliable. This decision was also based on how online games often go about this - for example, Destiny 2 uses a hybrid of server/client and peer to peer, with the server with environment information and peer to peer for individual user activity.
 
-3. **Matchmaking**: Before connecting the two players to each other, there needs to be a way that they can get information from each other. Given the decisions for P2P and UDP, we need both the ip address of the other player, the port, and their tank numbers. To solve for the port number, both the player and peer port numbers are set to be an arbitrary usable port (we used `7777`). That was just one issue out of the way, but there still needs to be a way to get the player's ip address to each other as well as being assigned their tank numbers. 
+    However, through a long and hard process of trying to solve an issue with the connection between the two players, a working solution landed on a client-server connection. Rather than rewrite the code again, it was kept that way. Despite the original P2P decision, this solution also works very well!
 
-    From the host server, each client connection is a new fork for the parent to talk to the new client - this can be counted up with each loop, so the first connection is assigned tank #0, the second is assigned tank #1. For sending each other their ip addresses, we needed two pipes: one for peer 1 to write and peer 2 to read, and the other for peer 2 to write and peer 1 to read. Using these, each peer is able to write to their specific pipe their own ip address (specifically, `ipv4`), and read from the other. We see this in this abbreviated version from [matchmaking_server.c](https://github.com/olincollege/SoftSysMultiTanki/blob/2750cf19702e22c5b6ff0ba06ba1e989466c8ab9/network/matchmaking_server.c#L59):
+3. **Matchmaking**: Before connecting the two players to each other, there needs to be a way that they can get information from each other. Given the original decisions for P2P and UDP, we need both the IP address of the other player, the port, and their tank numbers. To solve for the port number, both the player and peer port numbers are set to be an arbitrary usable port (we used `7777`). That was just one issue out of the way, but there still needs to be a way to get the player's IP address to each other as well as being assigned their tank numbers. Given the issues with setting up connection via global IP addresses using the *Olin College* network, we decided to keep it to a local IP address approach - only two users on the same network can play the game together. The host server is set to run `./matchmaking_server` indefinitely, connecting pairs of players to each other.
+
+    From the host server, each client connection is a new fork for the parent to talk to the new client - this can be counted up with each loop, so the first connection is assigned tank #0, the second is assigned tank #1. For sending each other their IP addresses, we needed two pipes: one for peer 1 to write and peer 2 to read, and the other for peer 2 to write and peer 1 to read. Using these, each peer is able to write to their specific pipe their own IP address (specifically, `ipv4`), and read from the other. We see this in this abbreviated version from [matchmaking_server.c](https://github.com/olincollege/SoftSysMultiTanki/blob/2750cf19702e22c5b6ff0ba06ba1e989466c8ab9/network/matchmaking_server.c#L59):
 
     ```c
     // pipes for talking between children (clients)
@@ -96,7 +99,7 @@ The game is done with most of the MVP and the stretch goals. We were able to fin
     ...
     if (client_counter == 1) {
         ...
-        // write ip address to writing end of pipe 1
+        // write IP address to writing end of pipe 1
         write(fd1[1], client_ip_addr, strlen(client_ip_addr) + 1);
         close(fd1[1]);
         // tank no.
@@ -110,13 +113,13 @@ The game is done with most of the MVP and the stretch goals. We were able to fin
         }
         ...
     }
-    // send ip address of peer to the other
+    // send IP address of peer to the other
     ...
     send(connect_d,peer_ip,strlen(peer_ip), 0);
     ```
     >Note: Ellipses used where code was removed for ease of reading. Follow the link to see full.
     
-    The server then sends these peers the other's ip address, and the count restarts. This could be cleaner, as it would be not ideal for more users accidentally connecting with different people, or if one misclicked multiplayer throwing the count off. However, for this project, it works perfectly.
+    The server then sends these peers the other's IP address, and the count restarts. This could be cleaner, as it would be not ideal for more users accidentally connecting with different people, or if one misclicked multiplayer throwing the count off. However, it works perfect for this project.
 
 4. **Packets**: Before research, one of our original plans was to have a JSON files which contained important game state and player state information. They would be transferred and read between the two players, with two JSONs based on the tank index to be sent or received (decided on by matchmaking process, a tank is either 0 and blue, or 1 and red). However, as it turns out, this process becomes very slow with memory to hard drive to JSON serialization. What is tried and true is simply sending over bytes in a buffer. This process is fast, and easy to parse. So, we decided to work around that. 
 
@@ -155,6 +158,8 @@ Overall it was a very fulfilling project!
 
 Prior to starting the project, I knew that I wanted to do something video game related. I've played and made games for a long time, and it's most of the reason why I became interested in coding. It was really cool to work on a video game in C - one of my favorite games, a Sonic fangame called [SRB2](https://www.srb2.org/), was written in C (as it was built off of *Doom*). I also wanted to learn network coding - I had never tried to make an online multiplayer game before.
 
-I was pretty much completely new to network coding, but I really wanted to learn. Luckily, to start, I found that *HeadFirstC* had a section on it, so I started there. A large chunk of the time I spent on the network portion was related to reading and trying out examples. When I felt that I understood it well, putting together the matchmaking code (where two clients connect, and are sent the other's IP address) was fairly easy. However, the tough part was the peer-to-peer communication. First, I tried simple examples - sending packets between server and client, then a Frankenstein of p2p code - until it seemed that it would work. What was very interesting and somewhat fun was putting together the packets that would be sent and received - how many bytes allocated to each value, and seeing it work correctly in example code. I switched a lot between implementations, as certain issues would arise and I would retry writing the code.
+I was pretty much completely new to network coding, but I really wanted to learn. Luckily, to start, I found that *HeadFirstC* had a section on it, so I started there. A large chunk of the time I spent on the network portion was related to reading and trying out examples. When I felt that I understood it well, putting together the matchmaking code (where two clients connect, and are sent the other's IP address) was fairly easy. However, the tough part was the peer-to-peer communication. First, I tried simple examples - sending packets between server and client, then a Frankenstein of p2p code - until it seemed that it would work. What was very interesting and somewhat fun was putting together the packets that would be sent and received - how many bytes allocated to each value, and seeing it work correctly in example code. 
 
-As it stands, this p2p communication does not yet work. The peers will sometimes send data but not receive, or freeze at receive, so I'm currently working this out. In all, I learned a lot, but I really wish I could get the implementation working as I had planned. At the very least, the matchmaking portion works wonderfully! I'm happy with the project, but in the future, I plan on trying more code first, so implementation becomes smoother.
+I had a lot of troubles working through this. I wasn't sure what to look out for, and actually rewrote the `server.c` script multiple times in multiple variations to try and catch what I was doing wrong. Finally, I found why the peers (technically server and client) wouldn't talk to each other - it was an issue with it being a global IP address, and using the school network! For this current implementation, everything is kept to the local network.
+
+Despite all what almost felt like wasted time, I learned a lot through this process! I'm pretty happy how it turned out, coming from not knowing how to do network code at all.
