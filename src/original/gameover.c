@@ -46,6 +46,14 @@ void initGameOver(int playerIndex)
     {
         winner = loadTexture("gfx/tank_red.png");
     }
+    else if (playerIndex == 2)
+    {
+        winner = loadTexture("gfx/tank_green.png");
+    }
+    else if (playerIndex == 3)
+    {
+        winner = loadTexture("gfx/tank_sand.png");
+    }
 
     title_scale = 0.5f;
     increase = 0;

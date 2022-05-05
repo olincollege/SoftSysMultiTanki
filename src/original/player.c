@@ -29,6 +29,9 @@ void initPlayer(void)
 		playerBody = malloc(sizeof(Player));
 		memset(playerBody, 0, sizeof(Player));
 
+		app.playerInputs[i].mouse.x = SCREEN_WIDTH/2;
+        app.playerInputs[i].mouse.y = SCREEN_HEIGHT/2;
+
 		stage.pTail->next = playerBody;
 		stage.pTail = playerBody;
 
@@ -52,11 +55,23 @@ void initPlayer(void)
 				playerBody->texture = loadTexture("gfx/tankBody_red_outline.png");
 				playerHead->texture = loadTexture("gfx/tankRed_barrel2_outline.png");
 				playerBody->x = 17 * GRID_SIZE;
+				playerBody->y = 4 * GRID_SIZE;
+				break;
+			case 2:
+				playerBody->texture = loadTexture("gfx/tankBody_green_outline.png");
+				playerHead->texture = loadTexture("gfx/tankGreen_barrel2_outline.png");
+				playerBody->x = 4 * GRID_SIZE;
+				playerBody->y = 11 * GRID_SIZE;
+				break;
+			case 3:
+				playerBody->texture = loadTexture("gfx/tankBody_sand_outline.png");
+				playerHead->texture = loadTexture("gfx/tankSand_barrel2_outline.png");
+				playerBody->x = 17 * GRID_SIZE;
 				playerBody->y = 11 * GRID_SIZE;
 				break;
 			default:
-				playerBody->texture = loadTexture("gfx/tankBody_blue_outline.png");
-				playerHead->texture = loadTexture("gfx/tankBlue_barrel2_outline.png");
+				playerBody->texture = loadTexture("gfx/tankBody_sand_outline.png");
+				playerHead->texture = loadTexture("gfx/tankSand_barrel2_outline.png");
 				playerBody->x = SCREEN_WIDTH / 2;
 				playerBody->y = SCREEN_HEIGHT / 2;
 				break;
@@ -113,21 +128,42 @@ void doPlayer(void)
 			{
 				playSound(SND_TANK_EXPLOSION, CH_PLAYER2_TANK);
 			}
+			else if (playerBody->playerIndex == 2)
+			{
+				playSound(SND_TANK_EXPLOSION, CH_PLAYER3_TANK);
+			}
+			else if (playerBody->playerIndex == 3)
+			{
+				playSound(SND_TANK_EXPLOSION, CH_PLAYER4_TANK);
+			}
 		}
 
-		if (p->isDead == PLAYER_EXPLOSION_TIME * 0.65)
+		if (p->isDead == PLAYER_EXPLOSION_TIME * 0.65 && p->health == 0)
+		{
+			continue;
+		}
+		else if (p->isDead == PLAYER_EXPLOSION_TIME * 0.65)
 		{
 			int x = 0;
 			int y = 0;
 
-			getEmptyPosition(&x, &y);
-			playerBody->isDead -= 1;
-			playerBody->x = x * GRID_SIZE;
-			playerBody->y = y * GRID_SIZE;
-			playerBody->angle = 0;
-			playerHead->x = playerBody->x;
-			playerHead->y = playerBody->y;
-			playerBody->health -= 1;
+			if (p->health == 1)
+			{
+				playerBody->health -= 1;
+				continue;
+			}
+			else 
+			{
+				getEmptyPosition(&x, &y);
+				playerBody->isDead -= 1;
+				playerBody->x = x * GRID_SIZE;
+				playerBody->y = y * GRID_SIZE;
+				playerBody->angle = 0;
+				playerHead->x = playerBody->x;
+				playerHead->y = playerBody->y;
+				playerBody->health -= 1;
+			}
+			
 			continue;
 		}
 		else if (p->isDead > PLAYER_EXPLOSION_TIME * 0.6)
@@ -341,6 +377,14 @@ void doPlayer(void)
 			else if (playerHead->playerIndex == 1)
 			{
 				playSound(SND_BULLET_FIRE, CH_PLAYER2_TANK);
+			}
+			else if (playerHead->playerIndex == 2)
+			{
+				playSound(SND_BULLET_FIRE, CH_PLAYER3_TANK);
+			}
+			else if (playerHead->playerIndex == 3)
+			{
+				playSound(SND_BULLET_FIRE, CH_PLAYER4_TANK);
 			}
 			fireBullet(playerHead);
 		}

@@ -4,8 +4,7 @@
 
 #include "bullets.h"
 
-static SDL_Texture *bulletTexture1;
-static SDL_Texture *bulletTexture2;
+static SDL_Texture *bulletTexture[4];
 static SDL_Texture *testBullet;
 static SDL_Texture *bulletExplosion[5];
 
@@ -16,9 +15,13 @@ static SDL_Texture *bulletExplosion[5];
  */
 void initBullets(void)
 {
-	bulletTexture1 = loadTexture("gfx/bulletBlue3_outline.png");
-	bulletTexture2 = loadTexture("gfx/bulletRed3_outline.png");
+	bulletTexture[0] = loadTexture("gfx/bulletBlue3_outline.png");
+	bulletTexture[1] = loadTexture("gfx/bulletRed3_outline.png");
+	bulletTexture[2] = loadTexture("gfx/bulletGreen3_outline.png");
+	bulletTexture[3] = loadTexture("gfx/bulletSand3_outline.png");
+
 	testBullet = loadTexture("gfx/crosshair001.png");
+
 	bulletExplosion[0] = loadTexture("gfx/explosionSmoke1.png");
 	bulletExplosion[1] = loadTexture("gfx/explosionSmoke2.png");
 	bulletExplosion[2] = loadTexture("gfx/explosionSmoke3.png");
@@ -49,13 +52,19 @@ void fireBullet(Player* playerHead)
 	switch(playerHead->playerIndex)
 	{
 		case 0:
-			b->texture = bulletTexture1;
+			b->texture = bulletTexture[0];
 			break;
 		case 1:
-			b->texture = bulletTexture2;
+			b->texture = bulletTexture[1];
+			break;
+		case 2:
+			b->texture = bulletTexture[2];
+			break;
+		case 3:
+			b->texture = bulletTexture[3];
 			break;
 		default:
-			b->texture = bulletTexture1;
+			b->texture = bulletTexture[0];
 			break;
 
 	}

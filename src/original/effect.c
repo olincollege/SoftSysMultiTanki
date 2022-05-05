@@ -67,6 +67,14 @@ void leaveTankTrailEffect(void)
                 {
                     playSound(SND_TANK_MOVE, CH_PLAYER2_TANK_TRAIL);
                 }
+                else if (p->playerIndex == 2)
+                {
+                    playSound(SND_TANK_MOVE, CH_PLAYER3_TANK_TRAIL);
+                }
+                else if (p->playerIndex == 3)
+                {
+                    playSound(SND_TANK_MOVE, CH_PLAYER4_TANK_TRAIL);
+                }
                 p->trailSound = 0;
             } 
             else

@@ -85,6 +85,8 @@ void initStage(void)
 	targetterTexture = loadTexture("gfx/crosshair010.png");
 	tankTextures[0] = loadTexture("gfx/tank_blue.png");
 	tankTextures[1] = loadTexture("gfx/tank_red.png");
+	tankTextures[2] = loadTexture("gfx/tank_green.png");
+	tankTextures[3] = loadTexture("gfx/tank_sand.png");
 	countdownTextures[0] = loadTexture("gfx/1.png");
 	countdownTextures[1] = loadTexture("gfx/2.png");
 	countdownTextures[2] = loadTexture("gfx/3.png");
@@ -141,6 +143,8 @@ static void logic(void)
 	}
 
 	doPlayer();
+
+	doAI();
 	
 	doBullets();
 
@@ -280,6 +284,30 @@ static void drawUI(void)
 			for (int i = 0; i < p->health; i++)
 			{
 				blitRotated(tankTextures[1], x, y, 0);
+				x -= GRID_SIZE;
+			}
+		}
+
+		if (p->isBody == 1 && p->playerIndex == 2)
+		{
+			int x = GRID_SIZE * 0.5;
+			int y = SCREEN_HEIGHT - GRID_SIZE * 0.5;
+
+			for (int i = 0; i < p->health; i++)
+			{
+				blitRotated(tankTextures[2], x, y, 0);
+				x += GRID_SIZE;
+			}
+		}
+
+		if (p->isBody == 1 && p->playerIndex == 3)
+		{
+			int x = SCREEN_WIDTH - GRID_SIZE * 0.5;
+			int y = SCREEN_HEIGHT - GRID_SIZE * 0.5;
+
+			for (int i = 0; i < p->health; i++)
+			{
+				blitRotated(tankTextures[3], x, y, 0);
 				x -= GRID_SIZE;
 			}
 		}

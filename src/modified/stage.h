@@ -37,6 +37,7 @@ extern void drawEffectOver(void);
 extern void drawEffectUnder(void);
 extern void initGameOver(int playerIndex);
 extern void playSound(int id, int channel);
+extern void doAI(void);
 
 extern SDL_Texture *loadSprite(int num);
 extern SDL_Texture *loadTexture(char *filename);

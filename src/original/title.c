@@ -40,6 +40,7 @@ static void logic(void)
     if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE])
 	{
         app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE] = 0;
+        app.playerIndex = 0;
 		initStage();
 	}
 
@@ -47,6 +48,7 @@ static void logic(void)
 	{
         app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_Q] = 0;
         app.isMulti = 1;
+        app.maxPlayer = 2;
 		initStage();
 	}
 
