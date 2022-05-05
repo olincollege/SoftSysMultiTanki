@@ -1,5 +1,15 @@
+/*
+	Copyright 2022 SeungU Lyu
+*/
+
 #include "server.h"
 
+/*
+ * Function: doAI
+ * ----------------------------
+ *  Decides key inputs for the AI players.
+ *  Currently it just randomly aims at other player, randomly shoots bullets, and randomly move.
+ */
 void doAI(void)
 {
     int x;

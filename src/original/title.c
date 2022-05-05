@@ -10,8 +10,9 @@ static void draw(void);
 static SDL_Texture *titleBackground;
 static SDL_Texture *logo;
 
-float title_scale = 0.5f;
-int increase = 0;
+float title_scale;;
+int increase;
+int current_choice;
 
 /*
  * Function: initTitle
@@ -25,6 +26,10 @@ void initTitle(void)
 
     titleBackground = loadTexture("gfx/title.png");
     logo = loadTexture("gfx/logo4.png");
+
+    title_scale = 0.5f;
+    increase = 0;
+    current_choice = 0;
 }
 
 /*

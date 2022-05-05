@@ -202,6 +202,7 @@ static void checkGameOver(void)
 	Player *p;
 
 	int livePlayersNum;
+	int singleGameOver = 0;
 	
 	for (p = stage.pHead.next ; p != NULL ; p = p->next)
 	{
@@ -211,6 +212,13 @@ static void checkGameOver(void)
 			{
 				livePlayersNum += 1;
 				lastLiveIndex = p->playerIndex;
+			}
+			else if (app.isMulti == 0)
+			{
+				if (p->playerIndex == app.playerIndex)
+				{
+					singleGameOver = 1;
+				}
 			}
 		}
 		else
@@ -223,6 +231,24 @@ static void checkGameOver(void)
 	{
 		gameover = 1;
 		countdown = FPS * 2;
+		playSound(SND_GAME_START, CH_GAME);
+	}
+	else if (singleGameOver == 1 && gameover == 0)
+	{
+		int health = 0;
+		gameover = 1;
+		countdown = FPS * 2;
+		for (p = stage.pHead.next ; p != NULL ; p = p->next)
+		{
+			if (p->isBody == 1)
+			{
+				if (p->health > health)
+				{
+					lastLiveIndex = p->playerIndex;
+					health = p->health;
+				}
+			}
+		}
 		playSound(SND_GAME_START, CH_GAME);
 	}
 }
