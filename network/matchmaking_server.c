@@ -22,7 +22,7 @@ int main(int argc, char const *argv[]){
     int opt = TRUE;
 
     // create a socket file descriptor
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         perror("Socket failed");
         exit(EXIT_FAILURE);
@@ -86,7 +86,12 @@ int main(int argc, char const *argv[]){
         if (pid==0) {
             char peer_ip[INET_ADDRSTRLEN];
             // figure out what ip connected
-            determine_client_ip(&client_addr, &client_ip_addr);
+            if ((recv(connect_d, &client_ip_addr, INET_ADDRSTRLEN, 0) < 0)){
+                perror("Can't receive from client");
+                exit(EXIT_FAILURE);
+            }
+            client_ip_addr[INET_ADDRSTRLEN] = '\0';
+
             printf("IP address: %s\n", client_ip_addr); // print out ip address
             fflush(stdout);
             if (client_counter == 1) {
@@ -141,13 +146,6 @@ int main(int argc, char const *argv[]){
         if (client_counter == MAX_PLAYERS) {
             client_counter = 0;
         }
+        // TODO: alarm which resets client_counter
     }
-}
-
-// find ip address from sockaddr_storage type
-void determine_client_ip(struct sockaddr_storage* client_addr, char* my_ip_addr) {
-    // cast to sockaddr_in
-    struct sockaddr_in *addr_in = (struct sockaddr_in *)client_addr;
-    // convert to number-point style ipv4 string
-    inet_ntop(AF_INET, &(addr_in->sin_addr), my_ip_addr, INET_ADDRSTRLEN);
 }

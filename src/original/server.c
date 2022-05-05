@@ -92,6 +92,42 @@ void buf_to_input(char * peer_keys_buffer){
 
 struct MultiplayerInfo doMatchmaking(void)
 {
+    // find and store local ip address
+    const char* google_dns_server = "8.8.8.8";
+    int dns_port = 53;
+	
+	struct sockaddr_in serv;
+
+    // create socket
+    int serv_sock;
+    if ((serv_sock = socket ( AF_INET, SOCK_DGRAM, 0))<0){
+        perror("Socket error");
+        exit(EXIT_FAILURE);
+    }
+    
+    // set to all 0
+	memset( &serv, 0, sizeof(serv) );
+
+    // setup
+    serv.sin_family = AF_INET;
+    serv.sin_addr.s_addr = inet_addr(google_dns_server);
+    serv.sin_port = htons(dns_port);
+
+    // connect to google dns server
+    connect(serv_sock,(const struct sockaddr*) &serv , sizeof(serv) );
+
+    // get local address
+    struct sockaddr_in name;
+    socklen_t namelen = sizeof(name);
+    getsockname(serv_sock, (struct sockaddr*) &name, &namelen);
+    
+    // local ip in buffer to send
+	char my_ip_address[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &name.sin_addr, my_ip_address, INET_ADDRSTRLEN);
+
+    close(serv_sock); // close socket 
+
+    // now start matchmaking !
     struct sockaddr_in server;
     int tank_no;
     struct MultiplayerInfo peer_info;
@@ -111,9 +147,15 @@ struct MultiplayerInfo doMatchmaking(void)
     // connect to host
     connect(sock, (struct sockaddr *) &server, sizeof(server));
 
+    // send local ip address
+    if ((send(sock, &my_ip_address, INET_ADDRSTRLEN, 0)) < 0){
+        perror("Can't send to host");
+        exit(EXIT_FAILURE);
+    }
+
     // receive data
     int tank_no_received;
-    if ((tank_no_received=recv(sock, &tank_no, sizeof(int), 0))==-1){
+    if ((tank_no_received=recv(sock, &tank_no, sizeof(int), 0)) < 0){
         perror("Can't read from host");
         exit(EXIT_FAILURE);
     }
@@ -122,10 +164,11 @@ struct MultiplayerInfo doMatchmaking(void)
     
     // receive data
     int ip_received;
-    if ((ip_received=recv(sock, peer_ip_addr, INET_ADDRSTRLEN, 0)) == -1){
+    if ((ip_received=recv(sock, peer_ip_addr, INET_ADDRSTRLEN, 0)) < 0){
         perror("Can't read from host");
         exit(EXIT_FAILURE);
     }
+    peer_ip_addr[INET_ADDRSTRLEN] = '\0';
     printf("%s\n", peer_ip_addr);
 
     // close connection
@@ -192,7 +235,7 @@ int client(struct MultiplayerInfo client_info){
     bzero(&servaddr, sizeof(servaddr)); //clear server addr
 
     // set up server
-    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    servaddr.sin_addr.s_addr = inet_addr(client_info.peer_ip_addr);
     servaddr.sin_port = htons(PORT);
     servaddr.sin_family = AF_INET;
 
