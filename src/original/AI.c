@@ -22,10 +22,13 @@ void doAI(void)
 
     for (p = stage.pHead.next ; p != NULL ; p = p->next)
     {
-        dead[p->playerIndex] = 0;
         if (p->isBody && p->isDead > 0)
         {
             dead[p->playerIndex] = 1;
+        }
+        else if (p->isBody)
+        {
+            dead[p->playerIndex] = 0;
         }
     }
 
@@ -59,7 +62,7 @@ void doAI(void)
                     app.playerInputs[i].AItarget = rand() % 4;
                 }
             }
-            app.playerInputs[i].AIaim = FPS * 3;
+            app.playerInputs[i].AIaim = FPS * 1;
             //printf("%i, %i \n", i, app.playerInputs[i].AItarget);
         }
         else if (app.playerInputs[i].AIaim > 0)
@@ -72,15 +75,17 @@ void doAI(void)
             x = rand() % SCREEN_WIDTH;
             y = rand() % SCREEN_HEIGHT;
         }
-        for (p = stage.pHead.next ; p != NULL ; p = p->next)
-        {
-            if (p->isBody == 1 && p->playerIndex == app.playerInputs[i].AItarget)
+        else {
+            for (p = stage.pHead.next ; p != NULL ; p = p->next)
             {
-                x = p->x;
-                y = p->y;
+                if (p->isBody == 1 && p->playerIndex == app.playerInputs[i].AItarget)
+                {
+                    x = p->x;
+                    y = p->y;
+                }
             }
         }
-
+        
         if (app.playerInputs[i].AImove == 0)
         {
             app.playerInputs[i].keyboard[SDL_SCANCODE_W] = 0;
@@ -104,7 +109,8 @@ void doAI(void)
                     break;
             }
 
-            app.playerInputs[i].AImove = FPS * 1;
+            float value = 0.5 + (float)(rand() % 10) * 0.1;
+            app.playerInputs[i].AImove = FPS * value;
         }
         else
         {

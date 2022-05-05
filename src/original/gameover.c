@@ -15,6 +15,8 @@ extern float title_scale;
 extern int increase;
 extern int gameover;
 
+extern int current_choice;
+
 int win = 0;
 
 /*
@@ -57,31 +59,43 @@ void initGameOver(int playerIndex)
 
     title_scale = 0.5f;
     increase = 0;
+    current_choice = 0;
 }
 
 /*
  * Function: logic
  * ----------------------------
  *  Logic for the game over screen.
- *  Detects if user input was SPACE or ESCAPE.
- *  If SPACE, return to the title screen.
- *  If ESC, exit the game.
+ *  Detects if user input was SPACE or W/S
+ *  Select menu on SPACE press
  */
 static void logic(void)
 {
     if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE])
 	{
-        app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE] = 0;
-        reset();
-		initTitle();
+        if (current_choice == 0)
+        {
+            app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_SPACE] = 0;
+            reset();
+            initTitle();
+        }
+        else if (current_choice == 1)
+        {
+            app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_ESCAPE] = 0;
+            cleanup();
+            exit(0);
+        }
 	}
-
-    if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_ESCAPE])
-	{
-        app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_ESCAPE] = 0;
-		cleanup();
-        exit(0);
-	}
+    else if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_W])
+    {
+        app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_W] = 0;
+        current_choice = current_choice - 1 >= 0 ? current_choice - 1 : 1;
+    }
+    else if (app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_S])
+    {
+        app.playerInputs[app.playerIndex].keyboard[SDL_SCANCODE_S] = 0;
+        current_choice = current_choice + 1 <= 1 ? current_choice + 1 : 0;
+    }
 }
 
 /*
@@ -123,14 +137,32 @@ static void draw(void)
         increase = 1;
     }
 
-    app.fontScale = title_scale;
+    app.fontScale = 0.5;
+    if (current_choice == 0)
+    {
+        app.fontScale = title_scale;
+    }
     if (win == 1)
     {
-        drawText("Game Over! Press Space To Restart, ESC to Quit", SCREEN_WIDTH / 2, 650, 0, 134, 212, TEXT_ALIGN_CENTER, 0);
+        drawText("Back To Title", SCREEN_WIDTH / 2, 650, 0, 134, 212, TEXT_ALIGN_CENTER, 0);
     }
     else
     {
-        drawText("Game Over! Press Space To Restart, ESC to Quit", SCREEN_WIDTH / 2, 650, 232, 55, 45, TEXT_ALIGN_CENTER, 0);
+        drawText("Back To Title", SCREEN_WIDTH / 2, 650, 232, 55, 45, TEXT_ALIGN_CENTER, 0);
+    }
+
+    app.fontScale = 0.5;
+    if (current_choice == 1)
+    {
+        app.fontScale = title_scale;
+    }
+    if (win == 1)
+    {
+        drawText("Quit", SCREEN_WIDTH / 2, 700, 0, 134, 212, TEXT_ALIGN_CENTER, 0);
+    }
+    else
+    {
+        drawText("Quit", SCREEN_WIDTH / 2, 700, 232, 55, 45, TEXT_ALIGN_CENTER, 0);
     }
 }
 

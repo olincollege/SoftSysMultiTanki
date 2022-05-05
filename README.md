@@ -27,10 +27,9 @@ To run:
 
 ## Instructions
 
-* <kbd>w</kbd> <kbd>a</kbd> <kbd>s</kbd> <kbd>d</kbd> : Move the tank
+* <kbd>w</kbd> <kbd>a</kbd> <kbd>s</kbd> <kbd>d</kbd> : Move the tank/cursor
 * <kbd>Left Mouse Button</kbd> : Shoot bullet to current cursor position
-* <kbd>SPACE</kbd> : Start/restart game on title/gameover screen
-* <kbd>ESC</kbd> : End game on title/gameover screen
+* <kbd>SPACE</kbd> : Select on title/gameover screen
 
 ## Known Issues
 
