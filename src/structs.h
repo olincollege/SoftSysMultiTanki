@@ -104,7 +104,9 @@ struct MapTile {
 typedef struct {
 	int keyboard[MAX_KEYBOARD_KEYS];
 	Mouse mouse;
-	int testInt;
+	int AImove;
+	int AIaim;
+	int AItarget;
 } PlayerInput;
 
 typedef struct {

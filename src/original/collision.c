@@ -41,6 +41,28 @@ void bulletSound(Player* p, Bullet* b)
             playSound(SND_BULLET_REFLECT, CH_PLAYER2_BULLET);
         }
     }
+    else if (p->playerIndex == 2)
+    {
+        if (b->health == 0)
+        {
+            playSound(SND_BULLET_EXPLOSION, CH_PLAYER3_BULLET);
+        }
+        else
+        {
+            playSound(SND_BULLET_REFLECT, CH_PLAYER3_BULLET);
+        }
+    }
+    else if (p->playerIndex == 3)
+    {
+        if (b->health == 0)
+        {
+            playSound(SND_BULLET_EXPLOSION, CH_PLAYER4_BULLET);
+        }
+        else
+        {
+            playSound(SND_BULLET_REFLECT, CH_PLAYER4_BULLET);
+        }
+    }
 }
 
 /*

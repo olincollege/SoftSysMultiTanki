@@ -35,10 +35,16 @@ void initSounds(void)
 
 	Mix_Volume(CH_PLAYER1_TANK_TRAIL, 25);
 	Mix_Volume(CH_PLAYER2_TANK_TRAIL, 25);
+	Mix_Volume(CH_PLAYER3_TANK_TRAIL, 25);
+	Mix_Volume(CH_PLAYER4_TANK_TRAIL, 25);
 	Mix_Volume(CH_PLAYER1_TANK, 75);
 	Mix_Volume(CH_PLAYER2_TANK, 75);
+	Mix_Volume(CH_PLAYER3_TANK, 75);
+	Mix_Volume(CH_PLAYER4_TANK, 75);
 	Mix_Volume(CH_PLAYER1_BULLET, 50);
 	Mix_Volume(CH_PLAYER2_BULLET, 50);
+	Mix_Volume(CH_PLAYER3_BULLET, 50);
+	Mix_Volume(CH_PLAYER4_BULLET, 50);
 }
 
 void loadMusic(char *filename)

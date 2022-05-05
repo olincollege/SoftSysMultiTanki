@@ -7,7 +7,7 @@
 #define PORT 					7777
 #define KEY_BUF_SIZE			46
 #define PLAYER_INDEX            0
-#define MAX_PLAYER              2
+#define MAX_PLAYER              4
 
 #define FPS                 	60
 #define WAIT                    1000/FPS                  
@@ -60,10 +60,16 @@ enum
 	CH_GAME,
 	CH_PLAYER1_TANK,
 	CH_PLAYER2_TANK,
+	CH_PLAYER3_TANK,
+	CH_PLAYER4_TANK,
 	CH_PLAYER1_TANK_TRAIL,
 	CH_PLAYER2_TANK_TRAIL,
+	CH_PLAYER3_TANK_TRAIL,
+	CH_PLAYER4_TANK_TRAIL,
 	CH_PLAYER1_BULLET,
-	CH_PLAYER2_BULLET
+	CH_PLAYER2_BULLET,
+	CH_PLAYER3_BULLET,
+	CH_PLAYER4_BULLET
 };
 
 enum
