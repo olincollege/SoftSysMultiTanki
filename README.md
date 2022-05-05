@@ -1,12 +1,12 @@
 # SoftSysMultiTanki
 
-![multitanki.gif](multitanki.gif)
+![multitanki_solo_2.gif](multitanki_solo_2.gif)
 
 MultiTanki is a multiplayer game written in C using SDL2. It is inspired by the Tanks! game from the Wii Play, but unlike the Tanks! it is fully made of top-down 2D graphics instead of 3D. It communicates through a simple UDP P2P connection between computers to achieve the multiplayer feature.
 
 ## Demo
 
-[Youtube](https://youtu.be/P3Cs8kipk8w)
+[Single Play](https://youtu.be/H5mSYYUEZL0)
 
 ## Building
 
