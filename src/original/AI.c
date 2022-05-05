@@ -16,7 +16,7 @@ void doAI(void)
     int y;
     int moveValue = 10;
     int dead[app.maxPlayer];
-    int bulletShootChance = 80;
+    int bulletShootChance = 60;
 
     Player *p;
 
@@ -135,7 +135,7 @@ void doAI(void)
             app.playerInputs[i].mouse.y = app.playerInputs[i].mouse.y - moveValue < y ? y : app.playerInputs[i].mouse.y - moveValue;
         }
 
-        if (rand() % bulletShootChance > bulletShootChance - 2 && app.playerInputs[i].AItarget != i)
+        if (rand() % bulletShootChance > bulletShootChance - 2)
         {
             app.playerInputs[i].mouse.button[SDL_BUTTON_LEFT] = 1;
         }
