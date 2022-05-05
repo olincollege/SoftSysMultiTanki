@@ -38,8 +38,8 @@ The first stretch goal would be to have the shells bounce off the walls from the
 
 #### Multiplayer
 
-- Head First C, Chapter 11: Sockets and networking
-- Computer Systems, A Programmer's Perspective Chapter 11: Network Programming
+- Head First C, Chapter 11: Sockets and networking, David and Dawn Griffiths
+- Computer Systems, A Programmer's Perspective Chapter 11: Network Programming, Randal Bryant
 - [GeeksforGeeks Socket Programming in C](https://www.geeksforgeeks.org/socket-programming-cc/)
 - [GeeksforGeeks Example for fork and pipe](https://www.geeksforgeeks.org/c-program-demonstrate-fork-and-pipe/)
 - [IBM's C Socket Documentation](https://www.ibm.com/docs/en/zos/2.3.0?topic=interfaces-c-socket-application-programming-interface)
@@ -153,4 +153,8 @@ Overall it was a very fulfilling project!
 
 ### Melissa Kazazic
 
+Prior to starting the project, I knew that I wanted to do something video game related. I've played and made games for a long time, and it's most of the reason why I became interested in coding. It was really cool to work on a video game in C - one of my favorite games, a Sonic fangame called [SRB2](https://www.srb2.org/), was written in C (as it was built off of *Doom*). I also wanted to learn network coding - I had never tried to make an online multiplayer game before.
 
+I was pretty much completely new to network coding, but I really wanted to learn. Luckily, to start, I found that *HeadFirstC* had a section on it, so I started there. A large chunk of the time I spent on the network portion was related to reading and trying out examples. When I felt that I understood it well, putting together the matchmaking code (where two clients connect, and are sent the other's IP address) was fairly easy. However, the tough part was the peer-to-peer communication. First, I tried simple examples - sending packets between server and client, then a Frankenstein of p2p code - until it seemed that it would work. What was very interesting and somewhat fun was putting together the packets that would be sent and received - how many bytes allocated to each value, and seeing it work correctly in example code. I switched a lot between implementations, as certain issues would arise and I would retry writing the code.
+
+As it stands, this p2p communication does not yet work. The peers will sometimes send data but not receive, or freeze at receive, so I'm currently working this out. In all, I learned a lot, but I really wish I could get the implementation working as I had planned. At the very least, the matchmaking portion works wonderfully! I'm happy with the project, but in the future, I plan on trying more code first, so implementation becomes smoother.
